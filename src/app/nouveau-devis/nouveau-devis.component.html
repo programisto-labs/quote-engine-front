@@ -1,0 +1,95 @@
+<mat-stepper #stepper>
+    <!-- DESCRIPTION GENERALE -->
+    <mat-step [stepControl]="formGroupDescription">
+        <ng-template matStepLabel>Description générale</ng-template>
+        <form [formGroup]="formGroupDescription">
+            <div style="flex: 1;">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Domaine d'activité</mat-label>
+                    <mat-hint>Exemple: Assurance, Centrale d'appel, Restauration, Boulangerie, ...</mat-hint>
+                    <mat-error>Le domaine d'activité est obligatoire</mat-error>
+                    <input matInput formControlName="coreBusiness">
+                </mat-form-field>
+            </div>
+            <div style="flex: 1;">
+                <mat-form-field appearance="fill" style="width: 100%;">
+                    <mat-label>Besoin</mat-label>
+                    <mat-hint>Exemple: Gestion comptable, Inventaire de stock, ...</mat-hint>
+                    <mat-error>Le besoin est obligatoire</mat-error>
+                    <textarea matInput formControlName="concept" required></textarea>
+                </mat-form-field>
+            </div>
+        </form>
+        @if( formGroupDescription.valid) {
+        <button mat-raised-button matStepperNext color="primary" style="margin: 50px;">
+            <mat-icon>keyboard_arrow_right</mat-icon> Création des scénarios utilisateurs
+        </button>
+        }
+    </mat-step>
+
+    <!-- SCENARIOS UTILISATEURS -->
+    <mat-step [stepControl]="formGroupScenarios">
+        <ng-template matStepLabel>Détail du besoin</ng-template>
+        <form [formGroup]="formGroupScenarios">
+            <div formArrayName="useCases" style="flex: 1;">
+                @for (useCase of useCases.controls; track useCase) {
+                <div [formGroupName]="$index" style="margin: 10px;">
+                    <mat-form-field appearance="fill" style="width: 100%;">
+                        <mat-label>Scénario utilisateur</mat-label>
+                        <mat-hint>Exemple: Consulte un inventaire</mat-hint>
+                        <mat-error>Le scénario utilisateur est obligatoire</mat-error>
+                        <input matInput formControlName="useCase" (keydown.enter)="newUseCase($event)"
+                            (keydown.backspace)="removeUseCase(useCase, $event)" #useCaseInput
+                            (keyup)="inlineAutocomplete($event, useCaseInput.value, 'useCase' + $index)"
+                            [matAutocomplete]="auto">
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
+                            @for( suggestion of suggestions['useCase'+$index]; track suggestion) {
+                            <mat-option [value]="suggestion" [textContent]="suggestion"> </mat-option>
+                            }
+                        </mat-autocomplete>
+                        @if (useCase.value && useCases.length > 1) {
+                        <button matSuffix mat-icon-button aria-label="Supprime le scénario"
+                            (click)="removeUseCase(useCase)">
+                            <mat-icon style="color: gray;">delete</mat-icon>
+                        </button>
+                        }
+                    </mat-form-field>
+                </div>
+                }
+            </div>
+
+            <button mat-raised-button color="accent" type="button" (click)="autocomplete()"
+                [disabled]="waitingForCompletion" style="flex: 1; width: 100%;">
+                @if(waitingForCompletion ) {
+                <ng-container>
+                    <mat-icon> cached </mat-icon> Génération des scénarios ...
+                </ng-container>
+                }
+                @else {
+                <ng-container>
+                    <mat-icon> lightbulb_outline </mat-icon> Suggérer
+                </ng-container>
+                }
+            </button>
+            @if(canAddUseCase) {
+            <button mat-raised-button color="accent" type="button" (click)="newUseCase()" style="flex: 1; width: 100%;">
+                <mat-icon>add</mat-icon> Ajouter
+            </button>
+            }
+        </form>
+
+        @if( formGroupScenarios.valid && formGroupScenarios.valid) {
+        <button mat-raised-button matStepperNext color="primary" style="margin: 50px; background-color: gold;"
+            (click)="buildDevis()">
+            <mat-icon>keyboard_arrow_right</mat-icon>
+            Génération du devis
+        </button>
+        }
+    </mat-step>
+
+    <!-- PROPOSITION DE DEVIS -->
+    <mat-step>
+        <ng-template matStepLabel>Devis temporaire</ng-template>
+        <app-proposition-devis [devis]="devis" [waitingForService]="waitingForService"></app-proposition-devis>
+    </mat-step>
+</mat-stepper>
