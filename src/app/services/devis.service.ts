@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { DemandeClient } from '../demande-client';
 import { environment } from '../../environments/environment';
@@ -43,17 +43,21 @@ export class DevisService {
   }
 
   public autocomplete(demandeClient: DemandeClient): Observable<Autocomplete> {
-    return this.http.post<Autocomplete>(`${this.devisRapideApiUrl}/autocomplete`, demandeClient, { headers: { 'Content-Type': 'application/json', } });
+    return this.http.post<Autocomplete>(`${this.devisRapideApiUrl}/scenario/autocomplete`, demandeClient, { headers: { 'Content-Type': 'application/json', } });
   }
 
   public inlineAutocomplete(demandeClient: DemandeClient, chunk: string) {
     return this.http.post<Autocomplete>(
-      `${this.devisRapideApiUrl}/autocomplete/inline`,
+      `${this.devisRapideApiUrl}/scenario/autocomplete/inline`,
       {
         demandeClient,
         chunk
       },
       { headers: { 'Content-Type': 'application/json', } });
+  }
+
+  public newDemandeClientFromRaw(raw: string): Observable<DemandeClient> {
+    return this.http.post<DemandeClient>(`${this.devisRapideApiUrl}/demande/new`, { raw }, { headers: { 'Content-Type': 'application/json', } });
   }
 }
 

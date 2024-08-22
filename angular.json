@@ -30,7 +30,9 @@
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.css"
             ],
-            "scripts": [],
+            "scripts": [
+              "node_modules/pdfjs-dist/build/pdf.worker.min.mjs"
+            ],
             "server": "src/main.server.ts",
             "prerender": true,
             "ssr": {

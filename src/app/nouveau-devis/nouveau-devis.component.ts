@@ -13,6 +13,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { MOCK_DEVIS } from '../MOCK_DEVIS';
 import { AsyncPipe } from '@angular/common';
 import { debounceTime, Subscription } from 'rxjs';
+
+import * as pdfjsLib from 'pdfjs-dist';
+
 @Component({
   selector: 'app-nouveau-devis',
   standalone: true,
@@ -62,6 +65,8 @@ export class NouveauDevisComponent {
     this.formGroupScenarios = this.formBuilder.group({
       useCases: this.formBuilder.array([this.newUseCaseValidator()])
     });
+
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.worker.min.mjs';
     // this.mockDemandeClient();
     // this.mockDevis();
   }
@@ -158,6 +163,41 @@ export class NouveauDevisComponent {
         this.suggestions[fieldName] = autocomplete.suggestions
       }
       );
+  }
+
+  async onFileChange(event: any) {
+    const file = event.target.files[0];
+    if (file && file.type === 'application/pdf') {
+      const fileReader = new FileReader();
+      fileReader.onload = async (e) => {
+        const typedarray = new Uint8Array(fileReader.result as ArrayBuffer);
+        const pdf = await pdfjsLib.getDocument({ data: typedarray }).promise;
+        let extractedText = '';
+        this.useCases.clear();
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const textContent = await page.getTextContent();
+          const pageText = textContent.items.map(item => (item as any).str).join(' ');
+          extractedText += pageText + "\n";
+          this.devisService.newDemandeClientFromRaw(pageText).subscribe(demandeClient => {
+            demandeClient.useCases.forEach(useCase => {
+              this.useCases.push(this.formBuilder.group({ useCase }));
+            });
+          });
+        }
+
+        this.devisService.newDemandeClientFromRaw(extractedText).subscribe(demandeClient => {
+          this.formGroupDescription.setValue({
+            coreBusiness: demandeClient.coreBusiness,
+            concept: demandeClient.concept
+          });
+        });
+
+      };
+      fileReader.readAsArrayBuffer(file);
+    } else {
+      console.error('Veuillez sélectionner un fichier PDF.');
+    }
   }
 
   mockDemandeClient() {

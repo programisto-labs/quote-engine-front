@@ -20,6 +20,7 @@
                 </mat-form-field>
             </div>
         </form>
+        <input type="file" (change)="onFileChange($event)" style="margin: 10px;">
         @if( formGroupDescription.valid) {
         <button mat-raised-button matStepperNext color="primary" style="margin: 50px;">
             <mat-icon>keyboard_arrow_right</mat-icon> Création des scénarios utilisateurs
