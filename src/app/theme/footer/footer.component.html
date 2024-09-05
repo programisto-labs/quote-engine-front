@@ -1,0 +1,93 @@
+<footer>
+  <div class="p-x-8 tex-left">
+    <div class="row">
+      <div class="col-sm-12 col-md-4 mb-3 p-l-12">
+        <div class="footer-item">
+          <app-branding [showName]="true"/>
+          <p>{{'p_description' | translate}}</p>
+        </div>
+      </div>
+
+      <div class="col-sm-12 col-md-4 mb-3 p-l-12">
+        <div class="footer-item">
+          <h4></h4>
+        </div>
+
+        <div class="footer-item">
+          <a href="https://programisto.fr/expertise" target="_blank" class="f-s-14">
+            {{ 'expertise' | translate }}
+          </a>
+        </div>
+
+        <div class="footer-item">
+          <a href="https://programisto.fr/offres-emploi" target="_blank" class="f-s-14">
+            {{ 'job_offers' | translate }}
+          </a>
+        </div>
+
+        <div class="footer-item">
+          <a href="https://programisto.fr/a-propos" target="_blank" class="f-s-14">
+            {{ 'about_us' | translate }}
+          </a>
+        </div>
+
+        <div class="footer-item">
+          <a href="https://programisto.fr/#contact-pop-up" target="_blank" class="f-s-14">
+            {{ 'contact_us' | translate }}
+          </a>
+        </div>
+      </div>
+
+      <div class="col-sm-12 col-md-4 mb-3 p-l-12">
+        <div class="footer-item">
+          <h4></h4>
+        </div>
+
+        <div class="footer-item">
+          <a [routerLink]="'/team'" class="f-s-14">
+            {{ 'team' | translate}}
+          </a>
+        </div>
+
+        <div class="footer-item">
+          <a href="https://g.page/programisto?share" target="_blank" class="f-s-14">
+            {{ 'visit_us' | translate}}
+          </a>
+        </div>
+
+        <div class="footer-item">
+          <a href="https://programisto.fr" target="_blank" class="f-s-14">
+            {{ 'website' | translate}}
+          </a>
+        </div>
+
+        <div class="footer-item">
+          <a href="https://www.linkedin.com/company/programisto" target="_blank" class="d-flex f-s-14">
+            <!--mat-icon class="m-r-4">face</mat-icon-->LinkedIn
+          </a>
+        </div>
+      </div>
+    </div>
+    <mat-divider role="separator" aria-orientation="horizontal"/>
+    <div class="row footer-item flex justify-content-between">
+        <div class="d-inline-flex m-b-12">
+          <span class="f-s-12">Copyright 2024 © Programisto - Ponton 5 Quai Lawton 33300 Bordeaux</span>
+        </div>
+        <div class="d-inline-flex f-s-12">
+          <a>
+            <span class="m-r-12  m-b-12">{{'privacy_policy' | translate}}</span>
+          </a>
+          <a href="https://programisto.fr/mentions-legales" target="_blank">
+            <span class="m-r-12  m-b-12">{{'legal_notices' | translate}}</span>
+          </a>
+          <a>
+          <span class="m-r-12  m-b-12">{{'cookies_policy' | translate}}</span>
+          </a>
+        </div>
+    </div>
+  </div>
+</footer>
+<!--
+politica de confidencialidad
+Ce site utilise des cookies afin que nous puissions vous fournir la meilleure expérience utilisateur possible. Les informations sur les cookies sont stockées dans votre navigateur et remplissent des fonctions telles que vous reconnaître lorsque vous revenez sur notre site Web et aider notre équipe à comprendre les sections du site que vous trouvez les plus intéressantes et utiles.
+-->

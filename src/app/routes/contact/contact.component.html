@@ -1,0 +1,47 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>Contact</mat-card-title>
+        <mat-card-subtitle>Informations générales sur Programisto</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <p>
+            Programisto met au service des moyens et grands groupes une équipe d’experts qualifiés et flexibles dans les
+            domaines du conseil numérique.
+        </p>
+
+        <mat-divider class="contact-divider"></mat-divider>
+
+        <mat-card-subtitle> Nos collaborateurs </mat-card-subtitle>
+        <mat-list>
+          @for (item of collaborators; track item) {
+          <mat-list-item>
+              <img matListItemAvatar decoding="async"
+                  src="{{item.avatar}}"
+                  alt="{{item.name}}"/>
+              <div matListItemTitle>{{item.name}} </div>
+              <div matListItemMeta>{{item.occupation}} </div>
+              <div matListItemLine>{{item.oc_description}}</div>
+          </mat-list-item>
+          }
+        </mat-list>
+    </mat-card-content>
+    <mat-divider class="contact-divider"></mat-divider>
+  <mat-card-footer>
+    <mat-card-content>
+      <mat-card-subtitle>Nous contacter</mat-card-subtitle>
+        <mat-list>
+            <mat-list-item>
+                <div matListItemIcon>
+                    <mat-icon>location_on</mat-icon>
+                </div>
+                <div matListItemTitle> Localisation </div>
+                <div matListItemMeta> Google Map </div>
+
+                <a matListItemLine href="https://g.page/programisto?share" target="_blank" rel="noopener">
+                    Ponton 5 Quai Lawton 33300 Bordeaux
+                </a>
+            </mat-list-item>
+        </mat-list>
+    </mat-card-content>
+  </mat-card-footer>
+</mat-card>
