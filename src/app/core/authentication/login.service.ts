@@ -5,7 +5,7 @@ import {find, from, map, of} from 'rxjs';
 import {admin, anonymous, guest} from './user';
 import { Token } from './interface';
 import {JWT} from "./jwt";
-import * as MenuData from '../bootstrap/menu.json';
+import MenuData from '../bootstrap/menu.json';
 import {Menu} from "../bootstrap/menu.service";
 
 @Injectable({
