@@ -21,7 +21,7 @@ import {MOCK_DEVIS} from '../MOCK_DEVIS';
 import {AsyncPipe} from '@angular/common';
 import {debounceTime, Subscription} from 'rxjs';
 
-//import * as pdfjsLib from 'pdfjs-dist';
+import * as pdfjsLib from 'pdfjs-dist';
 
 @Component({
   selector: 'app-nouveau-devis',

@@ -9,13 +9,11 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 import { provideMomentDatetimeAdapter } from '@ng-matero/extensions-moment-adapter';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { NgxPermissionsModule } from 'ngx-permissions';
 import { NgProgressHttp} from 'ngx-progressbar/http';
 import { NgProgressRouter} from 'ngx-progressbar/router';
 import { ToastrModule } from 'ngx-toastr';
 
-import { BASE_URL, appInitializerProviders, httpInterceptorProviders } from './core';
-import { environment } from '../environments/environment';
+import {appInitializerProviders, httpInterceptorProviders } from './core';
 import { PaginatorI18nService } from './shared';
 import { routes } from './app.routes';
 import {provideClientHydration, withEventReplay} from "@angular/platform-browser";
@@ -36,15 +34,13 @@ export const appConfig: ApplicationConfig = {
       withInMemoryScrolling({ scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' }),
       withComponentInputBinding()
     ),
-    { provide: BASE_URL, useValue: environment.baseUrl },
     httpInterceptorProviders,
     importProvidersFrom(
       NgProgressHttp,
       NgProgressRouter,
-      NgxPermissionsModule.forRoot(),
       ToastrModule.forRoot(),
       TranslateModule.forRoot({
-        defaultLanguage: 'en-US',
+        defaultLanguage: 'fr-Fr',
         loader: {
           provide: TranslateLoader,
           useFactory: TranslateHttpLoaderFactory,

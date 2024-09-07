@@ -38,11 +38,10 @@
     "apexcharts": "^3.53.0",
     "express": "^4.18.2",
     "moment": "^2.30.1",
-    "ngx-permissions": "^17.1.0",
     "ngx-progressbar": "^12.0.1",
     "ngx-toastr": "^19.0.0",
     "openai": "^4.53.0",
-    "photoviewer": "^3.10.2",
+    "pdfjs-dist": "^4.5.136",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"

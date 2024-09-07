@@ -18,7 +18,6 @@ import { CustomizerComponent } from '../customizer/customizer.component';
 import { HeaderComponent } from '../header/header.component';
 import { SidebarNoticeComponent } from '../sidebar-notice/sidebar-notice.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
-import { TopmenuComponent } from '../topmenu/topmenu.component';
 import {FooterComponent} from "../footer/footer.component";
 
 const MOBILE_MEDIAQUERY = 'screen and (max-width: 599px)';
@@ -37,7 +36,6 @@ const MONITOR_MEDIAQUERY = 'screen and (min-width: 960px)';
         MatSidenavModule,
         NgProgressbar,
         HeaderComponent,
-        TopmenuComponent,
         SidebarComponent,
         SidebarNoticeComponent,
         CustomizerComponent,

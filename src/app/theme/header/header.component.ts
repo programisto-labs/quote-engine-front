@@ -16,7 +16,6 @@ import { BrandingComponent } from '../widgets/branding.component';
 import { GithubButtonComponent } from '../widgets/github.component';
 import { NotificationComponent } from '../widgets/notification.component';
 import { TranslateComponent } from '../widgets/translate.component';
-import { UserComponent } from '../widgets/user.component';
 import {isPlatformBrowser} from "@angular/common";
 
 @Component({
@@ -36,7 +35,6 @@ import {isPlatformBrowser} from "@angular/common";
     GithubButtonComponent,
     NotificationComponent,
     TranslateComponent,
-    UserComponent,
   ],
 })
 export class HeaderComponent {

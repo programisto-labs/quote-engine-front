@@ -13,14 +13,14 @@ export class TranslateLangService {
 
   load() {
     return new Promise<void>(resolve => {
-      let defaultLang = 'en-US';
+      let defaultLang = 'fr-Fr';
 
       if (isPlatformBrowser(this.document)) {
         const browserLang = navigator.language;
         defaultLang =
-          browserLang.match(/fr-FR|fr-BE|fr-CA|fr-CH|fr-LU|fr-MC/) ? 'fr-FR' :
-            browserLang.match(/es-AR|es-BO|es-CL|es-CO|es-CR|es-DO|es-EC|es-ES|es-GT|es-HN|es-MX|es-NI|es-PA|es-PE|es-PR|es-PY|es-SA|es-US|es-UY|es-VE/) ? 'es-ES' :
-              'en-US';
+          browserLang.match(/en|en-US|en-GB|en-AU|en-CA|en-IN|en-NZ|en-ZA|en-IE|en-SG/) ? 'en-US' :
+            browserLang.match(/es-AR|es-BO|es-CL|es-CO|es-CR|es-DO|es-EC|es-ES|es-GT|es-HN|es-MX|es-NI|es-PA|es-PE|es-PR|es-PY|es-SA|es-US|es-UY|es-VE/) ? 'es-Es' :
+              'fr-Fr';
       } else {
         defaultLang = this.translate.defaultLang;
       }

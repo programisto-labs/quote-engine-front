@@ -6,7 +6,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { SidemenuComponent } from '../sidemenu/sidemenu.component';
 import { BrandingComponent } from '../widgets/branding.component';
-import { UserPanelComponent } from './user-panel.component';
 
 @Component({
   selector: 'app-sidebar',
@@ -21,12 +20,11 @@ import { UserPanelComponent } from './user-panel.component';
     MatToolbarModule,
     BrandingComponent,
     SidemenuComponent,
-    UserPanelComponent,
   ],
 })
 export class SidebarComponent {
   @Input() showToggle = true;
-  @Input() showUser = true;
+  @Input() showUser = false;
   @Input() showHeader = true;
   @Input() toggleChecked = false;
 

@@ -1,6 +1,5 @@
 import { Directive, inject } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { MenuService } from '../../core';
 import { filter } from 'rxjs';
 import { NavAccordionItemDirective } from './nav-accordion-item.directive';
 
@@ -11,7 +10,6 @@ import { NavAccordionItemDirective } from './nav-accordion-item.directive';
 })
 export class NavAccordionDirective {
   private readonly router = inject(Router);
-  private readonly menu = inject(MenuService);
 
   private navItems: NavAccordionItemDirective[] = [];
 
@@ -19,11 +17,6 @@ export class NavAccordionDirective {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => this.checkOpenedItems());
-
-    // Fix opening status for async menu data
-    this.menu.change().subscribe(() => {
-      setTimeout(() => this.checkOpenedItems());
-    });
   }
 
   addItem(item: NavAccordionItemDirective) {
