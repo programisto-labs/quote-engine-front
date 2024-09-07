@@ -13,7 +13,7 @@ type: 'nodejs:20'
 # The 'source' specifies where the writable mount is. The 'local' source
 # indicates that the mount point will point to a local directory on the
 # application container. The 'source_path' specifies the subdirectory
-# from within the source that the mount should point at. 
+# from within the source that the mount should point at.
 mounts:
   'web/uploads':
     source: local
@@ -23,18 +23,18 @@ mounts:
 disk: 2048
 
 dependencies:
-  nodejs: 
+  nodejs:
     "@angular/cli": "^12.2.0"
 
 hooks:
   build: |
     echo "--- Building the application ---"
     npm run cleanup
-    npm run build:ssr
+    NODE_ENV=production npm run build:ssr
 
 web:
-  commands: 
+  commands:
     start: |
       echo "--- Starting the application ---"
       npm run serve:ssr
-       
+
