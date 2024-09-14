@@ -1,5 +1,8 @@
 @if(devis) {
+<div class="title">
 <h3>{{ devis.nom }}</h3>
+<button mat-button (click)="sendEmail()">Envoyer par e-mail</button>
+</div>
 <mat-card>
     <mat-card-content>
         <mat-card-subtitle>Fonctionnalitées

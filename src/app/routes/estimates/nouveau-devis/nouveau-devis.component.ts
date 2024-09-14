@@ -19,7 +19,7 @@ import {DemandeClient} from '../../../shared';
 import {MatInputModule} from '@angular/material/input';
 import {MOCK_DEVIS} from '../MOCK_DEVIS';
 import {AsyncPipe} from '@angular/common';
-import {debounceTime, Subscription} from 'rxjs';
+import {debounceTime, distinctUntilChanged, Subscription} from 'rxjs';
 
 import * as pdfjsLib from 'pdfjs-dist';
 
@@ -212,7 +212,7 @@ export class NouveauDevisComponent {
     }
 
     this.autocompleteSubscription = this.devisService.inlineAutocomplete(this.demandeClient, chunk)
-      .pipe(debounceTime(500))
+      .pipe(debounceTime(500), distinctUntilChanged())
       .subscribe(autocomplete => {
           this.suggestions[fieldName] = autocomplete.suggestions
         }

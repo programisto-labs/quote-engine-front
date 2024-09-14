@@ -18,7 +18,6 @@ export class DevisService {
     return environment.devisRapideApiUrl;
   }
 
-
   public genere(demandeClient: DemandeClient): Observable<Devis> {
     return this.http.post<Devis>(`${this.devisRapideApiUrl}/genere`, demandeClient, {headers: {'Content-Type': 'application/json',}});
   }
@@ -35,6 +34,18 @@ export class DevisService {
         chunk
       },
       {headers: {'Content-Type': 'application/json',}});
+  }
+
+  public sendEmailToClient(data: any): Observable<any> {
+    return this.http.post<any>(`${this.devisRapideApiUrl}/mail/toClient`, data, {headers: {'Content-Type': 'application/json',}});
+  }
+
+  public sendEmailToSales(data: any): Observable<any> {
+    return this.http.post<any>(`${this.devisRapideApiUrl}/mail/toSales`, data, {headers: {'Content-Type': 'application/json',}});
+  }
+
+  public sendDiscordMessage(message: string): Observable<Autocomplete> {
+    return this.http.post<any>(`${this.devisRapideApiUrl}/discord/webhook/send`, {message}, {headers: {'Content-Type': 'application/json',}});
   }
 
   public newDemandeClientFromRaw(raw: string): Observable<DemandeClient> {

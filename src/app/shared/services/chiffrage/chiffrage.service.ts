@@ -42,4 +42,50 @@ export class ChiffrageService {
 
   estimeTotalJours(chiffrageJours: any): number { return Object.keys(chiffrageJours).reduce((acc, key) => acc + chiffrageJours[key], 0); }
 
+  getEstimatedData(jours: number) {
+    if (jours <= 0) {
+      return {};
+    }
+
+    return this.buildProjetData(jours);
+  }
+
+  private buildProjetData(estimeJours: number) {
+    let projet: any = {};
+
+    let couts: any = this.conceptionService.estimeCouts(estimeJours);
+    let jours: any = this.conceptionService.estimeJours(estimeJours);
+    projet['conception'] = this.buildStageData(couts, jours);
+
+    couts = this.constructionService.estimeCouts(estimeJours);
+    jours = this.constructionService.estimeJours(estimeJours);
+    projet['construction'] = this.buildStageData(couts, jours);
+
+    couts = this.recetteService.estimeCouts(estimeJours);
+    jours = this.recetteService.estimeJours(estimeJours);
+    projet['recette'] = this.buildStageData(couts, jours);
+
+    couts = this.livraisonService.estimeCouts(estimeJours);
+    jours = this.livraisonService.estimeJours(estimeJours);
+    projet['livraison'] = this.buildStageData(couts, jours);
+
+    return projet;
+  }
+
+  private buildStageData(couts: Object, jours: Object) {
+    let construction: any = {};
+    Object.keys(couts).forEach((key) => {
+      construction[key] = this.buildProperty(couts, jours, key);
+    }, this);
+
+    return construction;
+  }
+
+  private buildProperty(coust: any, jours: any, key: string) {
+    return {
+      couts: coust[key],
+      jours: jours[key]
+    };
+  }
+
 }
