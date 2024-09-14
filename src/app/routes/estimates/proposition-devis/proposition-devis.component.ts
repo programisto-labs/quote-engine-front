@@ -34,6 +34,7 @@ import {environment} from "../../../../environments/environment";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PropositionDevisComponent {
+
   accordion = viewChild.required(MatAccordion);
 
   private readonly chiffrageService: ChiffrageService = inject(ChiffrageService);
@@ -41,7 +42,6 @@ export class PropositionDevisComponent {
   private readonly toastService = inject(ToastrService);
 
   @Input() devis?: Devis;
-  @Input() demandeClient?: DemandeClient;
   @Input() waitingForService: boolean = false;
   estimationCouts: number = 0;
 

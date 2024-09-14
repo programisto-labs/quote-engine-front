@@ -18,6 +18,7 @@ export class DevisService {
     return environment.devisRapideApiUrl;
   }
 
+
   public genere(demandeClient: DemandeClient): Observable<Devis> {
     return this.http.post<Devis>(`${this.devisRapideApiUrl}/genere`, demandeClient, {headers: {'Content-Type': 'application/json',}});
   }
