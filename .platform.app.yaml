@@ -30,7 +30,7 @@ hooks:
   build: |
     echo "--- Building the application ---"
     npm run cleanup
-    NODE_ENV=development npm run build:ssr
+    NODE_ENV=production npm run build:ssr
 
 web:
   commands:

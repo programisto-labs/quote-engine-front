@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, inject, Input, viewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, inject, Input, OnDestroy, viewChild} from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatCard, MatCardActions, MatCardContent, MatCardFooter, MatCardHeader, MatCardModule, MatCardSubtitle, MatCardTitle } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
@@ -14,10 +14,10 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatLineModule } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
 
-import {ChiffrageService, DemandeClient, Devis, DevisService, Module, Scenario} from '../../../shared';
+import {ChiffrageService, Devis, DevisService, Module, Scenario} from '../../../shared';
 import { DecimalPipe } from '@angular/common';
 import { ChiffrageComponent } from "./chiffrage/chiffrage.component";
-import {forkJoin, tap} from "rxjs";
+import {concatAll, delay, fromEvent, of, Subject, switchMap, takeUntil} from "rxjs";
 import {ToastrService} from "ngx-toastr";
 import {environment} from "../../../../environments/environment";
 @Component({
@@ -33,13 +33,15 @@ import {environment} from "../../../../environments/environment";
   styleUrl: './proposition-devis.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PropositionDevisComponent {
+export class PropositionDevisComponent implements AfterViewInit, OnDestroy{
 
   accordion = viewChild.required(MatAccordion);
 
   private readonly chiffrageService: ChiffrageService = inject(ChiffrageService);
   private readonly devisService: DevisService = inject(DevisService);
   private readonly toastService = inject(ToastrService);
+
+  private destroy$ = new Subject();
 
   @Input() devis?: Devis;
   @Input() waitingForService: boolean = false;
@@ -58,23 +60,36 @@ export class PropositionDevisComponent {
   computeDevisDuration = (): string => `${this.estimationJours} jour${this.mutlipleJours ? "s" : ""}`;
   computeDevisCount = (): string => `${this.scenarioCount} scénario${this.multipleScenarios ? "s" : ""}`;
 
-  sendEmail() {
+  ngAfterViewInit() {
+    const button = document.getElementById('sendEmailButton');
+
+    const click$ = fromEvent(button!, 'click');
+
     const clientName = 'Jhon Doe';
     const clientEmail = 'aramis.stalin@gmail.com';
     const clientData = this.buildClientData(clientEmail);
     const salesData = this.buildSalesData(clientName, clientEmail);
 
-    forkJoin([
-      this.devisService.sendEmailToClient(clientData),
-      this.devisService.sendEmailToSales(salesData),
-      this.devisService.sendDiscordMessage(`Le client ${clientName} a envoyé un projet dans sa boîte mail (${clientEmail})!!!`)
-    ]).subscribe({
+    click$.pipe(
+      takeUntil(this.destroy$),
+      switchMap(() => {
+        return of([
+          this.devisService.sendEmailToClient(clientData).pipe(delay(3000)),
+          this.devisService.sendEmailToSales(salesData),
+          this.devisService.sendDiscordMessage(`Le client ${clientName} a envoyé un projet dans sa boîte mail (${clientEmail})!!!`)
+        ])
+      }),
+      concatAll()
+    ).subscribe({
       next: _ => this.toastService.success('L\'e-mail a été envoyé avec succès.'),
       error: (error) => {
         this.toastService.error('Une erreur s\'est produite lors de l\'envoi de l\'e-mail. Veuillez réessayer.');
-        console.log(error);
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next(0);
   }
 
   private buildSalesData(clientName: string, clientEmail: string) {
