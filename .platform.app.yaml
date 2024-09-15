@@ -30,6 +30,8 @@ hooks:
   build: |
     echo "--- Building the application ---"
     npm run cleanup
+    npm cache clean --force
+    npm install
     NODE_ENV=production npm run build:ssr
 
 web:
