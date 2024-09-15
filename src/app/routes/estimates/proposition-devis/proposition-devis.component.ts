@@ -66,10 +66,9 @@ export class PropositionDevisComponent {
 
     forkJoin([
       this.devisService.sendEmailToClient(clientData),
-      this.devisService.sendEmailToSales(salesData)
-    ]).pipe(
-      tap(_ => this.devisService.sendDiscordMessage(`Le client ${clientName} a envoyé un projet dans sa boîte mail (${clientEmail})!!!`))
-    ).subscribe({
+      this.devisService.sendEmailToSales(salesData),
+      this.devisService.sendDiscordMessage(`Le client ${clientName} a envoyé un projet dans sa boîte mail (${clientEmail})!!!`)
+    ]).subscribe({
       next: _ => this.toastService.success('L\'e-mail a été envoyé avec succès.'),
       error: (error) => {
         this.toastService.error('Une erreur s\'est produite lors de l\'envoi de l\'e-mail. Veuillez réessayer.');
