@@ -29,6 +29,7 @@
     "@angular/platform-server": "^18.2.0",
     "@angular/router": "^18.2.0",
     "@angular/ssr": "^18.2.2",
+    "@angular-devkit/build-angular": "^18.2.2",
     "@ng-matero/extensions": "^18.2.0",
     "@ng-matero/extensions-moment-adapter": "^18.0.0",
     "@ngx-formly/core": "^6.3.6",
@@ -47,7 +48,6 @@
     "zone.js": "~0.14.10"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^18.2.2",
     "@angular/cli": "^18.2.2",
     "@angular/compiler-cli": "^18.2.0",
     "@jefiozie/ngx-aws-deploy": "^1.2.0",
