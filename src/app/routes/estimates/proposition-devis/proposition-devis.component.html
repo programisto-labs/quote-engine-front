@@ -1,7 +1,7 @@
 @if(devis) {
 <div class="title">
 <h3>{{ devis.nom }}</h3>
-<button id="sendEmailButton" mat-button>Envoyer par e-mail</button>
+<button mat-button (click)="onSendEmail()">Envoyer par e-mail</button>
 </div>
 <mat-card>
     <mat-card-content>

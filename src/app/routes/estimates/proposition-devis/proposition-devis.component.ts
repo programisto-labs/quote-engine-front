@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, inject, Input, OnDestroy, viewChild} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input, OnDestroy, viewChild } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatCard, MatCardActions, MatCardContent, MatCardFooter, MatCardHeader, MatCardModule, MatCardSubtitle, MatCardTitle } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
@@ -17,9 +17,16 @@ import { MatChipsModule } from '@angular/material/chips';
 import {ChiffrageService, Devis, DevisService, Module, Scenario} from '../../../shared';
 import { DecimalPipe } from '@angular/common';
 import { ChiffrageComponent } from "./chiffrage/chiffrage.component";
-import {concatAll, delay, fromEvent, of, Subject, switchMap, takeUntil} from "rxjs";
+import {
+  concatAll,
+  debounceTime, delay,
+  Subject,
+  takeLast,
+  takeUntil
+} from "rxjs";
 import {ToastrService} from "ngx-toastr";
 import {environment} from "../../../../environments/environment";
+import {fromArrayLike} from "rxjs/internal/observable/innerFrom";
 @Component({
   selector: 'app-proposition-devis',
   standalone: true,
@@ -33,7 +40,7 @@ import {environment} from "../../../../environments/environment";
   styleUrl: './proposition-devis.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PropositionDevisComponent implements AfterViewInit, OnDestroy{
+export class PropositionDevisComponent implements OnDestroy{
 
   accordion = viewChild.required(MatAccordion);
 
@@ -41,7 +48,18 @@ export class PropositionDevisComponent implements AfterViewInit, OnDestroy{
   private readonly devisService: DevisService = inject(DevisService);
   private readonly toastService = inject(ToastrService);
 
+  private sendEmailSubject = new Subject<boolean>();
   private destroy$ = new Subject();
+
+  constructor() {
+    this.sendEmailSubject.pipe(
+      takeUntil(this.destroy$),
+      debounceTime(1000)
+    ).subscribe({
+      next: _ => this.sendEmail()
+    });
+  }
+
 
   @Input() devis?: Devis;
   @Input() waitingForService: boolean = false;
@@ -60,26 +78,23 @@ export class PropositionDevisComponent implements AfterViewInit, OnDestroy{
   computeDevisDuration = (): string => `${this.estimationJours} jour${this.mutlipleJours ? "s" : ""}`;
   computeDevisCount = (): string => `${this.scenarioCount} scénario${this.multipleScenarios ? "s" : ""}`;
 
-  ngAfterViewInit() {
-    const button = document.getElementById('sendEmailButton');
+  onSendEmail() {
+    this.sendEmailSubject.next(true);
+  }
 
-    const click$ = fromEvent(button!, 'click');
-
+  sendEmail() {
     const clientName = 'Jhon Doe';
     const clientEmail = 'aramis.stalin@gmail.com';
     const clientData = this.buildClientData(clientEmail);
     const salesData = this.buildSalesData(clientName, clientEmail);
 
-    click$.pipe(
-      takeUntil(this.destroy$),
-      switchMap(() => {
-        return of([
-          this.devisService.sendEmailToClient(clientData).pipe(delay(3000)),
-          this.devisService.sendEmailToSales(salesData),
-          this.devisService.sendDiscordMessage(`Le client ${clientName} a envoyé un projet dans sa boîte mail (${clientEmail})!!!`)
-        ])
-      }),
-      concatAll()
+    fromArrayLike( [
+      this.devisService.sendEmailToClient(clientData).pipe(delay(5000)),
+      this.devisService.sendEmailToSales(salesData),
+      this.devisService.sendDiscordMessage(`Le client ${clientName} a envoyé un projet dans sa boîte mail (${clientEmail})!!!`)
+    ]).pipe(
+      concatAll(),
+      takeLast(1)
     ).subscribe({
       next: _ => this.toastService.success('L\'e-mail a été envoyé avec succès.'),
       error: (error) => {
