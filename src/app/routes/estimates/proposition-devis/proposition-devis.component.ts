@@ -36,7 +36,7 @@ import {
 import {ToastrService} from "ngx-toastr";
 import {environment} from "../../../../environments/environment";
 import {fromArrayLike} from "rxjs/internal/observable/innerFrom";
-import {MatDialog} from "@angular/material/dialog";
+import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {DialogClientContactComponent} from "../../dialog-client-contact/dialog-client-contact.component";
 import {ClientContactModel} from "../../../shared";
 
@@ -66,11 +66,13 @@ export class PropositionDevisComponent implements OnDestroy {
   private readonly devisService: DevisService = inject(DevisService);
   private readonly toastService = inject(ToastrService);
   private readonly storageService: LocalStorageService = inject(LocalStorageService);
+  private clientDialogConfig: MatDialogConfig;
 
   private sendEmailSubject = new Subject<boolean>();
   private destroy$ = new Subject();
 
   constructor(public dialog: MatDialog) {
+    this.clientDialogConfig = new MatDialogConfig<any>();
     this.sendEmailSubject.pipe(
       takeUntil(this.destroy$),
     ).subscribe({
@@ -100,15 +102,19 @@ export class PropositionDevisComponent implements OnDestroy {
   }
 
   openClientContactDialog() {
+    this.clientDialogConfig.data = {};
     const ls = this.storageService.localStorage;
-    if (ls) {
+    if (this.storageService.localStorage) {
       const info: ClientContactModel = this.storageService.get(CONTACT_INFO_KEY) as ClientContactModel;
       if (info && info['fullname'] && info['email']) {
-        this.sendEmail(info);
-        return;
+        this.clientDialogConfig.data = {
+          fullname: info['fullname'],
+          email: info['email'],
+          tele: info['tele'] || ''
+        };
       }
     }
-    const dialogRef = this.dialog.open(DialogClientContactComponent);
+    const dialogRef = this.dialog.open(DialogClientContactComponent, this.clientDialogConfig);
     dialogRef.afterClosed().subscribe({
       next: (result) => {
         if (!result) return;

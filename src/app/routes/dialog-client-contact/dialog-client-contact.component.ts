@@ -1,7 +1,7 @@
-import {Component, inject} from '@angular/core';
-import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {Component, Inject, inject} from '@angular/core';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import {MatDialogModule, MatDialogRef} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import {TranslateModule} from "@ngx-translate/core";
@@ -41,14 +41,15 @@ import {MatDivider} from "@angular/material/divider";
 })
 export class DialogClientContactComponent {
   private readonly fb = inject(FormBuilder);
+  contactForm: FormGroup;
 
-  contactForm = this.fb.nonNullable.group({
-    fullname: ['', [Validators.required]],
-    email: ['', [Validators.required, Validators.email]],
-    tele: [''],
-  });
-
-  constructor(public dialogRef: MatDialogRef<DialogClientContactComponent>) {}
+  constructor(public dialogRef: MatDialogRef<DialogClientContactComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
+    this.contactForm = this.fb.nonNullable.group({
+      fullname: [this.data.fullname || '', [Validators.required]],
+      email: [this.data.email || '', [Validators.required, Validators.email]],
+      tele: [this.data.tele || ''],
+    });
+  }
 
   get fullname() {
     return this.contactForm.get('fullname');
