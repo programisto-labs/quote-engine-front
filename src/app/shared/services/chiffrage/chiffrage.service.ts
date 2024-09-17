@@ -42,6 +42,10 @@ export class ChiffrageService {
 
   estimeTotalJours(chiffrageJours: any): number { return Object.keys(chiffrageJours).reduce((acc, key) => acc + chiffrageJours[key], 0); }
 
+  estimeStageTotalJours(stage: any): number { return Object.keys(stage).reduce((acc, key) => acc + stage[key]['jours'], 0); }
+
+  estimeStageTotalCouts(stage: any): number { return Object.keys(stage).reduce((acc, key) => acc + stage[key]['couts'], 0); }
+
   getEstimatedData(jours: number) {
     if (jours <= 0) {
       return {};

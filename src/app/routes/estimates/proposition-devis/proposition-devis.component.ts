@@ -1,6 +1,15 @@
 import { ChangeDetectionStrategy, Component, inject, Input, OnDestroy, viewChild } from '@angular/core';
 import { MatButton } from '@angular/material/button';
-import { MatCard, MatCardActions, MatCardContent, MatCardFooter, MatCardHeader, MatCardModule, MatCardSubtitle, MatCardTitle } from '@angular/material/card';
+import {
+  MatCard,
+  MatCardActions,
+  MatCardContent,
+  MatCardFooter,
+  MatCardHeader,
+  MatCardModule,
+  MatCardSubtitle,
+  MatCardTitle
+} from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
@@ -14,12 +23,12 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatLineModule } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
 
-import {ChiffrageService, Devis, DevisService, Module, Scenario} from '../../../shared';
+import { ChiffrageService, Devis, DevisService, LocalStorageService, Module, Scenario} from '../../../shared';
 import { DecimalPipe } from '@angular/common';
 import { ChiffrageComponent } from "./chiffrage/chiffrage.component";
 import {
   concatAll,
-  debounceTime, delay,
+  delay,
   Subject,
   takeLast,
   takeUntil
@@ -27,6 +36,15 @@ import {
 import {ToastrService} from "ngx-toastr";
 import {environment} from "../../../../environments/environment";
 import {fromArrayLike} from "rxjs/internal/observable/innerFrom";
+import {MatDialog} from "@angular/material/dialog";
+import {DialogClientContactComponent} from "../../dialog-client-contact/dialog-client-contact.component";
+import {ClientContactModel} from "../../../shared";
+
+const CONTACT_INFO_KEY = 'programisto.quote-engine.contact_info';
+const LINE_LENGTH = 56;
+const TITLE_LENGTH = 30;
+const TIME_LENGTH = 13;
+const COST_LENGTH = 13;
 @Component({
   selector: 'app-proposition-devis',
   standalone: true,
@@ -40,26 +58,25 @@ import {fromArrayLike} from "rxjs/internal/observable/innerFrom";
   styleUrl: './proposition-devis.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PropositionDevisComponent implements OnDestroy{
+export class PropositionDevisComponent implements OnDestroy {
 
   accordion = viewChild.required(MatAccordion);
 
   private readonly chiffrageService: ChiffrageService = inject(ChiffrageService);
   private readonly devisService: DevisService = inject(DevisService);
   private readonly toastService = inject(ToastrService);
+  private readonly storageService: LocalStorageService = inject(LocalStorageService);
 
   private sendEmailSubject = new Subject<boolean>();
   private destroy$ = new Subject();
 
-  constructor() {
+  constructor(public dialog: MatDialog) {
     this.sendEmailSubject.pipe(
       takeUntil(this.destroy$),
-      debounceTime(1000)
     ).subscribe({
-      next: _ => this.sendEmail()
+      next: _ => this.openClientContactDialog()
     });
   }
-
 
   @Input() devis?: Devis;
   @Input() waitingForService: boolean = false;
@@ -82,16 +99,39 @@ export class PropositionDevisComponent implements OnDestroy{
     this.sendEmailSubject.next(true);
   }
 
-  sendEmail() {
-    const clientName = 'Jhon Doe';
-    const clientEmail = 'aramis.stalin@gmail.com';
-    const clientData = this.buildClientData(clientEmail);
-    const salesData = this.buildSalesData(clientName, clientEmail);
+  openClientContactDialog() {
+    const ls = this.storageService.localStorage;
+    if (ls) {
+      const info: ClientContactModel = this.storageService.get(CONTACT_INFO_KEY) as ClientContactModel;
+      if (info && info['fullname'] && info['email']) {
+        this.sendEmail(info);
+        return;
+      }
+    }
+    const dialogRef = this.dialog.open(DialogClientContactComponent);
+    dialogRef.afterClosed().subscribe({
+      next: (result) => {
+        if (!result) return;
+        if(ls) {
+          this.storageService.set(CONTACT_INFO_KEY, result);
+        }
+        this.sendEmail(result as ClientContactModel);
+      }
+    });
+  }
 
-    fromArrayLike( [
+  sendEmail(contactData: ClientContactModel) {
+    const clientData = this.buildClientData(contactData.email);
+    const salesData = this.buildSalesData(contactData.fullname, contactData.email);
+    const discordData = {
+      content: `Le client ${contactData.fullname} a envoyé un projet\\ndans sa boîte mail (${contactData.email})!!!`,
+      embeds: this.buildDiscordTable(clientData.devis, clientData.projet)
+    }
+
+    fromArrayLike([
       this.devisService.sendEmailToClient(clientData).pipe(delay(5000)),
       this.devisService.sendEmailToSales(salesData),
-      this.devisService.sendDiscordMessage(`Le client ${clientName} a envoyé un projet dans sa boîte mail (${clientEmail})!!!`)
+      this.devisService.sendDiscordMessage(discordData)
     ]).pipe(
       concatAll(),
       takeLast(1)
@@ -112,7 +152,6 @@ export class PropositionDevisComponent implements OnDestroy{
       to: environment.salesEmail,
       subject: 'Prospect envoyé quote',
       body: `Le prospect ${clientName} s'est envoyé le projet à sa adresse e-mail (${clientEmail}).`
-
     }
   }
 
@@ -123,5 +162,82 @@ export class PropositionDevisComponent implements OnDestroy{
       devis: this.devis || {},
       projet: this.chiffrageService.getEstimatedData(this.estimationJours) || {}
     };
+  }
+
+  private buildDiscordTable(devis: any, projet: any): string {
+    let table = [];
+    table.push(this.buildTitleLine(devis.nom) + this.buildString(COST_LENGTH + TIME_LENGTH));
+    devis.modules.forEach((module: any) => {
+      table.push(
+        this.buildTitleLine(module.nom) +
+        this.buildScenariosLine(module) +
+        this.buildTimeLine(module)
+      )
+    })
+    table.push(this.buildString(LINE_LENGTH, '-'))
+    table.push('Projet' + this.buildString(LINE_LENGTH - 6));
+    table.push(this.buildString(LINE_LENGTH, '-'))
+    const stages: string[] = Object.keys(projet);
+    let costs: any = {};
+    let hours: any = {};
+    stages.forEach(stage => {
+      costs[stage] = this.chiffrageService.estimeStageTotalCouts(projet[stage.toLowerCase()]);
+      hours[stage] = this.chiffrageService.estimeStageTotalJours(projet[stage.toLowerCase()]);
+      table.push(
+        this.buildTitleLine(stage.at(0)!.toUpperCase() + stage.substring(1)) +
+        this.buildCostLine(costs[stage]) +
+        this.buildHoursLine(hours[stage])
+      );
+    });
+
+    table.push(this.buildString(LINE_LENGTH, '-'))
+    table.push('Total' + this.buildString(LINE_LENGTH - 5));
+    table.push(
+      this.buildTitleLine('Coût total') +
+      this.buildCostLine((Object.values(costs) as number[]).reduce((acc: number, value: number) => acc + value)) +
+      this.buildString(TIME_LENGTH)
+    );
+    table.push(
+      this.buildTitleLine('Durée totale') +
+      this.buildCostLine((Object.values(hours) as number[]).reduce((acc: number, value: number) => acc + value)) +
+      this.buildString(TIME_LENGTH)
+    );
+
+    return "```plaintext\\n" + table.join("\\n") + "\\n```";
+  }
+
+  private buildTitleLine(title: string): string {
+    const l = title.length;
+    if (l >= TITLE_LENGTH) {
+      return title.substring(0, TITLE_LENGTH);
+    }
+    return title + this.buildString(TITLE_LENGTH - l);
+  }
+
+  private buildScenariosLine(module: any): string {
+    let str = this.computeModuleCount(module);
+    return this.buildString(COST_LENGTH - str.length || 0) + str;
+  }
+
+  private buildCostLine(price: number): string {
+    let str = new Intl.NumberFormat(
+      'fr-FR', { style: 'currency', currency: 'EUR' }
+    ).format(price);
+    return this.buildString(COST_LENGTH - str.length || 0) + str;
+  }
+
+  private buildHoursLine(hours: number): string {
+    let str = new Intl.NumberFormat('fr-FR', {style: 'decimal',minimumIntegerDigits:1, minimumFractionDigits:1, maximumFractionDigits:1}).format(hours);
+    str += ' jours';
+    return this.buildString(TIME_LENGTH - str.length || 0) + str;
+  }
+
+  private buildTimeLine(module: any): string {
+    let str = this.computeModuleDuration(module);
+    return this.buildString(TIME_LENGTH - str.length || 0) + str;
+  }
+
+  private buildString(count: number, character: string = ' '): string {
+    return character.repeat(count);
   }
 }

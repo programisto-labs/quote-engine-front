@@ -67,20 +67,6 @@
   "sessions.403": "403",
   "sessions.404": "404",
   "sessions.500": "500",
-  "utilities": "Utilidades",
-  "utilities.css-grid": "Cuadrícula CSS",
-  "utilities.css-helpers": "Asistentes CSS",
-  "menu-level": "Nivel de menú",
-  "menu-level.level-1-1": "Nivel 1.1",
-  "menu-level.level-1-2": "Nivel 1.2",
-  "menu-level.level-1-1.level-2-1": "Nivel 2.1",
-  "menu-level.level-1-1.level-2-2": "Nivel 2.2",
-  "menu-level.level-1-1.level-2-1.level-3-1": "Nivel 3.1",
-  "menu-level.level-1-1.level-2-1.level-3-1.level-4-1": "Nivel 4.1",
-  "permissions": "Permisos",
-  "permissions.role-switching": "Cambio de rol",
-  "permissions.route-guard": "Route Guard",
-  "permissions.test": "Prueba de permiso",
   "validations": {
     "required": "Este campo es obligatorio",
     "minlength": "Debe tener al menos {{number}} caracteres",
@@ -100,9 +86,11 @@
     "range_page_label_1": "sin registro",
     "range_page_label_2": "{{startIndex}} - {{endIndex}} de {{length}}"
   },
-  "table_kitchen_sink": {
+  "dialogs": {
+    "contact_info": "Información de contacto",
     "position": "Posición",
     "name": "Nombre",
+    "full_name": "Nombre completo",
     "weight": "Peso",
     "symbol": "Símbolo",
     "gender": "Género",
@@ -119,7 +107,9 @@
     "delete": "Eliminar",
     "confirm_delete": "¿Confirmar eliminación?",
     "ok": "Aceptar",
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "cancel": "Cancelar",
+    "submit": "Enviar"
   },
   "read_and_agree": "He leído y acepto los términos del servicio",
   "have_an_account": "Ya tengo una cuenta",
@@ -134,5 +124,6 @@
   "legal_notices": "Avisos Legales",
   "cookies_policy": "Política de Cookies",
   "website": "Sitio Web",
+  "visit_us": "Visítenos",
   "loading": "Cargando..."
 }

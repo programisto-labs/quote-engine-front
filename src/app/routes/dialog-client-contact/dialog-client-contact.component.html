@@ -1,0 +1,44 @@
+<div class="d-flex w-full h-full">
+  <mat-card class="m-auto" style="max-width: 480px;">
+    <mat-card-header class="m-b-24">
+      <mat-card-title>{{'dialogs.contact_info' | translate}}</mat-card-title>
+    </mat-card-header>
+    <mat-divider class="m-b-24"></mat-divider>
+    <mat-card-content>
+      <form class="form-field-full" [formGroup]="contactForm">
+        <mat-form-field class="w-full m-b-24" appearance="outline">
+          <mat-label>{{'dialogs.full_name' | translate}}</mat-label>
+          <input matInput placeholder="Jean Dupont" formControlName="fullname" required>
+          @if (fullname!.invalid) {
+            <mat-error>
+                <span>{{'validations.required' | translate}}
+                  <strong>*</strong>
+                </span>
+            </mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field class="w-full m-b-24" appearance="outline">
+          <mat-label>{{'dialogs.email' | translate}}</mat-label>
+          <input matInput placeholder="jean.dupont@example.com" formControlName="email" required>
+          @if (email!.invalid) {
+            <mat-error>
+                <span>{{'validations.invalid_email' | translate}}
+                  <strong>*</strong>
+                </span>
+            </mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field class="w-full m-b-24" appearance="outline">
+          <mat-label>{{'dialogs.tele' | translate}}</mat-label>
+          <input matInput placeholder="+33 6 1234 5678" formControlName="tele">
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+    <mat-divider></mat-divider>
+    <mat-dialog-actions align="end">
+      <button mat-raised-button mat-dialog-close (click)="cancel()">{{'dialogs.cancel' | translate}}</button>
+      <button mat-raised-button color="primary" mat-dialog-close [disabled]="contactForm.invalid"
+              (click)="close()">{{'dialogs.submit' | translate}}</button>
+    </mat-dialog-actions>
+  </mat-card>
+</div>

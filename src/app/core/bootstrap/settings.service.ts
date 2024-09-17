@@ -10,7 +10,7 @@ import { AppSettings, AppTheme, defaults } from '../settings';
   providedIn: 'root',
 })
 export class SettingsService {
-  private readonly key = 'ng-matero-settings';
+  private readonly key = 'programisto.quote-engine.settings';
 
   private readonly store = inject(LocalStorageService);
   private readonly mediaMatcher = inject(MediaMatcher);

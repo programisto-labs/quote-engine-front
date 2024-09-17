@@ -67,20 +67,6 @@
   "sessions.403": "403",
   "sessions.404": "404",
   "sessions.500": "500",
-  "utilities": "Utilitaires",
-  "utilities.css-grid": "Grille CSS",
-  "utilities.css-helpers": "Assistants CSS",
-  "menu-level": "Niveau de menu",
-  "menu-level.level-1-1": "Niveau 1.1",
-  "menu-level.level-1-2": "Niveau 1.2",
-  "menu-level.level-1-1.level-2-1": "Niveau 2.1",
-  "menu-level.level-1-1.level-2-2": "Niveau 2.2",
-  "menu-level.level-1-1.level-2-1.level-3-1": "Niveau 3.1",
-  "menu-level.level-1-1.level-2-1.level-3-1.level-4-1": "Niveau 4.1",
-  "permissions": "Autorisations",
-  "permissions.role-switching": "Changement de rôle",
-  "permissions.route-guard": "Route Guard",
-  "permissions.test": "Test d'autorisation",
   "validations": {
     "required": "Ce champ est obligatoire",
     "minlength": "Doit contenir au moins {{number}} caractères",
@@ -100,9 +86,11 @@
     "range_page_label_1": "aucun enregistrement",
     "range_page_label_2": "{{startIndex}} - {{endIndex}} de {{length}}"
   },
-  "table_kitchen_sink": {
+  "dialogs": {
+    "contact_info": "Coordonnées",
     "position": "Position",
     "name": "Nom",
+    "full_name": "Nom et prénom",
     "weight": "Poids",
     "symbol": "Symbole",
     "gender": "Sexe",
@@ -119,7 +107,9 @@
     "delete": "Supprimer",
     "confirm_delete": "Confirmer la suppression ?",
     "ok": "Ok",
-    "close": "Fermer"
+    "close": "Fermer",
+    "cancel": "Annuler",
+    "submit": "Soumettre"
   },
   "read_and_agree": "J'ai lu et j'accepte les conditions d'utilisation",
   "have_an_account": "J'ai déjà un compte",

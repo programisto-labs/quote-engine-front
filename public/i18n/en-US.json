@@ -67,23 +67,9 @@
   "sessions.403": "403",
   "sessions.404": "404",
   "sessions.500": "500",
-  "utilities": "Utilities",
-  "utilities.css-grid": "CSS Grid",
-  "utilities.css-helpers": "CSS Helpers",
-  "menu-level": "Menu Level",
-  "menu-level.level-1-1": "Level 1.1",
-  "menu-level.level-1-2": "Level 1.2",
-  "menu-level.level-1-1.level-2-1": "Level 2.1",
-  "menu-level.level-1-1.level-2-2": "Level 2.2",
-  "menu-level.level-1-1.level-2-1.level-3-1": "Level 3.1",
-  "menu-level.level-1-1.level-2-1.level-3-1.level-4-1": "Level 4.1",
-  "permissions": "Permissions",
-  "permissions.role-switching": "Role Switching",
-  "permissions.route-guard": "Route Guard",
-  "permissions.test": "Permission Test",
   "validations": {
     "required": "This field is required",
-    "minlength": "Should have atleast {{number}} characters",
+    "minlength": "Should have at least {{number}} characters",
     "maxlength": "This value should be less than {{number}} characters",
     "min": "This value should be more than {{number}}",
     "max": "This value should be less than {{number}}",
@@ -100,9 +86,11 @@
     "range_page_label_1": "no record",
     "range_page_label_2": "{{startIndex}} - {{endIndex}} of {{length}}"
   },
-  "table_kitchen_sink": {
+  "dialogs": {
+    "contact_info": "Contact information",
     "position": "Position",
     "name": "Name",
+    "full_name": "Full Name",
     "weight": "Weight",
     "symbol": "Symbol",
     "gender": "Gender",
@@ -119,7 +107,9 @@
     "delete": "Delete",
     "confirm_delete": "Confirm delete?",
     "ok": "Ok",
-    "close": "Close"
+    "close": "Close",
+    "cancel": "Cancel",
+    "submit": "Submit"
   },
   "read_and_agree": "I have read and agree to the terms of service",
   "have_an_account": "Already have an account",
