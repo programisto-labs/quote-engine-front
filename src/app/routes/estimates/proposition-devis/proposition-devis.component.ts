@@ -205,7 +205,8 @@ export class PropositionDevisComponent implements OnDestroy {
     );
     table.push(
       this.buildTitleLine('Durée totale') +
-      this.buildCostLine((Object.values(hours) as number[]).reduce((acc: number, value: number) => acc + value)) +
+      this.buildCostLine((Object.values(hours) as number[]).reduce((acc: number, value: number) => acc + value))
+        .replace('€', 'jours') +
       this.buildString(TIME_LENGTH)
     );
 
