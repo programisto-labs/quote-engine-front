@@ -1,7 +1,11 @@
 import {Scenario} from "./scenario";
 
 
-export interface Module {
+export class Module {
   nom: string;
   scenarios: Scenario[];
+
+  public moduleDuree() {
+    return this.scenarios.reduce((acc, scenario) => acc + scenario.duree, 0);
+  }
 }

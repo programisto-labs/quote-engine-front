@@ -39,12 +39,10 @@ import {fromArrayLike} from "rxjs/internal/observable/innerFrom";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {DialogClientContactComponent} from "../../dialog-client-contact/dialog-client-contact.component";
 import {ClientContactModel} from "../../../shared";
+import {DiscordDatatableBuilderService} from "../../../shared/services/discord.datatable.builder.service";
 
 const CONTACT_INFO_KEY = 'programisto.quote-engine.contact_info';
-const LINE_LENGTH = 56;
-const TITLE_LENGTH = 30;
-const TIME_LENGTH = 13;
-const COST_LENGTH = 13;
+
 @Component({
   selector: 'app-proposition-devis',
   standalone: true,
@@ -65,6 +63,7 @@ export class PropositionDevisComponent implements OnDestroy {
   private readonly chiffrageService: ChiffrageService = inject(ChiffrageService);
   private readonly devisService: DevisService = inject(DevisService);
   private readonly toastService = inject(ToastrService);
+  private readonly discordDatatableBuilderService = inject(DiscordDatatableBuilderService);
   private readonly storageService: LocalStorageService = inject(LocalStorageService);
   private clientDialogConfig: MatDialogConfig;
 
@@ -91,7 +90,7 @@ export class PropositionDevisComponent implements OnDestroy {
   get mutlipleJours(): boolean { return this.estimationJours > 1; }
 
 
-  computeModuleDuration = (module: Module): string => `${module.scenarios.reduce((acc, scenario) => acc + scenario.duree, 0)} jour${module.scenarios.reduce((acc, scenario) => acc + scenario.duree, 0) > 1 ? "s" : ""}`;
+  computeModuleDuration = (module: Module): string => `${module.moduleDuree()} jour${module.moduleDuree() > 1 ? "s" : ""}`;
   computeScenarioDuration = (scenario: Scenario): string => `${scenario.duree} jour${scenario.duree > 1 ? "s" : ""}`;
   computeModuleCount = (module: Module): string => `${module.scenarios.length} scénario${module.scenarios.length > 1 ? "s" : ""}`;
   computeDevisDuration = (): string => `${this.estimationJours} jour${this.mutlipleJours ? "s" : ""}`;
@@ -131,7 +130,7 @@ export class PropositionDevisComponent implements OnDestroy {
     const salesData = this.buildSalesData(contactData.fullname, contactData.email);
     const discordData = {
       content: `Le client ${contactData.fullname} a envoyé un projet\\ndans sa boîte mail (${contactData.email})!!!`,
-      embeds: this.buildDiscordTable(clientData.devis, clientData.projet)
+      embeds: this.discordDatatableBuilderService.buildDiscordTable(clientData.devis as Devis, clientData.projet)
     }
 
     fromArrayLike([
@@ -170,81 +169,4 @@ export class PropositionDevisComponent implements OnDestroy {
     };
   }
 
-  private buildDiscordTable(devis: any, projet: any): string {
-    let table = [];
-    table.push(this.buildTitleLine(devis.nom) + this.buildString(COST_LENGTH + TIME_LENGTH));
-    devis.modules.forEach((module: any) => {
-      table.push(
-        this.buildTitleLine(module.nom) +
-        this.buildScenariosLine(module) +
-        this.buildTimeLine(module)
-      )
-    })
-    table.push(this.buildString(LINE_LENGTH, '-'))
-    table.push('Projet' + this.buildString(LINE_LENGTH - 6));
-    table.push(this.buildString(LINE_LENGTH, '-'))
-    const stages: string[] = Object.keys(projet);
-    let costs: any = {};
-    let hours: any = {};
-    stages.forEach(stage => {
-      costs[stage] = this.chiffrageService.estimeStageTotalCouts(projet[stage.toLowerCase()]);
-      hours[stage] = this.chiffrageService.estimeStageTotalJours(projet[stage.toLowerCase()]);
-      table.push(
-        this.buildTitleLine(stage.at(0)!.toUpperCase() + stage.substring(1)) +
-        this.buildCostLine(costs[stage]) +
-        this.buildHoursLine(hours[stage])
-      );
-    });
-
-    table.push(this.buildString(LINE_LENGTH, '-'))
-    table.push('Total' + this.buildString(LINE_LENGTH - 5));
-    table.push(
-      this.buildTitleLine('Coût total') +
-      this.buildCostLine((Object.values(costs) as number[]).reduce((acc: number, value: number) => acc + value)) +
-      this.buildString(TIME_LENGTH)
-    );
-    table.push(
-      this.buildTitleLine('Durée totale') +
-      this.buildCostLine((Object.values(hours) as number[]).reduce((acc: number, value: number) => acc + value))
-        .replace('€', 'jours') +
-      this.buildString(TIME_LENGTH)
-    );
-
-    return "```plaintext\\n" + table.join("\\n") + "\\n```";
-  }
-
-  private buildTitleLine(title: string): string {
-    const l = title.length;
-    if (l >= TITLE_LENGTH) {
-      return title.substring(0, TITLE_LENGTH);
-    }
-    return title + this.buildString(TITLE_LENGTH - l);
-  }
-
-  private buildScenariosLine(module: any): string {
-    let str = this.computeModuleCount(module);
-    return this.buildString(COST_LENGTH - str.length || 0) + str;
-  }
-
-  private buildCostLine(price: number): string {
-    let str = new Intl.NumberFormat(
-      'fr-FR', { style: 'currency', currency: 'EUR' }
-    ).format(price);
-    return this.buildString(COST_LENGTH - str.length || 0) + str;
-  }
-
-  private buildHoursLine(hours: number): string {
-    let str = new Intl.NumberFormat('fr-FR', {style: 'decimal',minimumIntegerDigits:1, minimumFractionDigits:1, maximumFractionDigits:1}).format(hours);
-    str += ' jours';
-    return this.buildString(TIME_LENGTH - str.length || 0) + str;
-  }
-
-  private buildTimeLine(module: any): string {
-    let str = this.computeModuleDuration(module);
-    return this.buildString(TIME_LENGTH - str.length || 0) + str;
-  }
-
-  private buildString(count: number, character: string = ' '): string {
-    return character.repeat(count);
-  }
 }
