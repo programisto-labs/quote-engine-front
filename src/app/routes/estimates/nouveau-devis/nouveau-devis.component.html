@@ -1,31 +1,45 @@
-<mat-stepper #stepper>
+<mat-stepper #stepper [selectedIndex]="stepperIndex">
     <!-- DESCRIPTION GENERALE -->
     <mat-step [stepControl]="formGroupDescription">
-        <ng-template matStepLabel>Description générale</ng-template>
-        <form [formGroup]="formGroupDescription">
-            <div style="flex: 1;">
-                <mat-form-field appearance="fill" style="width: 100%;">
-                    <mat-label>Domaine d'activité</mat-label>
-                    <mat-hint>Exemple: Assurance, Centrale d'appel, Restauration, Boulangerie, ...</mat-hint>
-                    <mat-error>Le domaine d'activité est obligatoire</mat-error>
-                    <input matInput formControlName="coreBusiness">
-                </mat-form-field>
+      <ng-template matStepLabel>Description générale</ng-template>
+      <mat-tab-group>
+        <mat-tab label="Description générale">
+          <form [formGroup]="formGroupDescription">
+            <div class="d-flex p-t-24">
+              <mat-form-field appearance="outline" class="w-full m-b-24">
+                <mat-label>Domaine d'activité</mat-label>
+                <mat-hint>Exemple: Assurance, Centrale d'appel, Restauration ...</mat-hint>
+                <mat-error>Le domaine d'activité est obligatoire</mat-error>
+                <input matInput formControlName="coreBusiness">
+              </mat-form-field>
             </div>
-            <div style="flex: 1;">
-                <mat-form-field appearance="fill" style="width: 100%;">
-                    <mat-label>Besoin</mat-label>
-                    <mat-hint>Exemple: Gestion comptable, Inventaire de stock, ...</mat-hint>
-                    <mat-error>Le besoin est obligatoire</mat-error>
-                    <textarea matInput formControlName="concept" required></textarea>
-                </mat-form-field>
+            <div class="d-flex">
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Besoin</mat-label>
+                <mat-hint>Exemple: Gestion comptable, Inventaire de stock, ...</mat-hint>
+                <mat-error>Le besoin est obligatoire</mat-error>
+                <textarea matInput formControlName="concept" required style="min-height: 200px; max-height: 400px;"></textarea>
+              </mat-form-field>
             </div>
-        </form>
-        <input type="file" (change)="onFileChange($event)" style="margin: 10px;">
-        @if( formGroupDescription.valid) {
-        <button mat-raised-button matStepperNext color="primary" style="margin: 50px;">
-            <mat-icon>keyboard_arrow_right</mat-icon> Création des scénarios utilisateurs
-        </button>
-        }
+          </form>
+          <div class="d-flex w-full justify-content-end m-b-8 m-t-16">
+            <button mat-stroked-button matStepperNext color="primary" [disabled]="formGroupDescription.invalid">
+                <mat-icon>keyboard_arrow_right</mat-icon> Création des scénarios utilisateurs
+            </button>
+          </div>
+        </mat-tab>
+        <mat-tab label="{{'pdf_from_document' | translate}}">
+          <app-pdf-loader (sendContent)=setPdfContent($event)></app-pdf-loader>
+          <div class="d-flex w-ful justify-content-end m-b-8 m-t-16">
+            <button mat-stroked-button color="primary" [disabled]="!pdfContent" [ngClass]="loadingPdf ? 'd-none' : ''"
+                    (click)="sendPdfContent()">
+              <mat-icon>keyboard_arrow_right</mat-icon>
+              Création des scénarios utilisateurs
+            </button>
+            <mat-progress-bar mode="indeterminate" [ngClass]="!loadingPdf ? 'd-none' : ''"></mat-progress-bar>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
     </mat-step>
 
     <!-- SCENARIOS UTILISATEURS -->
@@ -34,59 +48,59 @@
         <form [formGroup]="formGroupScenarios">
             <div formArrayName="useCases" style="flex: 1;">
                 @for (useCase of useCases.controls; track useCase) {
-                <div [formGroupName]="$index" style="margin: 10px;">
-                    <mat-form-field appearance="fill" style="width: 100%;">
+                <div [formGroupName]="$index" class="m-16">
+                    <mat-form-field appearance="outline" style="width: 100%;">
                         <mat-label>Scénario utilisateur</mat-label>
                         <mat-hint>Exemple: Consulte un inventaire</mat-hint>
                         <mat-error>Le scénario utilisateur est obligatoire</mat-error>
                         <input matInput #useCaseInput
-                            formControlName="useCase" (keydown.enter)="newUseCase($event)"
-                            (keydown.backspace)="removeUseCase(useCase, $event)"
+                            formControlName="useCase"
                             (keyup)="inlineAutocomplete($event, useCaseInput.value, 'useCase' + $index)"
                             [matAutocomplete]="auto">
-                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event, $index)">
                             @for( suggestion of suggestions['useCase'+$index]; track suggestion) {
                             <mat-option [value]="suggestion" [textContent]="suggestion"> </mat-option>
                             }
                         </mat-autocomplete>
-                        @if (useCase.value && useCases.length > 1) {
                         <button matSuffix mat-icon-button aria-label="Supprime le scénario"
-                            (click)="removeUseCase(useCase)">
-                            <mat-icon style="color: gray;">delete</mat-icon>
+                          [disabled]="useCases.length < 2"
+                            (click)="removeUseCase($index)">
+                            <mat-icon>delete</mat-icon>
                         </button>
-                        }
                     </mat-form-field>
                 </div>
                 }
             </div>
-
-            <button mat-raised-button color="accent" type="button" (click)="autocomplete()"
-                [disabled]="waitingForCompletion" style="flex: 1; width: 100%;">
-                @if(waitingForCompletion ) {
-                <ng-container>
-                    <mat-icon> cached </mat-icon> Génération des scénarios ...
-                </ng-container>
-                }
-                @else {
-                <ng-container>
-                    <mat-icon> lightbulb_outline </mat-icon> Suggérer
-                </ng-container>
-                }
-            </button>
-            @if(canAddUseCase) {
-            <button mat-raised-button color="accent" type="button" (click)="newUseCase()" style="flex: 1; width: 100%;">
-                <mat-icon>add</mat-icon> Ajouter
-            </button>
-            }
+          <div class="row d-flex w-full p-l-16 p-r-16">
+            <div class="col-6 m-b-16">
+              <button mat-stroked-button [disabled]="!canAddUseCase" (click)="addNewUseCase()">
+                <mat-icon>add</mat-icon>{{'dialogs.add' | translate}}
+              </button>
+            </div>
+            <div class="col-6 m-b-16 d-flex justify-content-end">
+              <button mat-stroked-button (click)="autocomplete()"
+                  [disabled]="waitingForCompletion || (formGroupDescription.invalid && formGroupScenarios.invalid)">
+                      <mat-icon>{{ waitingForCompletion ? 'cached' : 'lightbulb_outline' }} </mat-icon>
+                      {{ waitingForCompletion ? 'Génération des scénarios ...' : 'dialogs.suggest' | translate }}
+              </button>
+            </div>
+          </div>
+          <div class="row d-flex w-full p-l-16 p-r-16">
+            <div class="col-6 m-b-16">
+              <button mat-stroked-button [disabled]="useCases.length < 3" (click)="removeAllUseCases()">
+                <mat-icon>delete</mat-icon>{{'dialogs.clear' | translate}}
+              </button>
+            </div>
+            <div class="col-6 m-b-16 d-flex justify-content-end">
+              <button mat-stroked-button matStepperNext
+                  (click)="buildDevis()"
+                  [disabled]="formGroupDescription.invalid || formGroupScenarios.invalid"
+              >
+                  <mat-icon>keyboard_arrow_right</mat-icon>Génération du devis
+              </button>
+            </div>
+          </div>
         </form>
-
-        @if( formGroupScenarios.valid && formGroupScenarios.valid) {
-        <button mat-raised-button matStepperNext color="primary" style="margin: 50px; background-color: gold;"
-            (click)="buildDevis()">
-            <mat-icon>keyboard_arrow_right</mat-icon>
-            Génération du devis
-        </button>
-        }
     </mat-step>
 
     <!-- PROPOSITION DE DEVIS -->

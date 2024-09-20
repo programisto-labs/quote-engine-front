@@ -32,7 +32,8 @@ export class SettingsService {
   constructor() {
     const storedOptions = this.store.get(this.key);
     this.options = Object.assign(defaults, storedOptions);
-    this.themeColor = this.getThemeColor();
+    this.options.theme = 'light';
+    // this.themeColor = this.getThemeColor();
     this.htmlElement = this.document.querySelector('html')!;
   }
 

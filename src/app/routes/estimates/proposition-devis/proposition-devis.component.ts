@@ -1,15 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, Input, OnDestroy, viewChild } from '@angular/core';
-import { MatButton } from '@angular/material/button';
-import {
-  MatCard,
-  MatCardActions,
-  MatCardContent,
-  MatCardFooter,
-  MatCardHeader,
-  MatCardModule,
-  MatCardSubtitle,
-  MatCardTitle
-} from '@angular/material/card';
+
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
@@ -17,7 +9,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 import { MatGridListModule } from '@angular/material/grid-list';
-
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatLineModule } from '@angular/material/core';
@@ -47,13 +38,23 @@ const CONTACT_INFO_KEY = 'programisto.quote-engine.contact_info';
   selector: 'app-proposition-devis',
   standalone: true,
   imports: [
-    MatButton, MatListModule, MatIconModule, MatSelectModule, MatInputModule, MatFormFieldModule,
-    MatCard, MatCardTitle, MatCardSubtitle, MatCardActions, MatCardContent, MatCardHeader, MatCardFooter,
-    MatChipsModule, MatLineModule, MatCardModule, MatListModule, MatExpansionModule, MatGridListModule, MatBadgeModule, DecimalPipe,
-    ChiffrageComponent, MatProgressBarModule
+    MatBadgeModule,
+    MatButtonModule,
+    MatCardModule,
+    MatChipsModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatGridListModule,
+    MatIconModule,
+    MatInputModule,
+    MatLineModule,
+    MatListModule,
+    MatProgressBarModule,
+    MatSelectModule,
+    DecimalPipe,
+    ChiffrageComponent
   ],
   templateUrl: './proposition-devis.component.html',
-  styleUrl: './proposition-devis.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PropositionDevisComponent implements OnDestroy {
@@ -90,7 +91,7 @@ export class PropositionDevisComponent implements OnDestroy {
   get mutlipleJours(): boolean { return this.estimationJours > 1; }
 
 
-  computeModuleDuration = (module: Module): string => `${module.moduleDuree()} jour${module.moduleDuree() > 1 ? "s" : ""}`;
+  computeModuleDuration = (module: Module): string => `${Module.moduleDuree(module)} jour${Module.moduleDuree(module) > 1 ? "s" : ""}`;
   computeScenarioDuration = (scenario: Scenario): string => `${scenario.duree} jour${scenario.duree > 1 ? "s" : ""}`;
   computeModuleCount = (module: Module): string => `${module.scenarios.length} scénario${module.scenarios.length > 1 ? "s" : ""}`;
   computeDevisDuration = (): string => `${this.estimationJours} jour${this.mutlipleJours ? "s" : ""}`;

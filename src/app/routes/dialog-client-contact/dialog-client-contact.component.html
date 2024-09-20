@@ -36,8 +36,8 @@
     </mat-card-content>
     <mat-divider></mat-divider>
     <mat-dialog-actions align="end">
-      <button mat-raised-button mat-dialog-close (click)="cancel()">{{'dialogs.cancel' | translate}}</button>
-      <button mat-raised-button color="primary" mat-dialog-close [disabled]="contactForm.invalid"
+      <button mat-stroked-button mat-dialog-close (click)="cancel()">{{'dialogs.cancel' | translate}}</button>
+      <button mat-stroked-button color="primary" mat-dialog-close [disabled]="contactForm.invalid"
               (click)="close()">{{'dialogs.submit' | translate}}</button>
     </mat-dialog-actions>
   </mat-card>

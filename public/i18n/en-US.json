@@ -105,6 +105,10 @@
   "dialogs.close": "Close",
   "dialogs.cancel": "Cancel",
   "dialogs.submit": "Submit",
+  "dialogs.upload": "Upload",
+  "dialogs.add": "Add",
+  "dialogs.suggest": "Suggest",
+  "dialogs.clear": "Clear",
   "read_and_agree": "I have read and agree to the terms of service",
   "have_an_account": "Already have an account",
   "restore_defaults": "Restore defaults",
@@ -119,5 +123,9 @@
   "cookies_policy": "Cookies Policy",
   "website": "Website",
   "visit_us": "Visit Us",
-  "loading": "Loading..."
+  "loading": "Loading...",
+  "filename": "File name",
+  "pdf_from_document": "Generate from document",
+  "pdf_content_required": "Please, upload a valid pdf document.",
+  "pdf_non_standard": "Error parsing pdf document, please verify that your document is on a standard format."
 }

@@ -1,0 +1,16 @@
+<div class="p-t-24">
+  <input type="file" (change)="onFileSelected($event)" #fileInput style="display: none;"/>
+  <button mat-stroked-button color="primary" class="m-r-8" (click)="fileInput.click()">
+    {{'dialogs.upload' | translate}}
+    <mat-icon>attach_file</mat-icon>
+  </button>
+</div>
+<div class="p-t-16">{{ filename || 'filename' | translate }}</div>
+<div class="d-flex p-t-16">
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Content</mat-label>
+    <mat-hint>Show the text content of the loaded document</mat-hint>
+    <mat-error>Le content est obligatoire</mat-error>
+    <textarea matInput required readonly style="min-height: 200px; max-height: 400px;">{{ pdfContent }}</textarea>
+  </mat-form-field>
+</div>

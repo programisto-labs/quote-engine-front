@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import {PageHeaderComponent} from "../../shared";
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
 import {TranslateModule} from "@ngx-translate/core";
+import {MatButton} from "@angular/material/button";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-home',
@@ -12,10 +14,11 @@ import {TranslateModule} from "@ngx-translate/core";
     MatCardContent,
     MatCardHeader,
     MatCardTitle,
-    TranslateModule
+    TranslateModule,
+    MatButton,
+    RouterLink
   ],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
 })
 export class HomeComponent {
 

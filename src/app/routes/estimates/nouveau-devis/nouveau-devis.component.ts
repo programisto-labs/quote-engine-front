@@ -1,15 +1,13 @@
-import {ChangeDetectorRef, Component, ElementRef, QueryList, ViewChildren} from '@angular/core';
+import {ChangeDetectorRef, Component, inject} from '@angular/core';
 import {PropositionDevisComponent} from "../proposition-devis/proposition-devis.component";
 import {MatIconModule} from '@angular/material/icon';
 import {Devis, DevisService} from '../../../shared';
 import {MatStepperModule} from '@angular/material/stepper';
-import {MatFormField, MatFormFieldModule, MatLabel} from '@angular/material/form-field';
+import {MatFormFieldModule} from '@angular/material/form-field';
 import {
-  AbstractControl,
   FormArray,
   FormBuilder,
   FormGroup,
-  FormsModule,
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
@@ -17,42 +15,51 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {DemandeClient} from '../../../shared';
 import {MatInputModule} from '@angular/material/input';
-import {MOCK_DEVIS} from '../MOCK_DEVIS';
-import {AsyncPipe} from '@angular/common';
-import {debounceTime, distinctUntilChanged, Subscription} from 'rxjs';
+import {AsyncPipe, NgClass} from '@angular/common';
+import {debounceTime, distinctUntilChanged, Subscription, take} from 'rxjs';
 
-import * as pdfjsLib from 'pdfjs-dist';
+import {PdfLoaderComponent} from "../../pdf-loader/pdf-loader.component";
+import {ToastrService} from "ngx-toastr";
+import {TranslateModule, TranslateService} from "@ngx-translate/core";
+import {MatTabsModule} from "@angular/material/tabs";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
+
 
 @Component({
   selector: 'app-nouveau-devis',
   standalone: true,
+  templateUrl: './nouveau-devis.component.html',
   imports: [
-    PropositionDevisComponent,
+    AsyncPipe,
     MatStepperModule,
-    FormsModule,
-    MatFormField,
-    ReactiveFormsModule,
-    MatInputModule,
     MatFormFieldModule,
+    MatInputModule,
     MatButtonModule,
-    MatLabel,
     MatIconModule,
     MatAutocompleteModule,
-    AsyncPipe
-  ],
-  providers: [DevisService],
-  templateUrl: './nouveau-devis.component.html',
-  styleUrls: ['./nouveau-devis.component.css']
+    PropositionDevisComponent,
+    PdfLoaderComponent,
+    ReactiveFormsModule,
+    MatTabsModule,
+    TranslateModule,
+    MatProgressBarModule,
+    NgClass
+  ]
 })
 export class NouveauDevisComponent {
+  private readonly toastService: ToastrService = inject(ToastrService);
+  private readonly translateService: TranslateService = inject(TranslateService);
+
   devis?: Devis;
   formGroupDescription: FormGroup;
   formGroupScenarios: FormGroup;
   waitingForService: boolean = false;
   waitingForCompletion: boolean = false;
+  loadingPdf: boolean = false;
+  pdfContent: string = '';
   suggestions: { [key: string]: string[] } = {};
 
-  @ViewChildren('useCaseInput') useCaseInputs!: QueryList<ElementRef>;
+  stepperIndex = 0;
 
   private autocompleteSubscription?: Subscription;
 
@@ -62,24 +69,12 @@ export class NouveauDevisComponent {
       concept: ['', Validators.required]
     });
     this.formGroupScenarios = this.formBuilder.group({
-      useCases: this.formBuilder.array([this.newUseCaseValidator()])
+      useCases: this.formBuilder.array([this.newUseCase()])
     });
-
-    // pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.worker.min.mjs';
-    // this.mockDemandeClient();
-    // this.mockDevis();
   }
 
   get useCases(): FormArray {
     return this.formGroupScenarios.get('useCases') as FormArray;
-  }
-
-  get lastUseCaseInput() {
-    return this.useCaseInputs.last;
-  }
-
-  get lastUseCase() {
-    return this.useCases.at(this.useCases.length - 1);
   }
 
   get canAddUseCase() {
@@ -94,23 +89,12 @@ export class NouveauDevisComponent {
     };
   }
 
-  ngAfterViewInit() {
-    this.useCaseInputs.changes.subscribe(() => {
-      this.focusLastUseCaseInput();
-    });
+  newUseCase(value: string = '') {
+    return this.formBuilder.group({useCase: [value, Validators.required]})
   }
 
-  newUseCaseValidator() {
-    return this.formBuilder.group({useCase: ['', Validators.required]})
-  }
-
-  newUseCase(event?: Event) {
-    if (event) {
-      event.preventDefault();
-    }
-    this.removeSuggestions();
-    this.removeEmptyUseCases();
-    this.useCases.push(this.newUseCaseValidator());
+  addNewUseCase() {
+    this.useCases.push(this.newUseCase());
   }
 
   removeSuggestions(fieldName?: string) {
@@ -121,35 +105,17 @@ export class NouveauDevisComponent {
     }
   }
 
-  removeLastUseCase() {
-    this.removeUseCase(this.useCases.at(this.useCases.length - 1));
-  }
-
-  removeEmptyUseCases() {
-    this.useCases.controls.forEach((useCase, index) => {
-      if (useCase.value.useCase == "") {
-        this.removeUseCase(useCase);
-      }
-    });
-  }
-
-  getUseCaseIndex(useCase: AbstractControl) {
-    return this.useCases.controls.indexOf(useCase);
-  }
-
-  removeUseCase(useCase: AbstractControl, event?: Event) {
-    const canRemoveUseCase = !event || (event && useCase.value.useCase.match(/^\s*$/))
-    if (canRemoveUseCase) {
-      this.useCases.removeAt(this.getUseCaseIndex(useCase));
+  removeUseCase(index: number) {
+    if (index >=0 && index < this.useCases.length) {
+      this.useCases.removeAt(index);
     }
   }
 
-  focusLastUseCaseInput() {
-    this.removeSuggestions();
-    if (this.lastUseCaseInput) {
-      this.lastUseCaseInput.nativeElement.focus();
-      this.cdr.detectChanges();
+  removeAllUseCases() {
+    while(this.useCases.length > 0) {
+      this.removeUseCase(this.useCases.length - 1);
     }
+    this.addNewUseCase();
   }
 
   buildDevis() {
@@ -162,25 +128,19 @@ export class NouveauDevisComponent {
     this.waitingForCompletion = true;
     this.devisService.autocomplete(this.demandeClient).subscribe(autocomplete => {
       autocomplete.suggestions.forEach(suggestion => {
-
         const item = this.formBuilder.group({useCase: suggestion})
-        item.disable();
-        setTimeout(() => {
-          item.enable();
-        }, 500);
         this.useCases.push(item);
       });
       this.waitingForCompletion = false;
     });
   }
 
-  onOptionSelected(event: any) {
+  onOptionSelected(event: any, index: number) {
     const value = event.option.value;
-    const index = this.useCases.controls.findIndex((useCase) => useCase.value.useCase == value);
     if (index == -1) {
       this.useCases.push(this.formBuilder.group({useCase: value}));
     }
-    this.removeSuggestions();
+    this.removeSuggestions(value);
   }
 
   inlineAutocomplete(event: KeyboardEvent, chunk: string, fieldName: string) {
@@ -219,62 +179,37 @@ export class NouveauDevisComponent {
       );
   }
 
-  async onFileChange(event: any) {
-    const file = event.target.files[0];
-    /*if (file && file.type === 'application/pdf') {
-      const fileReader = new FileReader();
-      fileReader.onload = async (e) => {
-        const typedarray = new Uint8Array(fileReader.result as ArrayBuffer);
-        const pdf = await pdfjsLib.getDocument({data: typedarray}).promise;
-        let extractedText = '';
-        this.useCases.clear();
-        for (let i = 1; i <= pdf.numPages; i++) {
-          const page = await pdf.getPage(i);
-          const textContent = await page.getTextContent();
-          const pageText = textContent.items.map((item: any) => (item as any).str).join(' ');
-          extractedText += pageText + "\n";
-          this.devisService.newDemandeClientFromRaw(pageText).subscribe({
-            next: (demandeClient) => {
-              demandeClient.useCases.forEach(useCase => {
-                this.useCases.push(this.formBuilder.group({useCase}));
-              })
-            }
-          })
+  setPdfContent(content: string) {
+    this.pdfContent = content;
+  }
+
+  sendPdfContent() {
+    if (!this.pdfContent) {
+      this.translateService.get('pdf_content_required').pipe(take(1)).subscribe(
+        (translation: string) => this.toastService.info(translation)
+      )
+      return;
+    }
+    this.loadingPdf = true;
+    this.devisService.newDemandeClientFromRaw(this.pdfContent).subscribe({
+      next: (demandeClient: DemandeClient) => {
+        if (demandeClient) {
+          this.formGroupDescription.setValue({
+            coreBusiness: demandeClient.coreBusiness,
+            concept: demandeClient.concept
+          });
+          Array.from({length: this.useCases.length}, (_) => this.useCases.removeAt(0));
+          demandeClient.useCases.map(
+            (useCase: string) => this.useCases.push(this.newUseCase(useCase))
+          );
+          this.stepperIndex++;
+          this.loadingPdf = false;
         }
-
-        this.devisService.newDemandeClientFromRaw(extractedText).subscribe({
-          next: (demandeClient) => {
-            this.formGroupDescription.setValue({
-              coreBusiness: demandeClient.coreBusiness,
-              concept: demandeClient.concept
-            });
-          }
-        });
-        fileReader.readAsArrayBuffer(file);
+      },
+      error: (error: any) => {
+        this.loadingPdf = false;
+        console.log(error);
       }
-    } else {
-      console.error('Veuillez sélectionner un fichier PDF.');
-    }*/
-  }
-
-  mockDemandeClient() {
-    this.useCases.clear();
-    const useCasesValues = [
-      {useCase: "Enroll in Courses"},
-      {useCase: "Track Learning Progress"},
-      {useCase: "Administer Online Exams"},
-      {useCase: "Issue Digital Certificates"}
-    ];
-    useCasesValues.forEach(value => {
-      this.useCases.push(this.formBuilder.group(value));
     });
-    this.formGroupDescription.setValue({
-      coreBusiness: "Education",
-      concept: "Learning Management System"
-    });
-  }
-
-  mockDevis() {
-    this.devis = MOCK_DEVIS;
   }
 }

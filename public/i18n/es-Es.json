@@ -105,6 +105,10 @@
   "dialogs.close": "Cerrar",
   "dialogs.cancel": "Cancelar",
   "dialogs.submit": "Enviar",
+  "dialogs.upload": "Subir",
+  "dialogs.add": "Adicionar",
+  "dialogs.suggest": "Sugerir",
+  "dialogs.clear": "Limpiar",
   "read_and_agree": "He leído y acepto los términos del servicio",
   "have_an_account": "Ya tengo una cuenta",
   "restore_defaults": "Restaurar valores predeterminados",
@@ -119,5 +123,9 @@
   "cookies_policy": "Política de Cookies",
   "website": "Sitio Web",
   "visit_us": "Visítenos",
-  "loading": "Cargando..."
+  "loading": "Cargando...",
+  "filename": "Nombre de archivo",
+  "pdf_from_document": "Generar a partir de documento",
+  "pdf_content_required": "Por favor, suba un documento pdf válido.",
+  "pdf_non_standard": "Error al analizar el documento PDF, verifique que su documento esté en un formato estándar."
 }

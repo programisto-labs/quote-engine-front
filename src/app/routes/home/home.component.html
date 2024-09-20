@@ -1,41 +1,37 @@
-<div class="row">
-  <div class="col">
-    <mat-card>
-      <mat-card-header class="d-block">
-        <h1>Accueil</h1>
-        <h3>Bienvenue sur le Générateur de Devis d'Application</h3>
-      </mat-card-header>
-      <mat-card-content>
-
-        <p>Bienvenue sur le Générateur de Devis d'Application, un outil conçu pour aider les entreprises et les
-          développeurs à obtenir rapidement une estimation structurée et détaillée pour leurs projets d'application.
-        </p>
-        <p>Notre application permet de :</p>
-        <ul>
-          <li>Définir le domaine d'activité principal de votre application.</li>
-          <li>Spécifier le concept général de l'application.</li>
-          <li>Identifier et détailler les cas d'utilisation de l'application.</li>
-          <li>Structurer ces cas d'utilisation en modules pertinents.</li>
-          <li>Générer un devis </li>
-        </ul>
-        <p>Comment ça marche :</p>
-        <ol>
-          <li>Vous fournissez les informations de base sur votre application, y compris le domaine d'activité, le
-            concept, et les cas d'utilisation.</li>
-          <li>Notre générateur analyse ces informations et crée des modules d'application cohérents.</li>
-          <li>Un devis détaillé est généré, incluant la complexité et la durée estimée pour chaque cas
-            d'utilisation.</li>
-        </ol>
-        <p>Avec notre Générateur de Devis d'Application, simplifiez la planification de votre projet et obtenez une
-          estimation rapide et fiable. Que vous soyez une startup, une PME ou une grande entreprise, notre outil est
-          conçu pour répondre à vos besoins de développement d'application.</p>
-        <p>Prêt à commencer ? Cliquez sur le bouton ci-dessous pour accéder au générateur de devis et créer votre
-          estimation personnalisée.</p>
-        <div class="text-center">
-          <a href="/estimates/new" class="btn btn-primary btn-lg">Accéder au Générateur de Devis</a>
-        </div>
-      </mat-card-content>
-
-    </mat-card>
+<div class="row w-full">
+  <div class="col p-24">
+    <h1 class="f-w-500">Accueil</h1>
+    <h3 class="f-w-500">Bienvenue sur le Générateur de Devis d'Application</h3>
+    <p>Bienvenue sur le Générateur de Devis d'Application, un outil conçu pour aider les entreprises et les
+      développeurs à obtenir rapidement une estimation structurée et détaillée pour leurs projets d'application.
+    </p>
+    <p>Notre application permet de :</p>
+    <ul>
+      <li>Définir le domaine d'activité principal de votre application.</li>
+      <li>Spécifier le concept général de l'application.</li>
+      <li>Identifier et détailler les cas d'utilisation de l'application.</li>
+      <li>Structurer ces cas d'utilisation en modules pertinents.</li>
+      <li>Générer un devis</li>
+    </ul>
+    <p>Comment ça marche :</p>
+    <ol>
+      <li>Vous fournissez les informations de base sur votre application, y compris le domaine d'activité, le
+        concept, et les cas d'utilisation.
+      </li>
+      <li>Notre générateur analyse ces informations et crée des modules d'application cohérents.</li>
+      <li>Un devis détaillé est généré, incluant la complexité et la durée estimée pour chaque cas
+        d'utilisation.
+      </li>
+    </ol>
+    <p>Avec notre Générateur de Devis d'Application, simplifiez la planification de votre projet et obtenez une
+      estimation rapide et fiable. Que vous soyez une startup, une PME ou une grande entreprise, notre outil est
+      conçu pour répondre à vos besoins de développement d'application.</p>
+    <p>Prêt à commencer ? Cliquez sur le bouton ci-dessous pour accéder au générateur de devis et créer votre
+      estimation personnalisée.</p>
+    <div class="col d-flex w-full justify-content-center">
+      <button mat-flat-button class="text-center" [routerLink]="'/estimates/new'">
+        Accéder au Générateur de Devis
+      </button>
+    </div>
   </div>
 </div>

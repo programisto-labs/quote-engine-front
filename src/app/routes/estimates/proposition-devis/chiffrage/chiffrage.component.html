@@ -1,21 +1,26 @@
 <mat-card-content>
-    <mat-card-subtitle>Projet</mat-card-subtitle>
-    <div class="example-action-buttons">
-        <button mat-button (click)="accordion().openAll()">Expand All</button>
-        <button mat-button (click)="accordion().closeAll()">Collapse All</button>
+  <mat-card-subtitle>
+    <div class="row p-y-8">
+      <div class="col-12 col-sm-6">
+        <h3 class="f-w-500 m-y-8" >Projet</h3>
+      </div>
+      <div class="col-12 col-sm-6 d-flex align-items-center justify-content-end p-y-8">
+        <button mat-stroked-button (click)="accordion().openAll()" class="m-r-16">Expand All</button>
+        <button mat-stroked-button (click)="accordion().closeAll()">Collapse All</button>
+      </div>
     </div>
-    <mat-accordion multi>
-
+  </mat-card-subtitle>
+    <mat-accordion multi displayMode="flat">
         <mat-expansion-panel #expansionPanel>
             <mat-expansion-panel-header>
                 <mat-panel-title>
-                    <mat-icon class="ligne-icone"> build </mat-icon> Conception
+                    <mat-icon class="m-x-8"> build </mat-icon> Conception
                 </mat-panel-title>
                 <mat-panel-description>
-                    <mat-chip class="ligne-icone">
+                    <mat-chip class="m-x-8">
                         {{ totalCoutsConception | number}} €
                     </mat-chip>
-                    <mat-chip class="ligne-icone">
+                    <mat-chip class="m-x-8">
                         {{ totalJoursConception | number}} jours
                         <div matChipRemove>
                             <mat-icon>build</mat-icon>
@@ -54,13 +59,13 @@
         <mat-expansion-panel>
             <mat-expansion-panel-header>
                 <mat-panel-title>
-                    <mat-icon class="ligne-icone"> construction</mat-icon> Construction
+                    <mat-icon class="m-x-8"> construction</mat-icon> Construction
                 </mat-panel-title>
                 <mat-panel-description>
-                    <mat-chip class="ligne-icone">
+                    <mat-chip class="m-x-8">
                         {{ totalCoutsConstruction | number}} €
                     </mat-chip>
-                    <mat-chip class="ligne-icone">
+                    <mat-chip class="m-x-8">
                         {{ totalJoursConstruction | number}} jours
                         <div matChipRemove>
                             <mat-icon>build</mat-icon>
@@ -112,13 +117,13 @@
         <mat-expansion-panel>
             <mat-expansion-panel-header>
                 <mat-panel-title>
-                    <mat-icon class="ligne-icone"> assignment_turned_in</mat-icon> Recette
+                    <mat-icon class="m-x-8"> assignment_turned_in</mat-icon> Recette
                 </mat-panel-title>
                 <mat-panel-description>
-                    <mat-chip class="ligne-icone">
+                    <mat-chip class="m-x-8">
                         {{ totalCoutsRecette | number}} €
                     </mat-chip>
-                    <mat-chip class="ligne-icone">
+                    <mat-chip class="m-x-8">
                         {{ totalJoursRecette | number}} jours
                         <div matChipRemove>
                             <mat-icon>build</mat-icon>
@@ -163,13 +168,13 @@
         <mat-expansion-panel>
             <mat-expansion-panel-header>
                 <mat-panel-title>
-                    <mat-icon class="ligne-icone"> send </mat-icon> Livraison
+                    <mat-icon class="m-x-8"> send </mat-icon> Livraison
                 </mat-panel-title>
                 <mat-panel-description>
-                    <mat-chip class="ligne-icone">
+                    <mat-chip class="m-x-8">
                         {{ totalCoutsLivraison | number}} €
                     </mat-chip>
-                    <mat-chip class="ligne-icone">
+                    <mat-chip class="m-x-8">
                         {{ totalJoursLivraison | number}} jours
                         <div matChipRemove>
                             <mat-icon>build</mat-icon>
@@ -206,9 +211,10 @@
         </mat-expansion-panel>
     </mat-accordion>
 </mat-card-content>
-<mat-divider class="divider-devis"></mat-divider>
+<mat-divider class="m-y-8"></mat-divider>
 <mat-card-content>
-    <mat-card-subtitle>Total</mat-card-subtitle>
+    <mat-card-subtitle>
+      <h3 class="f-w-500 m-y-8" >Total </h3></mat-card-subtitle>
     <mat-list>
         <mat-list-item>
             <mat-icon matListItemIcon>monetization_on</mat-icon>

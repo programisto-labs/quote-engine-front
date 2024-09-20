@@ -24,7 +24,6 @@ import { Chiffrage, ChiffrageService } from '../../../../shared';
     MatChipsModule, MatLineModule, MatCardModule, MatExpansionModule, MatGridListModule, MatBadgeModule, DecimalPipe
   ],
   templateUrl: './chiffrage.component.html',
-  styleUrl: './chiffrage.component.css'
 })
 export class ChiffrageComponent {
   private readonly chiffrageService = inject(ChiffrageService);
