@@ -3,6 +3,8 @@
 
 .matero-container-wrap,
 .matero-container {
+  max-width: 880px;
+  margin: auto;
   --mat-sidenav-content-background-color: transparent;
 
   //height: 100%;

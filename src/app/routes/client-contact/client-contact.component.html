@@ -1,0 +1,58 @@
+<form class="w-full p-24 p-b-0" [formGroup]="contactForm" novalidate>
+  <div class="d-flex row w-full m-x-0">
+    <div class="col-12 col-sm-6">
+      <mat-form-field class="w-full m-b-24" appearance="outline">
+        <mat-icon matPrefix>person</mat-icon>
+        <input matInput placeholder="{{'dialogs.full_name' | translate}}*" formControlName="fullname" required>
+        @if (fullname!.invalid) {
+        <mat-error>
+            <span>{{'validations.required' | translate}}
+              <strong>*</strong>
+            </span>
+        </mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div class="col-12 col-sm-6">
+      <mat-form-field class="w-full m-b-24" appearance="outline">
+        <mat-icon matPrefix>business</mat-icon>
+        <input matInput placeholder="{{'dialogs.company' | translate}}*" formControlName="enterprise" required>
+        @if (enterprise!.invalid) {
+          <mat-error>
+              <span>{{'validations.required' | translate}}
+                <strong>*</strong>
+              </span>
+          </mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="d-flex row w-full m-x-0">
+    <div class="col-12 col-sm-6">
+      <mat-form-field class="w-full m-b-24" appearance="outline">
+        <mat-icon matPrefix>mail</mat-icon>
+        <input matInput placeholder="{{'dialogs.email' | translate}}*" formControlName="email" required>
+        @if (email!.invalid) {
+          <mat-error>
+              <span>{{'validations.invalid_email' | translate}}
+                <strong>*</strong>
+              </span>
+          </mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div class="col-12 col-sm-6">
+      <mat-form-field class="w-full m-b-24" appearance="outline">
+        <mat-icon matPrefix>smartphone</mat-icon>
+        <input matInput placeholder="{{'dialogs.tele' | translate}}*" formControlName="tele" required>
+        @if (tele!.invalid) {
+              <mat-error>
+                  <span>{{'validations.invalid_tele' | translate}}
+              <strong>*</strong>
+            </span>
+        </mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+</form>

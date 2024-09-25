@@ -6,3 +6,33 @@
 @use 'styles/helpers';
 @use 'styles/plugins';
 @use 'styles/custom';
+
+@font-face {
+  font-family: 'Degular Black';
+  src: url('public/fonts/Degular-Black.otf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Degular Medium';
+  src: url('public/fonts/Degular-Medium.otf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Degular';
+  src: url('public/fonts/Degular-Regular.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-size: medium;
+}
+
+@font-face {
+  font-family: 'Degular Bold';
+  src: url('public/fonts/Degular-Bold.otf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-size: medium;
+}

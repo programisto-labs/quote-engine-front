@@ -56,9 +56,9 @@ export class DiscordDatatableBuilderService {
     return "```plaintext\\n" + table.join("\\n") + "\\n```";
   }
 
-  private computeModuleDuration = (module: Module): string => `${Module.moduleDuree(module)} jour${Module.moduleDuree(module) > 1 ? "s" : ""}`;
+  private computeModuleDuration = (module: Module): string => `${Module.moduleDuree(module)} jour${Module.moduleDuree(module) > 1 ? "s" : " "}`;
 
-  private computeModuleCount = (module: Module): string => `${module.scenarios.length} scénario${module.scenarios.length > 1 ? "s" : ""}`;
+  private computeModuleCount = (module: Module): string => `${module.scenarios.length} scénario${module.scenarios.length > 1 ? "s" : " "}`;
 
   private buildTitleLine(title: string): string {
     const l = title.length;

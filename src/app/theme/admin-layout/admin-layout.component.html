@@ -1,3 +1,10 @@
+<!-- Header Above -->
+@if (options.showHeader && options.headerPos === 'above') {
+  <app-header
+  (toggleSidenav)="sidenav.toggle()"
+  (toggleSidenavNotice)="sidenavNotice.toggle()"
+  [showBranding]="true" />
+}
 <div class="matero-container-wrap"
   [class.matero-sidenav-collapsed]="options.sidenavCollapsed && options.navPos !== 'top'"
   [class.matero-navbar-side]="options.navPos === 'side'"
@@ -7,15 +14,6 @@
   [dir]="options.dir">
 
   <ng-progress />
-
-  <!-- Header Above -->
-  @if (options.showHeader && options.headerPos === 'above') {
-    <app-header
-      (toggleSidenav)="sidenav.toggle()"
-      (toggleSidenavNotice)="sidenavNotice.toggle()"
-      [showBranding]="true" />
-  }
-
   <mat-sidenav-container class="matero-container" autosize autoFocus>
     <mat-sidenav #sidenav class="matero-sidenav"
       [mode]="isOver ? 'over' : 'side'"
@@ -45,9 +43,10 @@
       }
 
       <main class="matero-page-content">
+        <app-title/>
         <router-outlet />
       </main>
     </mat-sidenav-content>
   </mat-sidenav-container>
-  <app-footer></app-footer>
 </div>
+<app-footer></app-footer>

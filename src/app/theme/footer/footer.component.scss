@@ -1,10 +1,59 @@
 footer {
+  display: flex;
+  justify-content: center;
   background-color: black;
   color: white;
-  // background-color: var(--mdc-elevated-card-container-color, var(--mat-app-surface));
   padding: 16px;
-}
 
-.footer-item {
-  margin: 1rem;
+  h4 {
+    color: #F0CD65;
+    font-family: "Degular Black", sans-serif;
+    font-size: 12px;
+    letter-spacing: 2.4px;
+    opacity: 1;
+  }
+
+  ul {
+    font-family: "Degular Black", sans-serif;
+    list-style: none;
+    padding: 0;
+
+    li {
+      line-height: 2rem;
+      font-size: 12px;
+      letter-spacing: 2.8px;
+      opacity: 1;
+    }
+  }
+
+  .mat-icon {
+    color: white;
+  }
+
+  .linkedinWrapper {
+    line-height: normal;
+    text-decoration: none;
+  }
+
+  .linkedin {
+    color: black;
+    font-size: 18px;
+    font-weight: bolder;
+    background-color: white;
+    border-radius: 4px;
+    letter-spacing: 0.1rem;
+    padding: 0.1rem;
+    font-family: serif;
+  }
+
+  .sendIcon {
+    border-radius: 16px;
+    background-color: #FDcd60;
+    width: 24px;
+    height: 32px;
+    text-indent: 6px;
+    margin-right: 4px;
+    font-size: x-large;
+    margin-top: -4px;
+  }
 }

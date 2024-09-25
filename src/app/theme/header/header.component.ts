@@ -17,6 +17,7 @@ import { GithubButtonComponent } from '../widgets/github.component';
 import { NotificationComponent } from '../widgets/notification.component';
 import { TranslateComponent } from '../widgets/translate.component';
 import {isPlatformBrowser} from "@angular/common";
+import {SearchComponent} from "../search/search.component";
 
 @Component({
   selector: 'app-header',
@@ -35,12 +36,16 @@ import {isPlatformBrowser} from "@angular/common";
     GithubButtonComponent,
     NotificationComponent,
     TranslateComponent,
+    SearchComponent,
   ],
 })
 export class HeaderComponent {
   private readonly platform = inject(PLATFORM_ID);
+  src = 'images/hand_writing.webp';
   showBrandName = true;
-  @Input() showToggle = true;
+  brandWidth = 142;
+
+  @Input() showToggle = false;
   @Input() showBranding = true;
 
   @Output() toggleSidenav = new EventEmitter<void>();
@@ -53,8 +58,8 @@ export class HeaderComponent {
   @HostListener('window:resize', ['$event'])
   onResize() {
     if (isPlatformBrowser(this.platform)) {
-      window.innerWidth > 600 ? this.showBrandName = this.showBranding : this.showBrandName = false;
+      window.innerWidth > 960 ? this.showBrandName = this.showBranding : this.showBrandName = false;
+      this.showBrandName ? this.brandWidth = 142 : this.brandWidth = 32;
     }
   }
-
 }

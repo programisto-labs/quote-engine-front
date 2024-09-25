@@ -37,18 +37,6 @@ export class DevisService {
       {headers: {'Content-Type': 'application/json',}});
   }
 
-  public sendEmailToClient(data: any): Observable<any> {
-    return this.http.post<any>(`${this.devisRapideApiUrl}/mail/toClient`, data, {headers: {'Content-Type': 'application/json',}});
-  }
-
-  public sendEmailToSales(data: any): Observable<any> {
-    return this.http.post<any>(`${this.devisRapideApiUrl}/mail/toSales`, data, {headers: {'Content-Type': 'application/json',}});
-  }
-
-  public sendDiscordMessage(discordData: any): Observable<Autocomplete> {
-    return this.http.post<any>(`${this.devisRapideApiUrl}/discord/webhook/send`, discordData, {headers: {'Content-Type': 'application/json',}});
-  }
-
   public newDemandeClientFromRaw(raw: string): Observable<DemandeClient> {
     return this.http.post<DemandeClient>(`${this.devisRapideApiUrl}/demande/new`, {raw}, {headers: {'Content-Type': 'application/json',}});
   }

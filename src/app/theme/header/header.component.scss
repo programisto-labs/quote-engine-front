@@ -1,10 +1,12 @@
-.matero-header {
-  --mat-toolbar-container-background-color: transparent;
+#toolbar {
+  justify-content: center;
+  height: auto !important;
+  padding: 8px !important;
+}
 
-  position: relative;
-  z-index: 200;
-  display: block;
-  background-color: black;
-  // background-color: var(--header-background-color);
-  backdrop-filter: blur(8px);
+.header-container {
+  max-width: 1024px;
+  align-items: center;
+  margin: 0;
+  background-color: white;
 }

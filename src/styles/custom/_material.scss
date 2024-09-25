@@ -1,4 +1,87 @@
 /** Custom Material styles */
+.cdk-overlay-pane {
+  z-index: 1000 !important;
+}
+
+.secondary-button {
+  outline: 2px solid #F0CD65 !important;
+}
+
+.secondary-icon-button.mat-mdc-icon-button  {
+  background-color: white !important;
+}
+
+.mdc-text-field--outlined {
+  background-color: white !important;
+  border-radius: 20px !important;
+}
+
+.mdc-text-field--filled {
+  border-bottom-left-radius: var(--mdc-filled-text-field-container-shape) !important;
+  border-bottom-right-radius: var(--mdc-filled-text-field-container-shape) !important;
+}
+
+.mat-mdc-form-field-icon-prefix, .mat-mdc-form-field-icon-suffix {
+  align-self: flex-start !important;
+  margin-top: 8px !important;
+}
+
+.mat-mdc-form-field-icon-prefix>.mat-icon {
+  padding: 0 0 0 24px !important;
+}
+
+.mat-mdc-form-field-icon-suffix>.mat-icon {
+  padding: 0 8px 0 0 !important;
+  font-size: medium;
+  color: rgb(128,128,128);
+  align-content: center;
+}
+
+.mat-mdc-form-field-has-icon-prefix .mat-mdc-text-field-wrapper {
+  --mat-mdc-form-field-label-offset-x: -24px !important;
+}
+
+// -------- stepper ----------
+.mat-horizontal-content-container {
+  background-color: #F2D275;
+  border-radius: 25px;
+  padding: 24px !important;
+}
+
+.mat-horizontal-stepper-header {
+  flex-direction: column;
+  padding: 8px !important;
+}
+
+.mat-step-text-label {
+  color: white;
+  text-wrap: wrap;
+  text-align: center;
+}
+
+.mat-step-label-selected > .mat-step-text-label {
+  color: black !important;
+}
+
+.mat-step-icon {
+  border: solid 2px white;
+  margin-bottom: 8px !important;
+  background-color: transparent !important;
+}
+
+.mat-step-icon-selected {
+  color: black !important;
+  border: solid 2px black;
+}
+
+.mat-stepper-horizontal-line {
+  border-top: solid 2px white !important;
+  margin: -32px 0 0 0 !important;
+}
+
+.mat-mdc-outlined-button:not(:disabled) {
+  color: black !important;
+}
 
 mat-card {
   margin-bottom: var(--gutter);

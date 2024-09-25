@@ -19,6 +19,7 @@ import { HeaderComponent } from '../header/header.component';
 import { SidebarNoticeComponent } from '../sidebar-notice/sidebar-notice.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import {FooterComponent} from "../footer/footer.component";
+import {TitleComponent} from "../title/title.component";
 
 const MOBILE_MEDIAQUERY = 'screen and (max-width: 599px)';
 const TABLET_MEDIAQUERY = 'screen and (min-width: 600px) and (max-width: 959px)';
@@ -30,17 +31,18 @@ const MONITOR_MEDIAQUERY = 'screen and (min-width: 960px)';
   styleUrl: './admin-layout.component.scss',
   encapsulation: ViewEncapsulation.None,
   standalone: true,
-    imports: [
-        RouterOutlet,
-        BidiModule,
-        MatSidenavModule,
-        NgProgressbar,
-        HeaderComponent,
-        SidebarComponent,
-        SidebarNoticeComponent,
-        CustomizerComponent,
-        FooterComponent,
-    ],
+  imports: [
+    RouterOutlet,
+    BidiModule,
+    MatSidenavModule,
+    NgProgressbar,
+    HeaderComponent,
+    SidebarComponent,
+    SidebarNoticeComponent,
+    CustomizerComponent,
+    FooterComponent,
+    TitleComponent,
+  ],
 })
 export class AdminLayoutComponent implements OnDestroy {
   @ViewChild('sidenav', { static: true }) sidenav!: MatSidenav;
@@ -91,7 +93,7 @@ export class AdminLayoutComponent implements OnDestroy {
       .observe([MOBILE_MEDIAQUERY, TABLET_MEDIAQUERY, MONITOR_MEDIAQUERY])
       .subscribe(state => {
         // SidenavOpened must be reset true when layout changes
-        this.options.sidenavOpened = true;
+        this.options.sidenavOpened = false;
 
         this.isMobileScreen = state.breakpoints[MOBILE_MEDIAQUERY];
         this.options.sidenavCollapsed = state.breakpoints[TABLET_MEDIAQUERY];

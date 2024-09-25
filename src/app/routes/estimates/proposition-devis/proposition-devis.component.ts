@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, inject, Input, OnDestroy, viewChild } from '@angular/core';
-
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
@@ -13,26 +12,21 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatLineModule } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
-
-import { ChiffrageService, Devis, DevisService, LocalStorageService, Module, Scenario} from '../../../shared';
+import {
+  ChiffrageService,
+  Devis,
+  Module,
+  Scenario
+} from '../../../shared';
 import { DecimalPipe } from '@angular/common';
 import { ChiffrageComponent } from "./chiffrage/chiffrage.component";
-import {
-  concatAll,
-  delay,
-  Subject,
-  takeLast,
-  takeUntil
-} from "rxjs";
-import {ToastrService} from "ngx-toastr";
-import {environment} from "../../../../environments/environment";
-import {fromArrayLike} from "rxjs/internal/observable/innerFrom";
-import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
-import {DialogClientContactComponent} from "../../dialog-client-contact/dialog-client-contact.component";
-import {ClientContactModel} from "../../../shared";
-import {DiscordDatatableBuilderService} from "../../../shared/services/discord.datatable.builder.service";
+import { Subject } from "rxjs";
+import { environment } from "../../../../environments/environment";
+import { DiscordDatatableBuilderService } from "../../../shared/services/discord.datatable.builder.service";
+import { EmailService } from "../../../shared";
+import { ClientContactService } from "../../client-contact/client-contact.service";
+import { ToastrService } from "ngx-toastr";
 
-const CONTACT_INFO_KEY = 'programisto.quote-engine.contact_info';
 
 @Component({
   selector: 'app-proposition-devis',
@@ -62,34 +56,21 @@ export class PropositionDevisComponent implements OnDestroy {
   accordion = viewChild.required(MatAccordion);
 
   private readonly chiffrageService: ChiffrageService = inject(ChiffrageService);
-  private readonly devisService: DevisService = inject(DevisService);
-  private readonly toastService = inject(ToastrService);
+  private readonly emailService: EmailService = inject(EmailService);
+  private readonly contactService: ClientContactService = inject(ClientContactService);
+  private readonly toastService: ToastrService = inject(ToastrService);
   private readonly discordDatatableBuilderService = inject(DiscordDatatableBuilderService);
-  private readonly storageService: LocalStorageService = inject(LocalStorageService);
-  private clientDialogConfig: MatDialogConfig;
-
-  private sendEmailSubject = new Subject<boolean>();
   private destroy$ = new Subject();
-
-  constructor(public dialog: MatDialog) {
-    this.clientDialogConfig = new MatDialogConfig<any>();
-    this.sendEmailSubject.pipe(
-      takeUntil(this.destroy$),
-    ).subscribe({
-      next: _ => this.openClientContactDialog()
-    });
-  }
 
   @Input() devis?: Devis;
   @Input() waitingForService: boolean = false;
+
   estimationCouts: number = 0;
 
   get estimationJours(): number { return this.devis ? this.devis.modules.reduce((acc, module) => acc + module.scenarios.reduce((acc, scenario) => acc + scenario.duree, 0), 0) : 0; }
   get scenarioCount(): number { return this.devis ? this.devis.modules.reduce((acc, module) => acc + module.scenarios.length, 0) : 0; }
-
   get multipleScenarios(): boolean { return this.scenarioCount > 1; }
   get mutlipleJours(): boolean { return this.estimationJours > 1; }
-
 
   computeModuleDuration = (module: Module): string => `${Module.moduleDuree(module)} jour${Module.moduleDuree(module) > 1 ? "s" : ""}`;
   computeScenarioDuration = (scenario: Scenario): string => `${scenario.duree} jour${scenario.duree > 1 ? "s" : ""}`;
@@ -97,36 +78,13 @@ export class PropositionDevisComponent implements OnDestroy {
   computeDevisDuration = (): string => `${this.estimationJours} jour${this.mutlipleJours ? "s" : ""}`;
   computeDevisCount = (): string => `${this.scenarioCount} scénario${this.multipleScenarios ? "s" : ""}`;
 
-  onSendEmail() {
-    this.sendEmailSubject.next(true);
-  }
-
-  openClientContactDialog() {
-    this.clientDialogConfig.data = {};
-    const ls = this.storageService.localStorage;
-    if (this.storageService.localStorage) {
-      const info: ClientContactModel = this.storageService.get(CONTACT_INFO_KEY) as ClientContactModel;
-      if (info && info['fullname'] && info['email']) {
-        this.clientDialogConfig.data = {
-          fullname: info['fullname'],
-          email: info['email'],
-          tele: info['tele'] || ''
-        };
-      }
+  sendEmail() {
+    if (!this.contactService.contactValid.value) {
+      this.toastService.info("Les coordonnées ne sont pas valides, veuillez les vérifier à l'étape 1.");
+      return;
     }
-    const dialogRef = this.dialog.open(DialogClientContactComponent, this.clientDialogConfig);
-    dialogRef.afterClosed().subscribe({
-      next: (result) => {
-        if (!result) return;
-        if(ls) {
-          this.storageService.set(CONTACT_INFO_KEY, result);
-        }
-        this.sendEmail(result as ClientContactModel);
-      }
-    });
-  }
 
-  sendEmail(contactData: ClientContactModel) {
+    const contactData = this.contactService.contactValue.value;
     const clientData = this.buildClientData(contactData.email);
     const salesData = this.buildSalesData(contactData.fullname, contactData.email);
     const discordData = {
@@ -134,19 +92,7 @@ export class PropositionDevisComponent implements OnDestroy {
       embeds: this.discordDatatableBuilderService.buildDiscordTable(clientData.devis as Devis, clientData.projet)
     }
 
-    fromArrayLike([
-      this.devisService.sendEmailToClient(clientData).pipe(delay(5000)),
-      this.devisService.sendEmailToSales(salesData),
-      this.devisService.sendDiscordMessage(discordData)
-    ]).pipe(
-      concatAll(),
-      takeLast(1)
-    ).subscribe({
-      next: _ => this.toastService.success('L\'e-mail a été envoyé avec succès.'),
-      error: (error) => {
-        this.toastService.error('Une erreur s\'est produite lors de l\'envoi de l\'e-mail. Veuillez réessayer.');
-      }
-    });
+    this.emailService.sendNotificationMessages(clientData, salesData, discordData);
   }
 
   ngOnDestroy() {
@@ -169,5 +115,4 @@ export class PropositionDevisComponent implements OnDestroy {
       projet: this.chiffrageService.getEstimatedData(this.estimationJours) || {}
     };
   }
-
 }

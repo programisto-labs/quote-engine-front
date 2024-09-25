@@ -75,6 +75,7 @@
   "validations.exist": "El {{value}} ya existe",
   "validations.inconsistent": "Incoherente con {{value}}",
   "validations.invalid_email": "Correo electrónico no válido",
+  "validations.invalid_tele": "Teléfono no válido",
   "paginator.items_per_page_label": "Elementos por página:",
   "paginator.next_page_label": "Página siguiente",
   "paginator.previous_page_label": "Página anterior",

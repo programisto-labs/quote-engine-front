@@ -3,8 +3,7 @@
 @use '@angular/material' as mat;
 
 html {
-  --body-font-family: 'Roboto', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial,
-    'Lucida Grande', sans-serif;
+  --body-font-family: 'Degular', sans-serif;
   --code-font-family: 'Roboto Mono', monospace;
   --gutter: 1rem;
   --sidenav-width: 15rem;
@@ -13,9 +12,7 @@ html {
 
 // Tokens for the app that are based on the current theme.
 @mixin theme($theme) {
-  $bg-color: mat.get-theme-color($theme,
-    if(mat.get-theme-type($theme) == dark, surface-container-high, surface-container));
-
+  $bg-color: #F0CD65;
   --body-background-color: #{$bg-color};
   --link-color: #{mat.get-theme-color($theme, primary)};
   --link-hover-color: #{color.adjust(mat.get-theme-color($theme, primary), $lightness: -10%)};
@@ -41,4 +38,23 @@ html {
     if(mat.get-theme-type($theme) == dark, 40, 60))};
   --toast-error-background-color: #{map.get(mat.$red-palette,
     if(mat.get-theme-type($theme) == dark, 30, 50))};
+
+    // ------ inputs
+    --mdc-filled-text-field-container-shape: 20px;
+    --mdc-outlined-text-field-container-shape: 20px;
+    --mat-form-field-container-height: 40px;
+    --mat-form-field-container-vertical-padding: 8px;
+
+    --mdc-filled-button-label-text-size: medium;
+
+    --mat-form-field-leading-icon-color: black;
+    --mat-app-on-surface-variant: black;
+    --mdc-outlined-text-field-label-text-color: black;
+    --mdc-outlined-text-field-caret-color: black;
+
+    // ---- disabled buttons
+    --mdc-filled-button-disabled-label-text-color: #444444;
+    --mdc-filled-button-disabled-container-color: #dddddd;
+
+    --mat-divider-color: $bg-color;
 }

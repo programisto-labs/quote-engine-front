@@ -8,21 +8,255 @@
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
 
-//
-// Light theme
-//
+$my-palette:(
+  100: #000000, //  buttons text color
+  99: #311300,
+  98: #502400,
+  95: #612d00,
+  30: #723600,
+  35: #843f00,
+  40: #F0CD65,  // button primary background color
+  50: #bc5d00,
+  60: #e37100,
+  70: #ff8e36,
+  80: #ffb787,
+  90: #ffdcc7,
+  25: #ffede4,
+  20: #fff8f5,
+  10: #fffbff,
+  0: #ffffff,
+  secondary: (
+    100: #000000,
+    10: #2b1708,
+    20: #422b1b,
+    25: #4f3625,
+    30: #5b4130,
+    35: #684c3b,
+    40: #ffffff, // button secondary background color
+    50: #90715d,
+    60: #ab8a75,
+    70: #c8a48e,
+    80: #e5bfa8,
+    90: #ffdcc7,
+    95: #ffede4,
+    98: #fff8f5,
+    99: #fffbff,
+    0: #ffffff,
+  ),
+  neutral: (
+    0: #000000,
+    10: #201a17, // input hover label text color
+    20: #362f2b,
+    25: #413a36,
+    30: #4d4541,
+    35: #59514d,
+    40: #655d58,
+    50: #7e7571,
+    60: #998f8a,
+    70: #b4a9a4,
+    80: #d0c4bf,
+    90: #ece0da,
+    95: #fbeee8,
+    98: #fff8f5,
+    99: #fffbff,
+    100: #ffffff,
+    4: #120d0b,
+    6: #181210,
+    12: #241e1b,
+    17: #2f2926,
+    22: #3a3330,
+    24: #3f3834,
+    87: #e3d8d3,
+    92: #f2e6e1,
+    94: #f8ebe6,
+    96: #fef1ec,
+  ),
+  neutral-variant: (
+    0: #000000,
+    10: #241912,
+    20: #3a2e26,
+    25: #463931,
+    30: #000000, // input label text color, placeholder color
+    35: #5e4f47,
+    40: #6b5b52,
+    // 50: #84746a, // outline color
+    50: #000000,
+    60: #9f8d83,
+    70: #baa79d,
+    80: #d7c3b8,
+    // 90: #f4ded3, // container color
+    90: #E5E5E5,
+    95: #ffede4,
+    98: #fff8f5,
+    99: #fffbff,
+    100: #ffffff,
+  ),
+  error: (
+    0: #000000,
+    10: #000000,
+    20: #000000,
+    25: #000000,
+    30: #000000,
+    35: #000000,
+    40: #000000, // caret, label text
+    50: #000000,
+    60: #000000,
+    70: #000000,
+    80: #000000,
+    90: #000000,
+    95: #000000,
+    98: #000000,
+    99: #000000,
+    100: #000000
+  )
+);
+
+$my-tertiary: (
+  0: #000000, //  buttons text color
+  99: #311300,
+  98: #502400,
+  95: #612d00,
+  30: #723600,
+  35: #843f00,
+  40: #000000, // buttons tertiary background color
+  50: #bc5d00,
+  60: #e37100,
+  70: #ff8e36,
+  80: #ffb787,
+  90: #ffdcc7,
+  25: #ffede4,
+  20: #fff8f5,
+  10: #fffbff,
+  100: #ffffff,
+  secondary: (
+    0: #000000,
+    10: #2b1708,
+    20: #422b1b,
+    25: #4f3625,
+    30: #5b4130,
+    35: #684c3b,
+    40: #ffffff,    // button secondary background color
+    50: #90715d,
+    60: #ab8a75,
+    70: #c8a48e,
+    80: #e5bfa8,
+    90: #ffdcc7,
+    95: #ffede4,
+    98: #fff8f5,
+    99: #fffbff,
+    100: #ffffff,
+  ),
+  neutral: (
+    0: #000000,
+    10: #201a17,
+    20: #362f2b,
+    25: #413a36,
+    30: #4d4541,
+    35: #59514d,
+    40: #655d58,
+    50: #7e7571,
+    60: #998f8a,
+    70: #b4a9a4,
+    80: #d0c4bf,
+    90: #ece0da,
+    95: #fbeee8,
+    98: #fff8f5,
+    99: #fffbff,
+    100: #ffffff,
+    4: #120d0b,
+    6: #181210,
+    12: #241e1b,
+    17: #2f2926,
+    22: #3a3330,
+    24: #3f3834,
+    87: #e3d8d3,
+    92: #f2e6e1,
+    94: #f8ebe6,
+    96: #fef1ec,
+  ),
+  neutral-variant: (
+    0: #000000,
+    10: #241912,
+    20: #3a2e26,
+    25: #463931,
+    30: #52443c,
+    35: #5e4f47,
+    40: #6b5b52,
+    50: #84746a,
+    60: #9f8d83,
+    70: #baa79d,
+    80: #d7c3b8,
+    90: #f4ded3,
+    95: #ffede4,
+    98: #fff8f5,
+    99: #fffbff,
+    100: #ffffff,
+  ),
+  error: (
+    0: #000000,
+    10: #000000,
+    20: #000000,
+    25: #000000,
+    30: #000000,
+    35: #000000,
+    40: #000000, // caret, label text
+    50: #000000,
+    60: #000000,
+    70: #000000,
+    80: #000000,
+    90: #000000,
+    95: #000000,
+    98: #000000,
+    99: #000000,
+    100: #000000
+  )
+);
+
+// Degular font definition
+$typography: (
+  brand-family: 'Degular Black, sans-serif',
+  plain-family: 'Degular Medium, sans-serif'
+);
+
 $light-config: (
   color: (
     theme-type: 'light',
-    primary: mat.$azure-palette,
-    tertiary: mat.$blue-palette,
+    primary: $my-palette,
+    tertiary: $my-tertiary,
   ),
+  typography: $typography,
 );
 
 $light-theme: mat.private-deep-merge-all(
   mat.define-theme($light-config),
   mtx.define-theme($light-config)
 );
+
+.primary-button {
+  @include mat.button-color($light-theme, $color-variant: primary);
+}
+.secondary-button {
+  @include mat.button-color($light-theme, $color-variant: secondary);
+}
+.tertiary-button {
+  @include mat.button-color($light-theme, $color-variant: tertiary);
+}
+.error-button {
+  @include mat.button-color($light-theme, $color-variant: error);
+}
+
+.primary-icon-button {
+  @include mat.button-color($light-theme, $color-variant: primary);
+}
+.secondary-icon-button {
+  @include mat.button-color($light-theme, $color-variant: secondary);
+}
+.tertiary-icon-button {
+  @include mat.button-color($light-theme, $color-variant: tertiary);
+}
+.error-icon-button {
+  @include mat.button-color($light-theme, $color-variant: error);
+}
 
 html {
   @include mat.all-component-themes($light-theme);
@@ -41,10 +275,11 @@ html {
 //
 // Dark theme
 //
+/*
 $dark-config: (
   color: (
     theme-type: 'dark',
-    primary: mat.$cyan-palette,
+    primary: mat.$orange-palette,
     tertiary: mat.$orange-palette,
   ),
 );
@@ -53,6 +288,9 @@ $dark-theme: mat.private-deep-merge-all(
   mat.define-theme($dark-config),
   mtx.define-theme($dark-config)
 );
+
+
+$dark-theme: $light-theme;
 
 .theme-dark {
   color-scheme: dark;
@@ -64,3 +302,4 @@ $dark-theme: mat.private-deep-merge-all(
   @include mat.color-variants-backwards-compatibility($dark-theme);
   @include mtx.color-variants-backwards-compatibility($dark-theme);
 }
+*/

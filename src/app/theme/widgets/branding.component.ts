@@ -1,11 +1,13 @@
-import {AfterViewInit, Component, HostListener, Input} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'app-branding',
   template: `
-    <a class="branding" href="/">
-      <img [src]="src" class="branding-logo" alt="Programisto"/>
-    </a>
+    <div style="align-content: center;height: 100%;">
+      <a class="branding" href="/">
+        <img [src]="src" alt="Programisto" [width]="width"/>
+      </a>
+    </div>
   `,
   styles: `
     .branding {
@@ -17,25 +19,22 @@ import {AfterViewInit, Component, HostListener, Input} from '@angular/core';
       color: inherit;
       border-radius: 50rem;
     }
-
-    .branding-logo {
-      height: 2rem;
-      border-radius: 50rem;
-    }
-
-    .branding-name {
-      margin: 0 0.5rem;
-      font-size: 1rem;
-      font-weight: 500;
-    }
   `,
   standalone: true,
 })
 export class BrandingComponent {
-  src = 'images/logo.webp';
+  src = 'images/logo_black.png';
+
+  @Input() width: number = 142;
+  @Input() color: 'black'|'white' = 'black';
 
   @Input()
   set showName(value: boolean) {
-    value ? this.src = 'images/programisto.webp' : this.src = 'images/logo.webp';
+    this.src = this.getPath(this.color, value);
+  }
+
+  private getPath(color: 'black'|'white', showName: boolean) {
+    return showName ? `images/programisto_${color}.png`
+                    : `images/logo_${color}.png`;
   }
 }

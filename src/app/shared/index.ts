@@ -15,6 +15,3 @@ export * from './utils';
 
 // Interfaces
 export * from './interfaces';
-
-// Models
-export * from './models';

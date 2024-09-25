@@ -1,28 +1,22 @@
-import {ChangeDetectorRef, Component, inject} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, inject, OnDestroy} from '@angular/core';
 import {PropositionDevisComponent} from "../proposition-devis/proposition-devis.component";
 import {MatIconModule} from '@angular/material/icon';
-import {Devis, DevisService} from '../../../shared';
+import {ClientContact, defaultClientContact, DemandeClient, Devis, DevisService, PdfService} from '../../../shared';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import {
-  FormArray,
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators
-} from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import {DemandeClient} from '../../../shared';
 import {MatInputModule} from '@angular/material/input';
 import {AsyncPipe, NgClass} from '@angular/common';
-import {debounceTime, distinctUntilChanged, Subscription, take} from 'rxjs';
-
+import {debounceTime, distinctUntilChanged, Subject, Subscription, take, takeUntil} from 'rxjs';
 import {PdfLoaderComponent} from "../../pdf-loader/pdf-loader.component";
-import {ToastrService} from "ngx-toastr";
-import {TranslateModule, TranslateService} from "@ngx-translate/core";
+import {TranslateModule} from "@ngx-translate/core";
 import {MatTabsModule} from "@angular/material/tabs";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {ClientContactComponent} from "../../client-contact/client-contact.component";
+import {TooltipDirective} from "../../../core/directives/tooltip.directive";
+import {ClientContactService} from "../../client-contact/client-contact.service";
 
 
 @Component({
@@ -43,25 +37,44 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
     MatTabsModule,
     TranslateModule,
     MatProgressBarModule,
-    NgClass
-  ]
+    NgClass,
+    ClientContactComponent,
+    TooltipDirective
+  ],
+  styles: `
+  .custom-tooltip {
+    display: flex;
+    background-color: black;
+    color: white;
+    padding: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    align-items: center;
+  }
+  .tooltip-icon {
+    display: flex;
+    font-size: medium;
+    color: #F2D275;
+    align-items: baseline;
+    height: 20px;
+  }
+  .invisible { visibility: hidden; }
+  `
 })
-export class NouveauDevisComponent {
-  private readonly toastService: ToastrService = inject(ToastrService);
-  private readonly translateService: TranslateService = inject(TranslateService);
-
+export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
   devis?: Devis;
   formGroupDescription: FormGroup;
   formGroupScenarios: FormGroup;
+  contactFormValue: ClientContact = defaultClientContact;
+  contactValid: boolean = false;
   waitingForService: boolean = false;
   waitingForCompletion: boolean = false;
   loadingPdf: boolean = false;
-  pdfContent: string = '';
   suggestions: { [key: string]: string[] } = {};
-
   stepperIndex = 0;
-
+  private readonly pdfService: PdfService = inject(PdfService);
+  private readonly contactService: ClientContactService = inject(ClientContactService);
   private autocompleteSubscription?: Subscription;
+  private destroy$: Subject<void> = new Subject<void>();
 
   constructor(private formBuilder: FormBuilder, private cdr: ChangeDetectorRef, private devisService: DevisService) {
     this.formGroupDescription = this.formBuilder.group({
@@ -71,6 +84,26 @@ export class NouveauDevisComponent {
     this.formGroupScenarios = this.formBuilder.group({
       useCases: this.formBuilder.array([this.newUseCase()])
     });
+  }
+
+  ngAfterViewInit() {
+    this.pdfService.pdfContent.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (content: string) => {
+        if(!content) return;
+        this.loadingPdf = true;
+        this.sendPdfContent(content);
+      }
+    });
+    this.contactService.contactValid.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (value: boolean) => this.contactValid = value
+    });
+    this.contactService.contactValue.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (value: ClientContact) => this.contactFormValue = value
+    })
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
   }
 
   get useCases(): FormArray {
@@ -106,13 +139,13 @@ export class NouveauDevisComponent {
   }
 
   removeUseCase(index: number) {
-    if (index >=0 && index < this.useCases.length) {
+    if (index >= 0 && index < this.useCases.length) {
       this.useCases.removeAt(index);
     }
   }
 
   removeAllUseCases() {
-    while(this.useCases.length > 0) {
+    while (this.useCases.length > 0) {
       this.removeUseCase(this.useCases.length - 1);
     }
     this.addNewUseCase();
@@ -179,19 +212,13 @@ export class NouveauDevisComponent {
       );
   }
 
-  setPdfContent(content: string) {
-    this.pdfContent = content;
+  loadPdf(event: any) {
+    const file = event.target.files[0];
+    if (file) this.pdfService.loadPdf(file);
   }
 
-  sendPdfContent() {
-    if (!this.pdfContent) {
-      this.translateService.get('pdf_content_required').pipe(take(1)).subscribe(
-        (translation: string) => this.toastService.info(translation)
-      )
-      return;
-    }
-    this.loadingPdf = true;
-    this.devisService.newDemandeClientFromRaw(this.pdfContent).subscribe({
+  sendPdfContent(content: string) {
+    this.devisService.newDemandeClientFromRaw(content).pipe(take(1)).subscribe({
       next: (demandeClient: DemandeClient) => {
         if (demandeClient) {
           this.formGroupDescription.setValue({
@@ -204,7 +231,7 @@ export class NouveauDevisComponent {
           );
           this.stepperIndex++;
           this.loadingPdf = false;
-        }
+        } else this.loadingPdf = false;
       },
       error: (error: any) => {
         this.loadingPdf = false;

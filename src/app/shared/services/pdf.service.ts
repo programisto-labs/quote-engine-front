@@ -1,17 +1,68 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { inject, Injectable} from '@angular/core';
 import * as pdfjsLib from 'pdfjs-dist';
-import { from, Observable } from 'rxjs';
+import { BehaviorSubject, concatAll, from, map, Observable, of, take} from 'rxjs';
+import { TranslateService} from "@ngx-translate/core";
+import { ToastrService} from "ngx-toastr";
 
 @Injectable({
   providedIn: 'root',
 })
 export class PdfService {
-  constructor(private http: HttpClient) {
+  private readonly translateService: TranslateService = inject(TranslateService);
+  private readonly toastService: ToastrService = inject(ToastrService);
+
+  filename: string = '';
+  content: string = '';
+  pdfContent: BehaviorSubject<string> = new BehaviorSubject<string>('');
+
+  constructor() {
     pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
   }
 
-  loadPdf(file: File): Observable<any> {
+  loadPdf(file: File): void {
+    if (file) {
+      this.filename = file.name;
+      this.content = '';
+      this.decodePdf(file).subscribe({
+        next: (pdf) => {
+          let pages = Array.from({length:pdf.numPages}, (_, i) => i+1);
+          this.generateContent(pdf, pages);
+        },
+        error: (error) => {
+          this.pdfContent.next('');
+          this.showError();
+          console.log(error);
+        }
+      });
+    }
+  }
+
+  private generateContent(pdf: any, pages: number[]) {
+    of(pages).pipe(concatAll()).pipe(
+      map((pageNumber: number) => this.getPageText(pdf, pageNumber)),
+      concatAll(),
+    ).subscribe({
+      next: (text: string) => {
+        this.content += text;
+      },
+      complete: () => {
+        console.log(this.content);
+        this.pdfContent.next(this.content);
+      },
+      error: (error) => {
+        console.log(error);
+        this.showError();
+      },
+    });
+  }
+
+  private showError() {
+    this.translateService.get('pdf_non_standard').pipe(take(1)).subscribe(
+      (translation: string) => this.toastService.info(translation)
+    )
+  }
+
+  decodePdf(file: File): Observable<any> {
     const reader = new FileReader();
     return new Observable((observer) => {
       reader.onload = () => {

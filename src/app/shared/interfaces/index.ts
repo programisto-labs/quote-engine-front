@@ -4,3 +4,4 @@ export * from './devis';
 export * from './module';
 export * from './scenario';
 export * from './chiffrage';
+export * from './client-contact';
