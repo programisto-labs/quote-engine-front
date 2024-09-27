@@ -11,6 +11,10 @@
   background-color: white !important;
 }
 
+.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--invalid .mat-mdc-notch-piece {
+  border: 0 !important;
+}
+
 .mdc-text-field--outlined {
   background-color: white !important;
   border-radius: 20px !important;
@@ -30,11 +34,19 @@
   padding: 0 0 0 24px !important;
 }
 
+.mat-mdc-form-field-icon-suffix {
+  display: flex;
+}
+
 .mat-mdc-form-field-icon-suffix>.mat-icon {
   padding: 0 8px 0 0 !important;
   font-size: medium;
   color: rgb(128,128,128);
   align-content: center;
+}
+
+.mat-mdc-form-field-icon-suffix>.mat-icon:hover {
+  color: #000000;
 }
 
 .mat-mdc-form-field-has-icon-prefix .mat-mdc-text-field-wrapper {
@@ -54,28 +66,29 @@
 }
 
 .mat-step-text-label {
-  color: white;
+  color: black;
   text-wrap: wrap;
   text-align: center;
 }
 
 .mat-step-label-selected > .mat-step-text-label {
-  color: black !important;
+  color: white !important;
 }
 
 .mat-step-icon {
-  border: solid 2px white;
+  color: black !important;
+  border: solid 2px black;
   margin-bottom: 8px !important;
   background-color: transparent !important;
 }
 
 .mat-step-icon-selected {
-  color: black !important;
-  border: solid 2px black;
+  color: white !important;
+  border: solid 2px white;
 }
 
 .mat-stepper-horizontal-line {
-  border-top: solid 2px white !important;
+  border-top: solid 2px black !important;
   margin: -32px 0 0 0 !important;
 }
 
@@ -95,4 +108,12 @@ mat-card-header + mat-card-content {
   .mat-mdc-form-field {
     width: 100%;
   }
+}
+
+.mat-expansion-panel-header {
+  height: auto !important;
+}
+
+.mat-mdc-chip {
+  margin: 12px !important;
 }

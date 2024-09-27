@@ -1,77 +1,98 @@
 @if(devis) {
 <div class="row m-y-8">
-  <div class="col-12 col-sm-6">
-    <h3 class="f-w-500 m-y-8">{{ devis.nom }}</h3>
+  <div class="col-12 col-sm-6 p-y-8 align-content-center">
+    <h3 class="f-w-500 m-0">{{ devis.nom }}</h3>
   </div>
   <div class="col-12 col-sm-6 d-flex align-items-center justify-content-end p-y-8">
-    <button mat-flat-button class="secondary-button m-r-8"
+    <button mat-flat-button class="secondary-button"
         (click)="sendEmail()"
     >
       <mat-icon>email</mat-icon>Envoyer par e-mail
     </button>
   </div>
 </div>
-<div class="w-full p-y-8">
-  <div class="row">
-    <div class="col-12 col-sm-6">
-      <h3 class="f-w-500 m-y-8">Fonctionnalitées
-        <small> <i> ({{ computeDevisCount ()}} {{computeDevisDuration ()}}) </i> </small>
-      </h3>
-    </div>
-    <div class="col-12 col-sm-6 d-flex align-items-center justify-content-end p-y-8">
-        <button mat-stroked-button (click)="accordion().openAll()" class="m-r-8">Expand All</button>
-        <button mat-stroked-button (click)="accordion().closeAll()">Collapse All</button>
-    </div>
+<div class="row m-y-8">
+  <div class="col-12 col-sm-6 p-y-8 align-content-center">
+    <h3 class="f-w-500 m-0">Fonctionnalitées
+      <small> <i> ({{ computeDevisCount ()}} {{computeDevisDuration ()}}) </i> </small>
+    </h3>
   </div>
-  <mat-accordion multi>
-      @for (module of devis.modules; track module) {
-      <mat-expansion-panel #expansionPanel>
-          <mat-expansion-panel-header>
-              <mat-panel-title>
-                  {{ module.nom }}
-              </mat-panel-title>
-              <mat-panel-description>
-                  <mat-chip style="margin: 10px;"> {{ computeModuleCount (module)}} <div matChipRemove>
-                          <mat-icon>note</mat-icon>
-                      </div> </mat-chip>
-                  <mat-chip style="margin: 10px;"> {{ computeModuleDuration (module)}}
-                      <div matChipRemove>
-                          <mat-icon>build</mat-icon>
-                      </div>
-                  </mat-chip>
-              </mat-panel-description>
-          </mat-expansion-panel-header>
-          @for (scenario of module.scenarios; track scenario) {
-          <mat-list>
-              <mat-list-item>
-                  <mat-icon matListItemIcon>note</mat-icon>
-                  <div matListItemTitle>{{scenario.nom}}</div>
-                  <div matListItemMeta> {{ computeScenarioDuration(scenario) }}</div>
-              </mat-list-item>
-          </mat-list>
-          }
-      </mat-expansion-panel>
-      }
-  </mat-accordion>
-  <mat-divider class="m-t-24"></mat-divider>
-  <app-chiffrage [estimationJours]="estimationJours"></app-chiffrage>
+  <div class="col-12 col-sm-6 d-flex align-items-center justify-content-end p-y-8">
+      <button mat-flat-button (click)="accordion().openAll()" class="secondary-button m-r-8">Expand All</button>
+      <button mat-flat-button (click)="accordion().closeAll()" class="secondary-button">Collapse All</button>
+  </div>
 </div>
+<div class="row m-y-8">
+  <div class="col-12 p-y-8">
+    <mat-accordion multi [displayMode]="'flat'">
+        @for (module of devis.modules; track module) {
+        <mat-expansion-panel #expansionPanel>
+            <mat-expansion-panel-header>
+              <div class="row w-full m-y-8">
+                <div class="col-12 col-md-6 align-content-center">
+                  <mat-panel-title>
+                      {{ module.nom }}
+                  </mat-panel-title>
+                </div>
+                <div class="col-6 col-md-3">
+                    <mat-chip style="margin: 10px;"> {{ computeModuleCount (module)}} <div matChipRemove>
+                            <mat-icon>note</mat-icon>
+                        </div> </mat-chip>
+                </div>
+                <div class="col-6 col-md-3">
+                    <mat-chip style="margin: 10px;"> {{ computeModuleDuration (module)}}
+                        <div matChipRemove>
+                            <mat-icon>build</mat-icon>
+                        </div>
+                    </mat-chip>
+                </div>
+              </div>
+            </mat-expansion-panel-header>
+            @for (scenario of module.scenarios; track scenario) {
+            <mat-list>
+                <mat-list-item>
+                    <mat-icon matListItemIcon>note</mat-icon>
+                    <div matListItemTitle
+                      istoTooltip
+                      [tooltipIcon]="'info'"
+                      [tooltipContent]="scenario.nom">{{scenario.nom}}</div>
+                    <div matListItemMeta> {{ computeScenarioDuration(scenario) }}</div>
+                </mat-list-item>
+            </mat-list>
+            }
+        </mat-expansion-panel>
+        }
+    </mat-accordion>
+  </div>
+</div>
+<mat-divider class="m-y-24"></mat-divider>
+<app-chiffrage [estimationJours]="estimationJours"></app-chiffrage>
 }
 @else if(waitingForService) {
-  <div class="w-full">
-    <h3 class="f-w-500">Génération du devis en cours ...
-      <mat-icon>hourglass_full</mat-icon>
-    </h3>
-    <p> Veuillez patienter pendant que le service génère votre devis. </p>
-    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  <div class="row m-y-8">
+    <div class="col-12 p-y-8">
+      <h3 class="f-w-500 m-0">Génération du devis en cours ...
+        <mat-icon>hourglass_full</mat-icon>
+      </h3>
+    </div>
+    <div class="col-12 p-y-8">
+      <p> Veuillez patienter pendant que le service génère votre devis. </p>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
   </div>
 }
 @else {
-  <div class="w-full">
-    <h3 class="f-w-400">Informations manquantes ...
-      <mat-icon>construction</mat-icon>
-    </h3>
-    <p> Pour pouvoir générer une proposition de devis, veuillez renseigner les informations nécessaires. </p>
-    <p> Le bouton de génération de devis sera alors disponible à l'étape précédente. </p>
+  <div class="row m-y-8">
+    <div class="col-12 p-y-8">
+      <h3 class="f-w-400 m-0">Informations manquantes ...
+        <mat-icon>construction</mat-icon>
+      </h3>
+    </div>
+  </div>
+  <div class="row m-y-8">
+    <div class="col-12 p-y-8">
+      <p> Pour pouvoir générer une proposition de devis, veuillez renseigner les informations nécessaires. </p>
+      <p> Le bouton de génération de devis sera alors disponible à l'étape précédente. </p>
+    </div>
   </div>
 }

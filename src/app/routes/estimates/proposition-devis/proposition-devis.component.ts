@@ -26,6 +26,7 @@ import { DiscordDatatableBuilderService } from "../../../shared/services/discord
 import { EmailService } from "../../../shared";
 import { ClientContactService } from "../../client-contact/client-contact.service";
 import { ToastrService } from "ngx-toastr";
+import {TooltipDirective} from "../../../core/directives/tooltip.directive";
 
 
 @Component({
@@ -46,7 +47,8 @@ import { ToastrService } from "ngx-toastr";
     MatProgressBarModule,
     MatSelectModule,
     DecimalPipe,
-    ChiffrageComponent
+    ChiffrageComponent,
+    TooltipDirective
   ],
   templateUrl: './proposition-devis.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush

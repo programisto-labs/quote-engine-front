@@ -8,14 +8,21 @@
         <div class="d-flex col-12">
           <mat-form-field appearance="outline" class="w-full m-b-24">
             <mat-error>Le domaine d'activité est obligatoire</mat-error>
-            <mat-icon matSuffix style="align-items: flex-start" [istoTooltip]="tooltipBusiness">info</mat-icon>
+            <mat-icon matSuffix style="align-items: flex-start"
+                      istoTooltip [tooltipHorizontalPosition]="'end'"
+                      [tooltipIcon]="'info'"
+                      [tooltipContent]="'Exemple: Assurance, Centrale d\'appel, Restauration ...'"
+            >info</mat-icon>
             <input matInput formControlName="coreBusiness" placeholder="Domaine d’activité*">
           </mat-form-field>
         </div>
         <div class="d-flex col-12">
           <mat-form-field appearance="outline" class="w-full m-b-8">
             <mat-error>Le besoin est obligatoire</mat-error>
-            <mat-icon matSuffix style="align-items: flex-start" [istoTooltip]="tooltipConcept">info</mat-icon>
+            <mat-icon matSuffix style="align-items: flex-start"
+                      istoTooltip [tooltipIcon]="'info'" [tooltipHorizontalPosition]="'end'"
+                      [tooltipContent]="'Exemple: Gestion comptable, Inventaire de stock, ...'"
+            >info</mat-icon>
             <!--placeholder="Un minimum de 100 caractères est requis"-->
             <textarea matInput formControlName="concept" required
                       placeholder="Besoin*"
@@ -25,7 +32,8 @@
       </form>
       <div class="d-flex w-full row justify-content-start m-x-0 p-x-24 p-y-8">
         <div class="col-12">
-          <mat-progress-bar mode="indeterminate" class="m-b-16" [ngClass]="loadingPdf ? '' : 'invisible'"></mat-progress-bar>
+          <mat-progress-bar mode="indeterminate" class="m-b-16"
+                            [ngClass]="loadingPdf ? '' : 'invisible'"></mat-progress-bar>
           <input type="file" (change)="loadPdf($event)" #fileInput style="display: none;"/>
           <button mat-flat-button class="secondary-button m-r-8"
                   (click)="fileInput.click()"
@@ -38,7 +46,11 @@
       </div>
       <div class="row m-x-0 p-x-24 p-y-8">
         <div class="col-12 d-flex justify-content-end">
-          <span class="align-content-center m-r-8 text-underline">Passez à l’étape de définition des scénarios</span>
+          <button class="next-step-button" matStepperNext
+                  [disabled]="formGroupDescription.invalid || !contactValid"
+          >
+            Passez à l’étape de définition des scénarios
+          </button>
           <button mat-icon-button class="secondary-icon-button" matStepperNext
                   [disabled]="formGroupDescription.invalid || !contactValid"
           >
@@ -63,36 +75,44 @@
                       (click)="removeUseCase($index)">
                       <mat-icon>delete</mat-icon>
                   </button>
-                  <mat-icon matSuffix style="align-items: flex-start" [istoTooltip]="tooltipUseCase">info</mat-icon>
+                  <mat-icon matSuffix style="align-items: flex-start"
+                      istoTooltip [tooltipHorizontalPosition]="'end'"
+                      [tooltipIcon]="'info'"
+                      [tooltipContent]="'Exemple: Consulte un inventaire ...'"
+                      >info</mat-icon>
                   <input matInput #useCaseInput placeholder="Scénario utilisateur *"
                       formControlName="useCase"
                       (keyup)="inlineAutocomplete($event, useCaseInput.value, 'useCase' + $index)"
                       [matAutocomplete]="auto">
                   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event, $index)">
                       @for( suggestion of suggestions['useCase'+$index]; track suggestion) {
-                        <mat-option [value]="suggestion" [textContent]="suggestion"></mat-option>
-                      }
-                  </mat-autocomplete>
-              </mat-form-field>
-          </div>
+          <mat-option [value]="suggestion" [textContent]="suggestion"></mat-option>
+          }
+          </mat-autocomplete>
+      </mat-form-field>
+  </div>
           }
         </div> <!-- use cases -->
       </form>
       <div class="d-flex w-full row justify-content-start m-x-0 p-x-24 p-y-8">
-        <div class="col-12">
+        <div class="col-12 col-md-3 m-b-16" style="flex-basis: content;">
           <button mat-flat-button class="secondary-button m-r-8"
                   (click)="autocomplete()"
                   [disabled]="waitingForCompletion || (formGroupDescription.invalid && formGroupScenarios.invalid)"
           >
             <mat-icon>{{ waitingForCompletion ? 'cached' : 'lightbulb_outline' }}</mat-icon>
-            {{ waitingForCompletion ? 'Génération des scénarios ...' : 'dialogs.suggest' | translate }}
+            {{ waitingForCompletion ? 'Générateur...' : 'dialogs.suggest' | translate }}
           </button>
+        </div>
+        <div class="col-12 col-md-3 m-b-16" style="flex-basis: content;">
           <button mat-flat-button class="secondary-button m-r-8"
                   [disabled]="!canAddUseCase" (click)="addNewUseCase()"
           >
             <mat-icon>add</mat-icon>
             {{'dialogs.add' | translate}}
           </button>
+        </div>
+        <div class="col-12 col-md-3 m-b-16" style="flex-basis: content;">
           <button mat-flat-button class="secondary-button m-r-8"
                   [disabled]="useCases.length < 3" (click)="removeAllUseCases()"
           >
@@ -103,7 +123,12 @@
       </div>
       <div class="row m-x-0 p-x-24 p-y-8">
         <div class="col-12 d-flex justify-content-end">
-          <span class="align-content-center m-r-8 text-underline">Passez à l’étape de définition des scénarios</span>
+          <button class="next-step-button" matStepperNext
+                  (click)="buildDevis()"
+                  [disabled]="formGroupDescription.invalid || formGroupScenarios.invalid"
+          >
+            Génération du devis
+          </button>
           <button mat-icon-button matStepperNext class="secondary-icon-button"
                   (click)="buildDevis()"
                   [disabled]="formGroupDescription.invalid || formGroupScenarios.invalid"
@@ -121,21 +146,3 @@
     </mat-step>
   </mat-stepper>
 </div>
-<ng-template #tooltipConcept>
-  <div class="custom-tooltip">
-    <mat-icon class="tooltip-icon">info</mat-icon>
-    <span>Exemple: Gestion comptable, Inventaire de stock, ...</span>
-  </div>
-</ng-template>
-<ng-template #tooltipBusiness>
-  <div class="custom-tooltip">
-    <mat-icon class="tooltip-icon">info</mat-icon>
-    <span>Exemple: Assurance, Centrale d'appel, Restauration ...</span>
-  </div>
-</ng-template>
-<ng-template #tooltipUseCase>
-  <div class="custom-tooltip">
-    <mat-icon class="tooltip-icon">info</mat-icon>
-    <span>Exemple: Consulte un inventaire ...</span>
-  </div>
-</ng-template>

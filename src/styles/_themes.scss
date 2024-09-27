@@ -80,7 +80,7 @@ $my-palette:(
     35: #5e4f47,
     40: #6b5b52,
     // 50: #84746a, // outline color
-    50: #000000,
+    50: #F0CD65,
     60: #9f8d83,
     70: #baa79d,
     80: #d7c3b8,
@@ -266,40 +266,3 @@ html {
   @include mat.color-variants-backwards-compatibility($light-theme);
   @include mtx.color-variants-backwards-compatibility($light-theme);
 }
-
-//////////////////////////////////////////////////////////////////////////////////////
-// When we use the Schematics (`ng add`) to start, the following variables will be  //
-// used to create a dark theme! This strategy will not generate redundant codes.    //
-//////////////////////////////////////////////////////////////////////////////////////
-
-//
-// Dark theme
-//
-/*
-$dark-config: (
-  color: (
-    theme-type: 'dark',
-    primary: mat.$orange-palette,
-    tertiary: mat.$orange-palette,
-  ),
-);
-
-$dark-theme: mat.private-deep-merge-all(
-  mat.define-theme($dark-config),
-  mtx.define-theme($dark-config)
-);
-
-
-$dark-theme: $light-theme;
-
-.theme-dark {
-  color-scheme: dark;
-
-  @include mat.all-component-colors($dark-theme);
-  @include mtx.all-component-colors($dark-theme);
-  @include app-theme.theme($dark-theme);
-
-  @include mat.color-variants-backwards-compatibility($dark-theme);
-  @include mtx.color-variants-backwards-compatibility($dark-theme);
-}
-*/

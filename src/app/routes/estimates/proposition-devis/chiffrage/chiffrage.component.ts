@@ -13,6 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
 import { Chiffrage, ChiffrageService } from '../../../../shared';
+import {TooltipDirective} from "../../../../core/directives/tooltip.directive";
 
 @Component({
   selector: 'app-chiffrage',
@@ -21,7 +22,7 @@ import { Chiffrage, ChiffrageService } from '../../../../shared';
 
     MatButton, MatListModule, MatIconModule, MatSelectModule, MatInputModule, MatFormFieldModule,
     MatCard, MatCardTitle, MatCardSubtitle, MatCardActions, MatCardContent, MatCardHeader, MatCardFooter,
-    MatChipsModule, MatLineModule, MatCardModule, MatExpansionModule, MatGridListModule, MatBadgeModule, DecimalPipe
+    MatChipsModule, MatLineModule, MatCardModule, MatExpansionModule, MatGridListModule, MatBadgeModule, DecimalPipe, TooltipDirective
   ],
   templateUrl: './chiffrage.component.html',
 })

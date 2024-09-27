@@ -23,6 +23,7 @@ import {ClientContactService} from "../../client-contact/client-contact.service"
   selector: 'app-nouveau-devis',
   standalone: true,
   templateUrl: './nouveau-devis.component.html',
+  styleUrl: './nouveau-devis.component.scss',
   imports: [
     AsyncPipe,
     MatStepperModule,
@@ -40,25 +41,7 @@ import {ClientContactService} from "../../client-contact/client-contact.service"
     NgClass,
     ClientContactComponent,
     TooltipDirective
-  ],
-  styles: `
-  .custom-tooltip {
-    display: flex;
-    background-color: black;
-    color: white;
-    padding: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    align-items: center;
-  }
-  .tooltip-icon {
-    display: flex;
-    font-size: medium;
-    color: #F2D275;
-    align-items: baseline;
-    height: 20px;
-  }
-  .invisible { visibility: hidden; }
-  `
+  ]
 })
 export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
   devis?: Devis;

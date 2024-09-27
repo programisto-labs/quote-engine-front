@@ -20,6 +20,7 @@ import { SidebarNoticeComponent } from '../sidebar-notice/sidebar-notice.compone
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import {FooterComponent} from "../footer/footer.component";
 import {TitleComponent} from "../title/title.component";
+import {TooltipComponent} from "../../core/directives/tooltip.component";
 
 const MOBILE_MEDIAQUERY = 'screen and (max-width: 599px)';
 const TABLET_MEDIAQUERY = 'screen and (min-width: 600px) and (max-width: 959px)';
@@ -42,6 +43,7 @@ const MONITOR_MEDIAQUERY = 'screen and (min-width: 960px)';
     CustomizerComponent,
     FooterComponent,
     TitleComponent,
+    TooltipComponent,
   ],
 })
 export class AdminLayoutComponent implements OnDestroy {
