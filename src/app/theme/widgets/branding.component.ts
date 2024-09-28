@@ -3,7 +3,7 @@ import {Component, Input} from '@angular/core';
 @Component({
   selector: 'app-branding',
   template: `
-    <div style="align-content: center;height: 100%;">
+    <div class="p-y-16 align-content-center h-full">
       <a class="branding" href="/">
         <img [src]="src" alt="Programisto" [width]="width"/>
       </a>

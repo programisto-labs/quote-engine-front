@@ -4,57 +4,97 @@ footer {
   justify-content: center;
   background-color: black;
   color: white;
-  padding: 16px;
+  padding: 2rem;
+  font-family: "Degular", sans-serif;
+  font-size: 16px;
+  line-height: normal;
 
   h4 {
     color: #F0CD65;
-    font-family: "Degular Black", sans-serif;
-    font-size: 12px;
     letter-spacing: 2.4px;
     opacity: 1;
+    text-transform: uppercase;
+    font-size: 14px;
+  }
+
+  p {
+    line-height: 2rem;
   }
 
   ul {
-    font-family: "Degular Black", sans-serif;
     list-style: none;
     padding: 0;
+    color: white !important;
 
     li {
-      line-height: 2rem;
-      font-size: 12px;
       letter-spacing: 2.8px;
       opacity: 1;
+      padding-top: 8px;
+      padding-bottom: 8px;
+
+      a {
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        color: white !important;
+
+        img {
+          margin-right: 8px;
+        }
+      }
     }
   }
 
-  .mat-icon {
-    color: white;
+  .partner {
+    max-width: 96px !important;
+  }
+
+  .rights {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    color: #abb8c3;
+    font-size: 14px;
+
+    p {
+      display: flex;
+      margin: 0;
+      padding: 0.5rem 0 0.5rem 0;
+
+      a {
+        text-decoration: none;
+        color: #abb8c3;
+      }
+    }
   }
 
   .linkedinWrapper {
     line-height: normal;
     text-decoration: none;
+    align-content: center;
   }
 
   .linkedin {
     color: black;
     font-size: 18px;
     font-weight: bolder;
-    background-color: white;
+    background-color: #abb8c3;
     border-radius: 4px;
     letter-spacing: 0.1rem;
     padding: 0.1rem;
-    font-family: serif;
+    font-family: sans-serif;
   }
+}
 
-  .sendIcon {
-    border-radius: 16px;
-    background-color: #FDcd60;
-    width: 24px;
-    height: 32px;
-    text-indent: 6px;
-    margin-right: 4px;
-    font-size: x-large;
-    margin-top: -4px;
+@media (max-width: 600px) {
+  footer {
+    .rights {
+      flex-direction: column;
+      p {
+        justify-content: center;
+        display: flex;
+        align-items: center;
+      }
+    }
   }
 }

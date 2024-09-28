@@ -1,73 +1,155 @@
 <footer>
-  <img src="images/pet.png" [ngStyle]="petStyles"/>
-  <div class="w-full tex-left" style="max-width: 1024px;">
-    <div class="row m-t-16">
-      <div class="col-sm-12 col-md-4 mb-8">
-        <div class="footer-item">
+  <img id="pet" src="images/pet.png" [ngStyle]="petStyles"/>
+  <div class="w-full">
+    <div class="row">
+      <div class="col-12 col-md-5 m-y-8">
+        <div class="w-full">
           <app-branding [showName]="true" [width]="258" color="white"/>
-          <p>La communauté tech dédiée au développement et à l'innovation technologique.</p>
-          <button mat-flat-button class="tertiary-button" style="outline: solid 2px #F0CD65">Posez vos questions
+          <p class="m-t-32">Programisto met au service des moyens et grands groupes une équipe d’experts qualifiés et
+            flexibles dans
+            les domaines du conseil numérique.</p>
+          <p>Ponton 5 Quai Lawton 33300 Bordeaux</p>
+          <button mat-flat-button class="tertiary-button m-y-8" style="outline: solid 2px #F0CD65">
+            Offres d'emploi 👀
           </button>
         </div>
-      </div>
-
-      <div class="col-sm-12 col-md-4 mb-8">
-        <h4>NAVIGUER</h4>
-        <ul>
-          <li>🚀 Innovation</li>
-          <li>📅 Événements</li>
-          <li>💡 Technologie Émergente</li>
-          <li>🌐 Transformation Digitale</li>
-          <li>🚀 Entrepreneuriat</li>
-          <li>🎧 Podcasts Tech</li>
-        </ul>
-      </div>
-
-      <div class="col-sm-12 col-md-4 mb-8">
-        <h4>PROGRAMISTO</h4>
-        <ul>
-          <li>Qui sommes-nous ?</li>
-          <li>Soumettre un projet</li>
-          <li>Contactez-nous</li>
-          <li>Carrières Jouer</li>
-        </ul>
-      </div>
-    </div>
-    <mat-divider class="m-y-24" role="separator" aria-orientation="horizontal"/>
-    <div class="row">
-      <div class="col-sm-12 col-md-4 mb-8">
-        <h4>SUIVEZ-NOUS</h4>
-        <div class="d-inline-flex">
-          <a href="https://programisto.fr" target="_blank" class="m-r-8">
-            <mat-icon>facebook</mat-icon>
-          </a>
-          <a href="https://programisto.fr" target="_blank" class="m-r-8">
-            <mat-icon>camera_alt</mat-icon>
-          </a>
-          <a href="https://programisto.fr" target="_blank" class="m-r-8 linkedinWrapper">
-            <span class="linkedin">in</span>
-          </a>
-          <a href="https://programisto.fr" target="_blank" class="m-r-8">
-            <mat-icon>discord</mat-icon>
-          </a>
+        <div class="row w-full m-y-24 align-items-center" style="text-align: center;">
+          <div class="col-4">
+            <img class="w-full partner" src="images/Partner-Google.svg"/>
+          </div>
+          <div class="col-4">
+            <img class="w-full partner" src="images/Partner-French-Tech.jpg"/>
+          </div>
+          <div class="col-4">
+            <img class="w-full partner" src="images/Partner-Platform-SH.jpg"/>
+          </div>
         </div>
       </div>
-      <div class="col-sm-12 col-md-8 mb-8">
-        <h4 style="letter-spacing: 3px;">NEWLSETTER</h4>
-        <p>Restez au fait des dernières tendances technologiques avec Programisto</p>
-        <mat-form-field appearance="outline" class="w-full m-b-24" style="max-width: 480px;">
-          <mat-icon matSuffix class="sendIcon">send</mat-icon>
-          <input matInput placeholder="Email">
-        </mat-form-field>
+      <div class="col-12 col-md-7">
+        <div class="row">
+          <div class="col-12 col-sm-4 m-y-8">
+            <h4>Programisto</h4>
+            <ul>
+              <li>
+                <a target="_blank" href="https://programisto.fr/expertise">
+                  <span>Expertise</span>
+                </a>
+              </li>
+              <li>
+                <a target="_blank" href="https://programisto.fr/offres-emploi">
+                  <span>Offres d'emploi </span>
+                </a>
+              </li>
+              <li>
+                <a target="_blank" href="https://programisto.fr/a-propos">
+                  <span>Qui sommes-nous ? </span>
+                </a>
+              </li>
+              <li>
+                <a target="_blank" href="https://programisto.fr/#contact-pop-up">
+                  <span>Contactez-nous </span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-12 col-sm-4 m-y-8">
+            <h4>Filiales & partenaires</h4>
+            <ul>
+              <li>
+                <a href="https://lahorde.tech/" target="_blank">
+                  <img src="images/ico-La-Horde.png" alt="La Horde, l'école du Jeu Vidéo à Bordeaux" width="25"
+                       height="25"/>
+                  La Horde
+                </a>
+              </li>
+              <li>
+                <a href="https://ecoledeturing.fr/" target="_blank">
+                  <img src="images/ico-Ecole-de-Turing.png"
+                       alt="École de Turing, Data, IA, Cybersécurité & Génie Logiciel" width="25" height="25"/>
+                  École de Turing
+                </a>
+              </li>
+              <li>
+                <a href="https://vortex.camp/" target="_blank">
+                  <img src="images/ico-Vortex.png" alt="Formations professionnelles dans le domaine de la technologie"
+                       width="25" height="25"/>
+                  Vortex
+                </a>
+              </li>
+              <li>
+                <a href="https://www.brumisphere.com/" target="_blank">
+                  <img src="images/ico-Brumisphere.png" alt="Agence Webmarketing et Produit" width="25" height="25"/>
+                  Brumisphère
+                </a>
+              </li>
+              <li>
+                <a href="https://genly-consulting.com/" target="_blank">
+                  <img src="images/ico-Genly.png" alt="Recrutement Data, IA, Cybersécurité" width="25" height="25"/>
+                  Genly
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-12 col-sm-4 m-y-8">
+            <h4>Publications</h4>
+            <ul>
+              <li>
+                <a href="https://programisto.fr/publications/entrepreneuriat/" target="_blank">
+                  <img src="images/ico-Entrepreneuriat.svg" width="24" height="24"/>
+                  Entrepreneuriat
+                </a>
+              </li>
+              <li>
+                <a href="https://programisto.fr/publications/evenements/" target="_blank">
+                  <img src="images/ico-Event.png" width="24" height="24"/>
+                  Événements
+                </a>
+              </li>
+              <li>
+                <a href="https://programisto.fr/publications/innovation/" target="_blank">
+                  <img src="images/ico-Innovation.svg" width="24" height="24"/>
+                  Innovation
+                </a>
+              </li>
+              <li>
+                <a href="https://programisto.fr/publications/podcasts-tech/" target="_blank">
+                  <img src="images/ico-Podcasts.svg" width="24" height="24"/>
+                  Podcasts Tech
+                </a>
+              </li>
+              <li>
+                <a href="https://programisto.fr/publications/technologie-emergente/" target="_blank">
+                  <img src="images/ico-Technologie.svg" width="24" height="24"/>
+                  Technologie Émergente
+                </a>
+              </li>
+              <li>
+                <a href="https://programisto.fr/publications/transformation-digitale/" target="_blank">
+                  <img src="images/ico-Transformation.svg" width="24" height="24"/>
+                  Transformation Digitale
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
     <mat-divider class="m-y-24" role="separator" aria-orientation="horizontal"/>
     <div class="row">
-      <div class="col-12 col-md-4 m-b-8">
-        <span class="f-s-12">Copyright 2024 © Programisto</span>
-      </div>
-      <div class="col-12 col-md-8 m-b-8">
-        <span class="f-s-12">Confidentialité l Mentions légales</span>
+      <div class="col-12 m-y-8 rights">
+        <p>Copyright 2024 © Programisto</p>
+        <p>
+          <a href="https://www.linkedin.com/company/programisto" target="_blank" class="m-r-8 linkedinWrapper">
+            <span class="linkedin">in</span>
+          </a>
+        </p>
+        <p>
+          <a title="Mentions Légales" target="_blank" href="https://programisto.fr/mentions-legales">Mentions Légales</a>
+          <span>&nbsp;|&nbsp;</span>
+          <a title="Gérer la confidentialité" target="_blank" href="#gdpr_cookie_modal">Gérer la confidentialité</a>
+        </p>
       </div>
     </div>
   </div>
