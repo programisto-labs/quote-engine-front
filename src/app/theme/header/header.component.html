@@ -1,16 +1,15 @@
 <mat-toolbar id="toolbar">
-  <div class="row d-flex w-full header-container">
-    <div class="col-12 col-sm-6 d-flex p-b-8">
-      <app-branding [showName]="showBrandName" [width]="brandWidth"/>
-      <app-search class="w-full"></app-search>
-    </div>
-    <div class="col-12 col-sm-6 d-flex justify-content-end">
-      <button mat-flat-button class="secondary-button">
-        <mat-icon><img [src]="src" alt=""/></mat-icon>
-        Écrire
+  <app-branding [showName]="showBrandName" [width]="brandWidth"/>
+    @if (showToggle) {
+      <button mat-icon-button (click)="toggleSidenav.emit()">
+        <mat-icon>menu</mat-icon>
       </button>
-      <button mat-flat-button class="primary-button m-x-8">S'inscrire</button>
-      <button mat-flat-button class="tertiary-button">Se connecter</button>
-    </div>
-  </div>
+    } @else {
+      <app-topmenu />
+      <a href="https://programisto.fr/offres-emploi" target="_blank">
+        <button mat-flat-button class="primary-button m-y-8">
+          Offres d'emploi 👀
+        </button>
+      </a>
+    }
 </mat-toolbar>

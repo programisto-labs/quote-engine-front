@@ -6,17 +6,16 @@
   max-width: 880px;
   margin: auto;
   --mat-sidenav-content-background-color: transparent;
-
-  //height: 100%;
   height: auto !important;
 }
 
 .matero-sidenav {
-  --mat-sidenav-container-width: var(--sidenav-width);
-
-  position: absolute;
   overflow-x: hidden;
+  width: 100% !important;
+  max-width: 1480px;
+  left: 0;
   border-width: 0 !important;
+  border-radius: 0 !important;
   transition: width mat.$private-swift-ease-out-duration mat.$private-swift-ease-out-timing-function;
 }
 
@@ -149,7 +148,7 @@
   position: relative;
   /*padding: var(--gutter);*/
   margin: 0;
-  padding: 0 0 64px 0;
+  padding-top: var(--mat-toolbar-standard-height) !important;
 
   .matero-header + &,
   .matero-header-above &,

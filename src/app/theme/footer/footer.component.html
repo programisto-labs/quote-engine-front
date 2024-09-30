@@ -1,19 +1,21 @@
 <footer>
   <img id="pet" src="images/pet.png" [ngStyle]="petStyles"/>
-  <div class="w-full">
+  <div class="w-full" style="max-width: 1480px;">
     <div class="row">
       <div class="col-12 col-md-5 m-y-8">
         <div class="w-full">
           <app-branding [showName]="true" [width]="258" color="white"/>
-          <p class="m-t-32">Programisto met au service des moyens et grands groupes une équipe d’experts qualifiés et
+          <p class="m-t-32" style="max-width: 420px;">Programisto met au service des moyens et grands groupes une équipe d’experts qualifiés et
             flexibles dans
             les domaines du conseil numérique.</p>
           <p>Ponton 5 Quai Lawton 33300 Bordeaux</p>
-          <button mat-flat-button class="tertiary-button m-y-8" style="outline: solid 2px #F0CD65">
-            Offres d'emploi 👀
-          </button>
+          <a href="https://programisto.fr/offres-emploi" target="_blank">
+            <button mat-flat-button class="tertiary-button m-y-8" style="outline: solid 2px #F0CD65">
+              Offres d'emploi 👀
+            </button>
+          </a>
         </div>
-        <div class="row w-full m-y-24 align-items-center" style="text-align: center;">
+        <div class="row w-full m-y-24 align-items-center" style="max-width: 250px;">
           <div class="col-4">
             <img class="w-full partner" src="images/Partner-Google.svg"/>
           </div>

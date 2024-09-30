@@ -1,10 +1,3 @@
-<!-- Header Above -->
-@if (options.showHeader && options.headerPos === 'above') {
-  <app-header
-  (toggleSidenav)="sidenav.toggle()"
-  (toggleSidenavNotice)="sidenavNotice.toggle()"
-  [showBranding]="true" />
-}
 <div class="matero-container-wrap"
   [class.matero-sidenav-collapsed]="options.sidenavCollapsed && options.navPos !== 'top'"
   [class.matero-navbar-side]="options.navPos === 'side'"
@@ -14,12 +7,25 @@
   [dir]="options.dir">
 
   <ng-progress />
+
+  <!-- Header Above -->
+  @if (options.showHeader && options.headerPos === 'above') {
+  <app-header
+  (toggleSidenav)="sidenav.toggle()"
+  (toggleSidenavNotice)="sidenavNotice.toggle()"
+  [showBranding]="true" />
+  }
+
   <mat-sidenav-container class="matero-container" autosize autoFocus>
     <mat-sidenav #sidenav class="matero-sidenav"
       [mode]="isOver ? 'over' : 'side'"
       [opened]="options.navPos === 'side' && options.sidenavOpened && !isOver"
       (openedChange)="onSidenavOpenedChange($event)"
-      (closedStart)="onSidenavClosedStart()">
+      (closedStart)="onSidenavClosedStart()"
+      [fixedInViewport]="true"
+      [fixedTopGap]="72"
+      [fixedBottomGap]="0"
+    >
       <app-sidebar
         [showToggle]="!isOver"
         [showUser]="options.showUserPanel"
@@ -34,14 +40,6 @@
     </mat-sidenav>
 
     <mat-sidenav-content #content class="matero-content">
-      @if (options.showHeader && options.headerPos !== 'above') {
-        <app-header
-          [showToggle]="!options.sidenavCollapsed && options.navPos !== 'top'"
-          [showBranding]="options.navPos === 'top'"
-          (toggleSidenav)="sidenav.toggle()"
-          (toggleSidenavNotice)="sidenavNotice.toggle()" />
-      }
-
       <main class="matero-page-content">
         <app-title/>
         <router-outlet />

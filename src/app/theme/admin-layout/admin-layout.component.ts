@@ -21,6 +21,7 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 import {FooterComponent} from "../footer/footer.component";
 import {TitleComponent} from "../title/title.component";
 import {TooltipComponent} from "../../core/directives/tooltip.component";
+import {TopmenuComponent} from "../topmenu/topmenu.component";
 
 const MOBILE_MEDIAQUERY = 'screen and (max-width: 599px)';
 const TABLET_MEDIAQUERY = 'screen and (min-width: 600px) and (max-width: 959px)';
@@ -44,6 +45,7 @@ const MONITOR_MEDIAQUERY = 'screen and (min-width: 960px)';
     FooterComponent,
     TitleComponent,
     TooltipComponent,
+    TopmenuComponent
   ],
 })
 export class AdminLayoutComponent implements OnDestroy {
@@ -61,7 +63,7 @@ export class AdminLayoutComponent implements OnDestroy {
   }
 
   get isOver() {
-    return true; //this.isMobileScreen;
+    return this.isMobileScreen;
   }
 
   private isMobileScreen = false;

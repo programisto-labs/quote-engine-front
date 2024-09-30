@@ -1,0 +1,59 @@
+<nav>
+  @for (menuItem of menu$ | async; track menuItem; let index = $index) {
+      @if (menuItem.type === 'link') {
+        <a
+          [routerLink]="buildRoute([menuItem.route])" routerLinkActive="active">
+          <ng-container
+            [ngTemplateOutlet]="linkTypeTpl"
+            [ngTemplateOutletContext]="{item: menuItem}" />
+        </a>
+      }
+      @if (menuItem.type === 'extLink') {
+        <a [href]="menuItem.route">
+          <ng-container
+            [ngTemplateOutlet]="linkTypeTpl"
+            [ngTemplateOutletContext]="{item: menuItem}" />
+        </a>
+      }
+      @if (menuItem.type === 'extTabLink') {
+        <a [href]="menuItem.route" target="_blank">
+          <ng-container
+            [ngTemplateOutlet]="linkTypeTpl"
+            [ngTemplateOutletContext]="{item: menuItem}" />
+        </a>
+      }
+      @if (menuItem.type === 'sub') {
+        <button [matMenuTriggerFor]="submenu.menuPanel"
+          routerLinkActive #rla="routerLinkActive"
+          [class.active]="rla.isActive || menuStates[index].active">
+          <ng-container
+            [ngTemplateOutlet]="linkTypeTpl"
+            [ngTemplateOutletContext]="{item: menuItem}" />
+
+          <app-topmenu-panel #submenu
+            [items]="menuItem.children!"
+            [parentRoute]="[menuItem.route]"
+            [level]="1"
+            (routeChange)="onRouteChange($event, index)" />
+
+        </button>
+      }
+  }
+</nav>
+
+<ng-template #linkTypeTpl let-item="item" let-level="level">
+  @if (item.icon) {
+    <mat-icon class="menu-icon">{{item.icon}}</mat-icon>
+  }
+  @if (item.label) {
+    <span class="menu-label">{{item.label.value}}</span>
+  } @else {
+    <span class="menu-name">{{item.name | translate}}</span>
+  }
+  @if (item.badge) {
+    <span class="menu-badge bg-{{item.badge.color}}">{{item.badge.value}}</span>
+  }
+  @if (item.type=='sub') {
+    <mat-icon class="menu-caret">arrow_drop_down</mat-icon>
+  }
+</ng-template>

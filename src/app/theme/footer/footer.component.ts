@@ -6,7 +6,6 @@ import {MatDivider} from "@angular/material/divider";
 import {MatList, MatListItem} from "@angular/material/list";
 import {TranslateModule} from "@ngx-translate/core";
 import {MatIcon} from "@angular/material/icon";
-import {RouterLink} from "@angular/router";
 import {MatButton} from "@angular/material/button";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatError, MatFormField, MatSuffix} from "@angular/material/form-field";
@@ -29,7 +28,6 @@ const PET_PADDING = 4;
     MatListItem,
     TranslateModule,
     MatIcon,
-    RouterLink,
     MatButton,
     FormsModule,
     MatError,

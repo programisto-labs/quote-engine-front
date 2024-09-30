@@ -1,7 +1,7 @@
 @if (showHeader) {
   <div class="matero-sidebar-header">
     <mat-toolbar>
-      <app-branding [showName]="false" />
+      <app-branding [showName]="true" />
 
       <span class="flex-fill"></span>
 
@@ -17,5 +17,14 @@
 }
 
 <div class="matero-sidebar-main">
-  <app-sidemenu [ripple]="showToggle" />
+  <app-sidemenu/>
+  <div class="row">
+    <div class="col-12 p-y-32" style="text-align: center;">
+      <a href="https://programisto.fr/offres-emploi" target="_blank">
+        <button mat-flat-button class="primary-button m-y-8">
+          Offres d'emploi 👀
+        </button>
+      </a>
+    </div>
+  </div>
 </div>

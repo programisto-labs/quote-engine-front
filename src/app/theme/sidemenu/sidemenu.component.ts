@@ -1,60 +1,44 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AsyncPipe, NgTemplateOutlet, SlicePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
-  Component,
-  Input,
-  ViewEncapsulation,
+  Component, inject, Input,
 } from '@angular/core';
-import { MatRippleModule } from '@angular/material/core';
-import { MatIconModule } from '@angular/material/icon';
-import { RouterLink, RouterLinkActive } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
 
-import { NavAccordionItemDirective } from './nav-accordion-item.directive';
-import { NavAccordionToggleDirective } from './nav-accordion-toggle.directive';
-import { NavAccordionDirective } from './nav-accordion.directive';
+import {menu} from '../../shared';
+import {MatAccordion, MatExpansionPanel, MatExpansionPanelHeader} from "@angular/material/expansion";
+import {RouterLink, RouterLinkActive} from "@angular/router";
+import {TopmenuPanelComponent} from "../topmenu/topmenu-panel.component";
+import {Menu, MenuChildrenItem, MenuService} from "../../core";
+import {AsyncPipe, NgTemplateOutlet} from "@angular/common";
+import {MatIconModule} from "@angular/material/icon";
+import {TranslateModule} from "@ngx-translate/core";
+import {MatButton} from "@angular/material/button";
+
 
 @Component({
   selector: 'app-sidemenu',
   templateUrl: './sidemenu.component.html',
   styleUrl: './sidemenu.component.scss',
-  encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    AsyncPipe,
-    SlicePipe,
-    NgTemplateOutlet,
-    RouterLink,
+    MatAccordion,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
     RouterLinkActive,
+    TopmenuPanelComponent,
+    RouterLink,
+    NgTemplateOutlet,
     MatIconModule,
-    MatRippleModule,
     TranslateModule,
-    NavAccordionDirective,
-    NavAccordionItemDirective,
-    NavAccordionToggleDirective,
-  ],
-  animations: [
-    trigger('expansion', [
-      state('collapsed, void', style({ height: '0px', visibility: 'hidden' })),
-      state('expanded', style({ height: '*', visibility: '' })),
-      transition(
-        'expanded <=> collapsed, void => collapsed',
-        animate('225ms cubic-bezier(0.4,0,0.2,1)')
-      ),
-    ]),
+    AsyncPipe,
+    MatButton
   ],
 })
 export class SidemenuComponent {
-  // The ripple effect makes page flashing on mobile
-  @Input() ripple = false;
+  private readonly menuService: MenuService = inject(MenuService);
 
-  estimationsExpand = 'expanded';
+  @Input('menu')
+  menu: Menu[]|MenuChildrenItem[] = menu;
 
-  toggleEstimations() {
-    this.estimationsExpand === 'expanded' ?
-      this.estimationsExpand = 'collapsed' :
-      this.estimationsExpand = 'expanded';
-  }
+  buildRoute = this.menuService.buildRoute;
 }

@@ -11,13 +11,9 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
-
 import { BrandingComponent } from '../widgets/branding.component';
-import { GithubButtonComponent } from '../widgets/github.component';
-import { NotificationComponent } from '../widgets/notification.component';
-import { TranslateComponent } from '../widgets/translate.component';
 import {isPlatformBrowser} from "@angular/common";
-import {SearchComponent} from "../search/search.component";
+import {TopmenuComponent} from "../topmenu/topmenu.component";
 
 @Component({
   selector: 'app-header',
@@ -33,19 +29,15 @@ import {SearchComponent} from "../search/search.component";
     MatButtonModule,
     MatIconModule,
     BrandingComponent,
-    GithubButtonComponent,
-    NotificationComponent,
-    TranslateComponent,
-    SearchComponent,
+    TopmenuComponent,
   ],
 })
 export class HeaderComponent {
   private readonly platform = inject(PLATFORM_ID);
-  src = 'images/hand_writing.webp';
   showBrandName = true;
   brandWidth = 142;
 
-  @Input() showToggle = false;
+  @Input() showToggle = true;
   @Input() showBranding = true;
 
   @Output() toggleSidenav = new EventEmitter<void>();
@@ -58,8 +50,7 @@ export class HeaderComponent {
   @HostListener('window:resize', ['$event'])
   onResize() {
     if (isPlatformBrowser(this.platform)) {
-      window.innerWidth > 960 ? this.showBrandName = this.showBranding : this.showBrandName = false;
-      this.showBrandName ? this.brandWidth = 142 : this.brandWidth = 32;
+      this.showToggle = window.innerWidth < 700;
     }
   }
 }

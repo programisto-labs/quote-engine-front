@@ -1,47 +1,57 @@
-
-<ul navAccordion class="matero-sidemenu level-0" [class.submenu]="false" [@expansion]="'expanded'">
-  <li navAccordionItem class="menu-item"
-      routerLinkActive="active" [route]="'/home'" [type]="'link'">
-    <a class="menu-heading" [routerLink]="'/home'"
-       matRipple [matRippleDisabled]="!ripple">
-      <mat-icon class="menu-icon">home</mat-icon>
-      <span class="menu-name">{{'home' | translate}}</span>
-    </a>
-  </li>
-  <li navAccordionItem class="menu-item"
-      routerLinkActive="active" [route]="'/estimates'" [type]="'sub'">
-    <button navAccordionToggle class="menu-heading menu-toggle"
-            matRipple [matRippleDisabled]="!ripple" (click)="toggleEstimations()">
-        <mat-icon class="menu-icon">insert_chart</mat-icon>
-        <span class="menu-name">{{'estimates' | translate}}</span>
-        <mat-icon class="menu-caret">arrow_drop_down</mat-icon>
-    </button>
-    <ul navAccordion class="matero-sidemenu level-1" [class.submenu]="true" [@expansion]="estimationsExpand">
-      <li navAccordionItem class="menu-item"
-          routerLinkActive="active" [route]="'estimates/new'" [type]="'link'">
-        <a class="menu-heading" [routerLink]="'estimates/new'"
-           matRipple [matRippleDisabled]="!ripple">
-          <mat-icon class="menu-icon">add_circle</mat-icon>
-          <span class="menu-name">{{'estimates.new' | translate}}</span>
+<mat-accordion [displayMode]="'flat'" [multi]="true">
+  @for (menuItem of menu; track menuItem; let index = $index) {
+    @if (menuItem.type === 'link') {
+      <mat-expansion-panel hideToggle="true" expanded="true">
+        <a
+          [routerLink]="buildRoute([menuItem.route])" routerLinkActive="active">
+          <ng-container
+            [ngTemplateOutlet]="linkTypeTpl"
+            [ngTemplateOutletContext]="{item: menuItem}"/>
         </a>
-      </li>
-      <li navAccordionItem class="menu-item"
-          routerLinkActive="active" [route]="'estimates/suggestions'" [type]="'link'">
-        <a class="menu-heading" [routerLink]="'estimates/suggestions'"
-           matRipple [matRippleDisabled]="!ripple">
-          <mat-icon class="menu-icon">flag</mat-icon>
-          <span class="menu-name">{{'estimates.suggestions' | translate}}</span>
+      </mat-expansion-panel>
+    }
+    @if (menuItem.type === 'extLink') {
+      <mat-expansion-panel hideToggle="true" expanded="true">
+        <a [href]="menuItem.route">
+          <ng-container
+            [ngTemplateOutlet]="linkTypeTpl"
+            [ngTemplateOutletContext]="{item: menuItem}"/>
         </a>
-      </li>
-    </ul>
-  </li>
-  <li navAccordionItem class="menu-item"
-      routerLinkActive="active" [route]="'team'" [type]="'link'">
-    <a class="menu-heading" [routerLink]="'team'"
-       matRipple [matRippleDisabled]="!ripple">
-      <mat-icon class="menu-icon">group</mat-icon>
-      <span class="menu-name">{{'team' | translate}}</span>
-    </a>
-  </li>
-</ul>
-
+      </mat-expansion-panel>
+    }
+    @if (menuItem.type === 'extTabLink') {
+      <mat-expansion-panel hideToggle="true" expanded="true">
+        <a [href]="menuItem.route" target="_blank">
+          <ng-container
+            [ngTemplateOutlet]="linkTypeTpl"
+            [ngTemplateOutletContext]="{item: menuItem}"/>
+        </a>
+      </mat-expansion-panel>
+    }
+    @if (menuItem.type === 'sub') {
+      <mat-expansion-panel expanded="true">
+        <mat-expansion-panel-header>
+          <span>{{menuItem.name}}</span>
+        </mat-expansion-panel-header>
+        <app-sidemenu #submenu
+                           [menu]="menuItem.children!"/>
+      </mat-expansion-panel>
+    }
+  }
+</mat-accordion>
+<ng-template #linkTypeTpl let-item="item" let-level="level">
+  @if (item.icon) {
+  <mat-icon class="menu-icon">{{item.icon}}</mat-icon>
+  }
+  @if (item.label) {
+  <span class="menu-label">{{item.label.value}}</span>
+  } @else {
+  <span class="menu-name">{{item.name | translate}}</span>
+  }
+  @if (item.badge) {
+  <span class="menu-badge bg-{{item.badge.color}}">{{item.badge.value}}</span>
+  }
+  @if (item.type=='sub') {
+  <mat-icon class="menu-caret">arrow_drop_down</mat-icon>
+  }
+</ng-template>
