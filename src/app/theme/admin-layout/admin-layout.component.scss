@@ -148,7 +148,8 @@
   position: relative;
   /*padding: var(--gutter);*/
   margin: 0;
-  padding-top: var(--mat-toolbar-standard-height) !important;
+  padding: var(--mat-toolbar-standard-height) 0 64px 0 !important;
+  //padding-top: var(--mat-toolbar-standard-height) !important;
 
   .matero-header + &,
   .matero-header-above &,
