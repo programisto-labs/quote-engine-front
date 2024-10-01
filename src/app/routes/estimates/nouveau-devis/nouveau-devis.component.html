@@ -1,4 +1,4 @@
-<div class="w-full" style="background-color: transparent !important;">
+<div id="nouveau">
   <mat-stepper #stepper [selectedIndex]="stepperIndex" style="background-color: transparent !important;">
     <!-- DESCRIPTION GENERALE -->
     <mat-step [stepControl]="formGroupDescription">
@@ -30,20 +30,7 @@
           </mat-form-field>
         </div>
       </form>
-      <div class="d-flex w-full row justify-content-start m-x-0 p-x-24 p-y-8">
-        <div class="col-12">
-          <mat-progress-bar mode="indeterminate" class="m-b-16"
-                            [ngClass]="loadingPdf ? '' : 'invisible'"></mat-progress-bar>
-          <input type="file" (change)="loadPdf($event)" #fileInput style="display: none;"/>
-          <button mat-flat-button class="secondary-button m-r-8"
-                  (click)="fileInput.click()"
-          >
-            <mat-icon>upload</mat-icon>
-            Chosir un fichier
-          </button>
-          <span class="align-content-center"><strong>Optionnel:</strong>&nbsp;Transmettez-nous votre cahier des charges.</span>
-        </div>
-      </div>
+      <app-pdf-loader [loadingPdf]="loadingPdf" (sendContent)="sendPdfContent($event)"/>
       <div class="row m-x-0 p-x-24 p-y-8">
         <div class="col-12 d-flex justify-content-end">
           <button class="next-step-button" matStepperNext
@@ -70,7 +57,7 @@
               <mat-form-field appearance="outline" class="w-full">
                   <mat-error>Le scénario utilisateur est obligatoire *</mat-error>
                   <button matSuffix mat-icon-button aria-label="Supprime le scénario"
-                    style="padding: 0; margin-top: -4px;"
+                    style="margin-top: -8px !important;"
                     [disabled]="useCases.length < 2"
                       (click)="removeUseCase($index)">
                       <mat-icon>delete</mat-icon>

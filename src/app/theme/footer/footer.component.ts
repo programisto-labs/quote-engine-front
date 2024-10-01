@@ -11,6 +11,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatError, MatFormField, MatSuffix} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {isPlatformBrowser, NgStyle} from "@angular/common";
+import {LinkedinComponent} from "../widgets/linkedin.component";
 
 const MAX_PET_WIDTH = 300;
 const CONTENT_WIDTH = 880;
@@ -35,7 +36,8 @@ const PET_PADDING = 4;
     MatInput,
     MatSuffix,
     ReactiveFormsModule,
-    NgStyle
+    NgStyle,
+    LinkedinComponent
   ],
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.scss'

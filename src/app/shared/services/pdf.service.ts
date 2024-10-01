@@ -46,7 +46,6 @@ export class PdfService {
         this.content += text;
       },
       complete: () => {
-        console.log(this.content);
         this.pdfContent.next(this.content);
       },
       error: (error) => {

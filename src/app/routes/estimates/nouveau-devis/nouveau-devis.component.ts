@@ -1,7 +1,7 @@
 import {AfterViewInit, ChangeDetectorRef, Component, inject, OnDestroy} from '@angular/core';
 import {PropositionDevisComponent} from "../proposition-devis/proposition-devis.component";
 import {MatIconModule} from '@angular/material/icon';
-import {ClientContact, defaultClientContact, DemandeClient, Devis, DevisService, PdfService} from '../../../shared';
+import {ClientContact, defaultClientContact, DemandeClient, Devis, DevisService} from '../../../shared';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -54,7 +54,6 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
   loadingPdf: boolean = false;
   suggestions: { [key: string]: string[] } = {};
   stepperIndex = 0;
-  private readonly pdfService: PdfService = inject(PdfService);
   private readonly contactService: ClientContactService = inject(ClientContactService);
   private autocompleteSubscription?: Subscription;
   private destroy$: Subject<void> = new Subject<void>();
@@ -70,13 +69,6 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
   }
 
   ngAfterViewInit() {
-    this.pdfService.pdfContent.pipe(takeUntil(this.destroy$)).subscribe({
-      next: (content: string) => {
-        if(!content) return;
-        this.loadingPdf = true;
-        this.sendPdfContent(content);
-      }
-    });
     this.contactService.contactValid.pipe(takeUntil(this.destroy$)).subscribe({
       next: (value: boolean) => this.contactValid = value
     });
@@ -195,11 +187,6 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
       );
   }
 
-  loadPdf(event: any) {
-    const file = event.target.files[0];
-    if (file) this.pdfService.loadPdf(file);
-  }
-
   sendPdfContent(content: string) {
     this.devisService.newDemandeClientFromRaw(content).pipe(take(1)).subscribe({
       next: (demandeClient: DemandeClient) => {
@@ -213,8 +200,8 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
             (useCase: string) => this.useCases.push(this.newUseCase(useCase))
           );
           this.stepperIndex++;
-          this.loadingPdf = false;
-        } else this.loadingPdf = false;
+        }
+        this.loadingPdf = false;
       },
       error: (error: any) => {
         this.loadingPdf = false;
