@@ -23,10 +23,9 @@ import { ChiffrageComponent } from "./chiffrage/chiffrage.component";
 import { Subject } from "rxjs";
 import { environment } from "../../../../environments/environment";
 import { DiscordDatatableBuilderService } from "../../../shared/services/discord.datatable.builder.service";
-import { EmailService } from "../../../shared";
-import { ClientContactService } from "../../client-contact/client-contact.service";
+import { EmailService, ClientContactService } from "../../../shared";
 import { ToastrService } from "ngx-toastr";
-import {TooltipDirective} from "../../../core/directives/tooltip.directive";
+import {TooltipDirective} from "../../../core";
 
 
 @Component({

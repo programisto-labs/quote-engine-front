@@ -11,6 +11,9 @@ export class PdfService {
   private readonly translateService: TranslateService = inject(TranslateService);
   private readonly toastService: ToastrService = inject(ToastrService);
 
+  private loading = new BehaviorSubject<boolean>(false);
+  loading$ = this.loading.asObservable();
+
   filename: string = '';
   content: string = '';
   pdfContent: BehaviorSubject<string> = new BehaviorSubject<string>('');
@@ -84,5 +87,9 @@ export class PdfService {
         )
       )
     );
+  }
+
+  toogleLoading() {
+    this.loading.next(!this.loading.value);
   }
 }

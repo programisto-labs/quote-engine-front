@@ -1,7 +1,14 @@
 import {AfterViewInit, ChangeDetectorRef, Component, inject, OnDestroy} from '@angular/core';
 import {PropositionDevisComponent} from "../proposition-devis/proposition-devis.component";
 import {MatIconModule} from '@angular/material/icon';
-import {ClientContact, defaultClientContact, DemandeClient, Devis, DevisService} from '../../../shared';
+import {
+  ClientContact,
+  DemandeClient,
+  Devis,
+  DevisService,
+  PdfService,
+  ClientContactService
+} from '../../../shared';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -14,9 +21,7 @@ import {PdfLoaderComponent} from "../../pdf-loader/pdf-loader.component";
 import {TranslateModule} from "@ngx-translate/core";
 import {MatTabsModule} from "@angular/material/tabs";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
-import {ClientContactComponent} from "../../client-contact/client-contact.component";
-import {TooltipDirective} from "../../../core/directives/tooltip.directive";
-import {ClientContactService} from "../../client-contact/client-contact.service";
+import {TooltipDirective, isEmptyValidator} from "../../../core";
 
 
 @Component({
@@ -39,7 +44,6 @@ import {ClientContactService} from "../../client-contact/client-contact.service"
     TranslateModule,
     MatProgressBarModule,
     NgClass,
-    ClientContactComponent,
     TooltipDirective
   ]
 })
@@ -47,21 +51,24 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
   devis?: Devis;
   formGroupDescription: FormGroup;
   formGroupScenarios: FormGroup;
-  contactFormValue: ClientContact = defaultClientContact;
-  contactValid: boolean = false;
   waitingForService: boolean = false;
   waitingForCompletion: boolean = false;
-  loadingPdf: boolean = false;
   suggestions: { [key: string]: string[] } = {};
   stepperIndex = 0;
+  private readonly pdfService: PdfService = inject(PdfService);
   private readonly contactService: ClientContactService = inject(ClientContactService);
   private autocompleteSubscription?: Subscription;
   private destroy$: Subject<void> = new Subject<void>();
 
   constructor(private formBuilder: FormBuilder, private cdr: ChangeDetectorRef, private devisService: DevisService) {
+    let data: ClientContact = this.contactService.getContact();
     this.formGroupDescription = this.formBuilder.group({
-      coreBusiness: ['', Validators.required],
-      concept: ['', Validators.required]
+      fullname: [data?.fullname || '', [Validators.required, Validators.pattern('^[a-zA-ZÀ-ÖØ-öø-ÿ]+[ a-zA-ZÀ-ÖØ-öø-ÿ]+$')]],
+      company: [data?.company || '', [Validators.required, Validators.pattern('^[a-zA-ZÀ-ÖØ-öø-ÿ]+([ a-zA-ZÀ-ÖØ-öø-ÿ])*$')]],
+      email: [data?.email || '', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
+      tele: [data?.tele || '', [Validators.required, Validators.pattern('^(0[1-7]{1}(\\d{2}){4})$')]], //(\+33|0)
+      coreBusiness: ['', [Validators.required, Validators.pattern('^[a-zA-ZÀ-ÖØ-öø-ÿ]+[ .,;:!-_a-zA-ZÀ-ÖØ-öø-ÿ]+$')]],
+      concept: ['', [Validators.required, isEmptyValidator(), Validators.maxLength(2000), Validators.minLength(10)]]
     });
     this.formGroupScenarios = this.formBuilder.group({
       useCases: this.formBuilder.array([this.newUseCase()])
@@ -69,16 +76,45 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
   }
 
   ngAfterViewInit() {
-    this.contactService.contactValid.pipe(takeUntil(this.destroy$)).subscribe({
-      next: (value: boolean) => this.contactValid = value
+    this.formGroupDescription.valueChanges.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (value: any) => {
+        this.contactService.updateValue(value);
+        this.contactService.updateValidStatus(this.formGroupDescription.valid);
+      }
     });
-    this.contactService.contactValue.pipe(takeUntil(this.destroy$)).subscribe({
-      next: (value: ClientContact) => this.contactFormValue = value
-    })
   }
 
   ngOnDestroy() {
     this.destroy$.next();
+  }
+
+  get fullname() {
+    return this.formGroupDescription.get('fullname');
+  }
+
+  get company() {
+    return this.formGroupDescription.get('company');
+  }
+
+  get email() {
+    return this.formGroupDescription.get('email');
+  }
+
+  get tele() {
+    return this.formGroupDescription.get('tele');
+  }
+
+  get concept() {
+    return this.formGroupDescription.get('concept');
+  }
+
+  get coreBusiness() {
+    return this.formGroupDescription.get('coreBusiness');
+  }
+
+  getUseCaseError(index: number) {
+    const control = this.useCases.at(index).get('useCase');
+    return (control && control.errors) || {};
   }
 
   get useCases(): FormArray {
@@ -98,7 +134,7 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
   }
 
   newUseCase(value: string = '') {
-    return this.formBuilder.group({useCase: [value, Validators.required]})
+    return this.formBuilder.group({useCase: [value, [Validators.required, Validators.pattern('^[a-zA-ZÀ-ÖØ-öø-ÿ]+[ .,;:!-_a-zA-ZÀ-ÖØ-öø-ÿ]+$')]]})
   }
 
   addNewUseCase() {
@@ -124,6 +160,13 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
       this.removeUseCase(this.useCases.length - 1);
     }
     this.addNewUseCase();
+  }
+
+  onStepChange(event: any) {
+    this.stepperIndex = event.selectedIndex;
+    if (this.stepperIndex == 2) {
+      this.buildDevis();
+    }
   }
 
   buildDevis() {
@@ -188,23 +231,26 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
   }
 
   sendPdfContent(content: string) {
+    this.pdfService.toogleLoading();
     this.devisService.newDemandeClientFromRaw(content).pipe(take(1)).subscribe({
       next: (demandeClient: DemandeClient) => {
-        if (demandeClient) {
-          this.formGroupDescription.setValue({
-            coreBusiness: demandeClient.coreBusiness,
-            concept: demandeClient.concept
-          });
-          Array.from({length: this.useCases.length}, (_) => this.useCases.removeAt(0));
-          demandeClient.useCases.map(
-            (useCase: string) => this.useCases.push(this.newUseCase(useCase))
-          );
-          this.stepperIndex++;
+        try {
+          if (demandeClient) {
+            this.formGroupDescription.patchValue({
+              coreBusiness: demandeClient.coreBusiness,
+              concept: demandeClient.concept
+            });
+            Array.from({length: this.useCases.length}, (_) => this.useCases.removeAt(0));
+            demandeClient.useCases.map(
+              (useCase: string) => this.useCases.push(this.newUseCase(useCase))
+            );
+          }
+        } finally {
+          this.pdfService.toogleLoading();
         }
-        this.loadingPdf = false;
       },
       error: (error: any) => {
-        this.loadingPdf = false;
+        this.pdfService.toogleLoading();
         console.log(error);
       }
     });

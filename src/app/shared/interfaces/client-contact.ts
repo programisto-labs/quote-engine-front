@@ -1,13 +1,13 @@
 export interface ClientContact {
   fullname: string;
-  enterprise: string;
+  company: string;
   email: string;
   tele: string;
 }
 
 export const defaultClientContact: ClientContact = {
   fullname: '',
-  enterprise: '',
+  company: '',
   email: '',
   tele: ''
 }

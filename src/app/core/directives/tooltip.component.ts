@@ -8,7 +8,7 @@ import {TooltipTemplateService} from "./tooltip-template.service";
   template: `
     <ng-template #tooltipTemplate let-tooltipIcon="tooltipIcon" let-tooltipContent="tooltipContent">
       <div class="custom-tooltip">
-        <mat-icon class="tooltip-icon">{{tooltipIcon}}</mat-icon>
+        <mat-icon class="tooltip-icon p-r-8">{{tooltipIcon}}</mat-icon>
         <span>{{tooltipContent}}</span>
       </div>
     </ng-template>

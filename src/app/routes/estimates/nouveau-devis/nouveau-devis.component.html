@@ -1,45 +1,158 @@
 <div id="nouveau">
-  <mat-stepper #stepper [selectedIndex]="stepperIndex" style="background-color: transparent !important;">
+  <mat-stepper #stepper [selectedIndex]="stepperIndex" [linear]="true" (selectionChange)="onStepChange($event)" style="background-color: transparent !important;">
     <!-- DESCRIPTION GENERALE -->
     <mat-step [stepControl]="formGroupDescription">
       <ng-template matStepLabel>Présentation du projet</ng-template>
-      <app-client-contact></app-client-contact>
       <form [formGroup]="formGroupDescription" class="p-x-24 p-y-0">
+        <div class="d-flex row w-full m-x-0">
+          <div class="col-12 col-sm-6">
+            <mat-form-field class="w-full m-b-24" appearance="outline">
+              <mat-icon matPrefix>person</mat-icon>
+              <input matInput placeholder="{{'dialogs.full_name' | translate}}*" formControlName="fullname" required>
+              @if (fullname!.errors && fullname!.errors['required']) {
+                <mat-error>
+                    <span>{{'validations.required' | translate}}
+                      <strong>*</strong>
+                    </span>
+                </mat-error>
+              } @else if (fullname!.invalid) {
+                <mat-error>
+                    <span>{{'validations.invalid_value' | translate}}
+                      <strong>*</strong>
+                    </span>
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-12 col-sm-6">
+            <mat-form-field class="w-full m-b-24" appearance="outline">
+              <mat-icon matPrefix>business</mat-icon>
+              <input matInput placeholder="{{'dialogs.company' | translate}}*" formControlName="company" required>
+              @if (company!.errors && company!.errors['required']) {
+                <mat-error>
+                    <span>{{'validations.required' | translate}}
+                      <strong>*</strong>
+                    </span>
+                </mat-error>
+              } @else if (company!.invalid) {
+                <mat-error>
+                    <span>{{'validations.invalid_value' | translate}}
+                      <strong>*</strong>
+                    </span>
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="d-flex row w-full m-x-0">
+          <div class="col-12 col-sm-6">
+            <mat-form-field class="w-full m-b-24" appearance="outline">
+              <mat-icon matPrefix>mail</mat-icon>
+              <input type="email" matInput placeholder="{{'dialogs.email' | translate}}*" formControlName="email" required>
+              @if (email!.errors && email!.errors['required']) {
+                <mat-error>
+                    <span>{{'validations.required' | translate}}
+                      <strong>*</strong>
+                    </span>
+                </mat-error>
+              } @else if (email!.invalid) {
+                <mat-error>
+                    <span>{{'validations.invalid_value' | translate}}
+                      <strong>*</strong>
+                    </span>
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-12 col-sm-6">
+            <mat-form-field class="w-full m-b-24" appearance="outline">
+              <mat-icon matPrefix>smartphone</mat-icon>
+              <mat-icon matSuffix style="align-items: flex-start"
+                        istoTooltip [tooltipHorizontalPosition]="'end'"
+                        [tooltipIcon]="'info'"
+                        [tooltipContent]="'Exemple: 0X XX XX XX XX (Aucun espace)'"
+              >info</mat-icon>
+              <input type="tel" matInput placeholder="{{'dialogs.tele' | translate}}*" formControlName="tele" required>
+              @if (tele!.errors && tele!.errors['required']) {
+                <mat-error>
+                    <span>{{'validations.required' | translate}}
+                      <strong>*</strong>
+                    </span>
+                </mat-error>
+              } @else if (tele!.invalid) {
+                <mat-error>
+                    <span>{{'validations.invalid_value' | translate}}
+                      <strong>*</strong>
+                    </span>
+                </mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
         <div class="d-flex col-12">
           <mat-form-field appearance="outline" class="w-full m-b-24">
-            <mat-error>Le domaine d'activité est obligatoire</mat-error>
             <mat-icon matSuffix style="align-items: flex-start"
                       istoTooltip [tooltipHorizontalPosition]="'end'"
                       [tooltipIcon]="'info'"
                       [tooltipContent]="'Exemple: Assurance, Centrale d\'appel, Restauration ...'"
             >info</mat-icon>
             <input matInput formControlName="coreBusiness" placeholder="Domaine d’activité*">
+            @if (coreBusiness!.errors && coreBusiness!.errors['pattern']) {
+              <mat-error>
+                  <span>{{'validations.invalid_value' | translate }}
+                    <strong>*</strong>
+                  </span>
+              </mat-error>
+            } @else if (coreBusiness!.invalid) {
+              <mat-error>
+                  <span>{{'validations.required' | translate }}
+                    <strong>*</strong>
+                  </span>
+              </mat-error>
+            }
           </mat-form-field>
         </div>
         <div class="d-flex col-12">
           <mat-form-field appearance="outline" class="w-full m-b-8">
-            <mat-error>Le besoin est obligatoire</mat-error>
             <mat-icon matSuffix style="align-items: flex-start"
                       istoTooltip [tooltipIcon]="'info'" [tooltipHorizontalPosition]="'end'"
                       [tooltipContent]="'Exemple: Gestion comptable, Inventaire de stock, ...'"
             >info</mat-icon>
-            <!--placeholder="Un minimum de 100 caractères est requis"-->
             <textarea matInput formControlName="concept" required
                       placeholder="Besoin*"
                       style="min-height: 200px; max-height: 400px;"></textarea>
+            @if (concept!.errors && concept!.errors['maxlength']) {
+              <mat-error>
+                  <span>{{'validations.max_length' | translate : {maxLength:2000} }}
+                    <strong>*</strong>
+                  </span>
+              </mat-error>
+            } @else if (concept!.errors && concept!.errors['minlength']) {
+              <mat-error>
+                  <span>{{'validations.min_length' | translate : {minLength:10} }}
+                    <strong>*</strong>
+                  </span>
+              </mat-error>
+            } @else if (concept!.invalid) {
+              <mat-error>
+                  <span>{{'validations.required' | translate}}
+                    <strong>*</strong>
+                  </span>
+              </mat-error>
+            }
           </mat-form-field>
         </div>
       </form>
-      <app-pdf-loader [loadingPdf]="loadingPdf" (sendContent)="sendPdfContent($event)"/>
+      <app-pdf-loader (sendContent)="sendPdfContent($event)"/>
       <div class="row m-x-0 p-x-24 p-y-8">
         <div class="col-12 d-flex justify-content-end">
           <button class="next-step-button" matStepperNext
-                  [disabled]="formGroupDescription.invalid || !contactValid"
+                  [disabled]="formGroupDescription.invalid"
           >
             Passez à l’étape de définition des scénarios
           </button>
           <button mat-icon-button class="secondary-icon-button" matStepperNext
-                  [disabled]="formGroupDescription.invalid || !contactValid"
+                  [disabled]="formGroupDescription.invalid"
           >
             <mat-icon>arrow_right_alt</mat-icon>
           </button>
@@ -55,7 +168,6 @@
           @for (useCase of useCases.controls; track useCase) {
           <div [formGroupName]="$index" class="w-full">
               <mat-form-field appearance="outline" class="w-full">
-                  <mat-error>Le scénario utilisateur est obligatoire *</mat-error>
                   <button matSuffix mat-icon-button aria-label="Supprime le scénario"
                     style="margin-top: -8px !important;"
                     [disabled]="useCases.length < 2"
@@ -71,13 +183,26 @@
                       formControlName="useCase"
                       (keyup)="inlineAutocomplete($event, useCaseInput.value, 'useCase' + $index)"
                       [matAutocomplete]="auto">
-                  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event, $index)">
-                      @for( suggestion of suggestions['useCase'+$index]; track suggestion) {
-          <mat-option [value]="suggestion" [textContent]="suggestion"></mat-option>
-          }
-          </mat-autocomplete>
-      </mat-form-field>
-  </div>
+                      @if (getUseCaseError($index)['required']) {
+                        <mat-error>
+                          <span>{{'validations.required' | translate }}
+                            <strong>*</strong>
+                          </span>
+                        </mat-error>
+                      } @else if (getUseCaseError($index)['pattern']) {
+                        <mat-error>
+                          <span>{{'validations.invalid_value' | translate }}
+                            <strong>*</strong>
+                          </span>
+                        </mat-error>
+                      }
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event, $index)">
+                        @for( suggestion of suggestions['useCase'+$index]; track suggestion) {
+                          <mat-option [value]="suggestion" [textContent]="suggestion"></mat-option>
+                        }
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
           }
         </div> <!-- use cases -->
       </form>
@@ -111,13 +236,11 @@
       <div class="row m-x-0 p-x-24 p-y-8">
         <div class="col-12 d-flex justify-content-end">
           <button class="next-step-button" matStepperNext
-                  (click)="buildDevis()"
                   [disabled]="formGroupDescription.invalid || formGroupScenarios.invalid"
           >
             Génération du devis
           </button>
           <button mat-icon-button matStepperNext class="secondary-icon-button"
-                  (click)="buildDevis()"
                   [disabled]="formGroupDescription.invalid || formGroupScenarios.invalid"
           >
             <mat-icon>arrow_right_alt</mat-icon>

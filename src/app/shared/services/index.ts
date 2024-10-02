@@ -6,3 +6,4 @@ export * from './devis.service';
 export * from './chiffrage';
 export * from './pdf.service';
 export * from './email.service';
+export * from './client-contact.service';

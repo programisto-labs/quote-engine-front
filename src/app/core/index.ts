@@ -10,3 +10,9 @@ export * from './bootstrap/startup.service';
 
 // Interceptors
 export * from './interceptors';
+
+// Directives
+export * from './directives';
+
+// Validators
+export * from './validators';
