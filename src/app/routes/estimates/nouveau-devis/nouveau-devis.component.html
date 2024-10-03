@@ -72,7 +72,7 @@
                         [tooltipIcon]="'info'"
                         [tooltipContent]="'Exemple: 0X XX XX XX XX (Aucun espace)'"
               >info</mat-icon>
-              <input type="tel" matInput placeholder="{{'dialogs.tele' | translate}}*" formControlName="tele" required>
+              <input type="tel" numbersOnly matInput placeholder="{{'dialogs.tele' | translate}}*" formControlName="tele" required>
               @if (tele!.errors && tele!.errors['required']) {
                 <mat-error>
                     <span>{{'validations.required' | translate}}

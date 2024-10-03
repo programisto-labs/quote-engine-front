@@ -2,13 +2,19 @@
   <div class="col-12">
     <mat-progress-bar mode="indeterminate" class="m-b-16"
                       [ngClass]="(loadingPdf | async) ? '' : 'invisible'"></mat-progress-bar>
-    <input type="file" (change)="loadPdf($event)" #fileInput style="display: none;"/>
+    <input type="file" accept=".pdf" (change)="loadPdf($event)" #fileInput style="display: none;"/>
     <button mat-flat-button class="secondary-button m-r-8"
             (click)="fileInput.click()"
     >
       <mat-icon>upload</mat-icon>
-      Chosir un fichier
+      Choisir un fichier
     </button>
-    <span class="align-content-center"><strong>Optionnel:</strong>&nbsp;Transmettez-nous votre cahier des charges.</span>
+    <span class="align-content-center">
+      @if ( file | async ) {
+        {{ ( file | async ).name}}
+      } @else {
+        <strong>Optionnel:</strong>&nbsp;Transmettez-nous votre cahier des charges.
+      }
+    </span>
   </div>
 </div>

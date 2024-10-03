@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import { PdfService } from '../../shared';
 import {TranslateModule} from "@ngx-translate/core";
 import {MatIcon} from "@angular/material/icon";
@@ -8,6 +8,7 @@ import {MatInput} from "@angular/material/input";
 import {AsyncPipe, NgClass} from "@angular/common";
 import {MatProgressBar} from "@angular/material/progress-bar";
 import {Subject, takeUntil} from "rxjs";
+
 
 @Component({
   selector: 'app-pdf-loader',
@@ -32,6 +33,8 @@ export class PdfLoaderComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
 
   loadingPdf = this.pdfService.loading$;
+  file = this.pdfService.file$;
+
   @Output() sendContent = new EventEmitter<string>();
 
   ngOnInit() {
@@ -52,6 +55,6 @@ export class PdfLoaderComponent implements OnInit, OnDestroy {
 
   loadPdf(event: any) {
     const file = event.target.files[0];
-    if (file) this.pdfService.loadPdf(file);
+    if (this.file) this.pdfService.loadPdf(file);
   }
 }

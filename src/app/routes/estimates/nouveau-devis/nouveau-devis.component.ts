@@ -22,6 +22,7 @@ import {TranslateModule} from "@ngx-translate/core";
 import {MatTabsModule} from "@angular/material/tabs";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {TooltipDirective, isEmptyValidator} from "../../../core";
+import {NumbersOnlyDirective} from "../../../core/directives/numbersOnly.directive";
 
 
 @Component({
@@ -44,7 +45,8 @@ import {TooltipDirective, isEmptyValidator} from "../../../core";
     TranslateModule,
     MatProgressBarModule,
     NgClass,
-    TooltipDirective
+    TooltipDirective,
+    NumbersOnlyDirective
   ]
 })
 export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
@@ -134,7 +136,7 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
   }
 
   newUseCase(value: string = '') {
-    return this.formBuilder.group({useCase: [value, [Validators.required, Validators.pattern('^[a-zA-ZÀ-ÖØ-öø-ÿ]+[ .,;:!-_a-zA-ZÀ-ÖØ-öø-ÿ]+$')]]})
+    return this.formBuilder.group({useCase: [value, [Validators.required, Validators.pattern('^[.,;:!-_\'"a-zA-ZÀ-ÖØ-öø-ÿ]+[ .,;:!-_\'"a-zA-ZÀ-ÖØ-öø-ÿ]+$')]]})
   }
 
   addNewUseCase() {

@@ -14,7 +14,9 @@ export class PdfService {
   private loading = new BehaviorSubject<boolean>(false);
   loading$ = this.loading.asObservable();
 
-  filename: string = '';
+  private file = new BehaviorSubject<any>(undefined);
+  file$ = this.file.asObservable();
+
   content: string = '';
   pdfContent: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
@@ -24,15 +26,16 @@ export class PdfService {
 
   loadPdf(file: File): void {
     if (file) {
-      this.filename = file.name;
       this.content = '';
       this.decodePdf(file).subscribe({
         next: (pdf) => {
           let pages = Array.from({length:pdf.numPages}, (_, i) => i+1);
           this.generateContent(pdf, pages);
+          this.file.next(file);
         },
         error: (error) => {
           this.pdfContent.next('');
+          this.file.next(undefined);
           this.showError();
           console.log(error);
         }
