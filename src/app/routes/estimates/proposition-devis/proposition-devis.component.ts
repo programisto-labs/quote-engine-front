@@ -85,9 +85,12 @@ export class PropositionDevisComponent implements OnDestroy {
       return;
     }
 
+    let devis = this.devis || {};
+    let projet = this.chiffrageService.getEstimatedData(this.estimationJours) || {}
+
     const contactData = this.contactService.contactValue.value;
-    const clientData = this.buildClientData(contactData.email);
-    const salesData = this.buildSalesData(contactData.fullname, contactData.email);
+    const clientData = this.buildClientData(contactData.email, contactData.fullname, devis, projet);
+    const salesData = this.buildSalesData(contactData.email, contactData.fullname, devis, projet);
     const discordData = {
       content: `Le client ${contactData.fullname} a envoyé un projet\\ndans sa boîte mail (${contactData.email})!!!`,
       embeds: this.discordDatatableBuilderService.buildDiscordTable(clientData.devis as Devis, clientData.projet)
@@ -100,20 +103,25 @@ export class PropositionDevisComponent implements OnDestroy {
     this.destroy$.next(0);
   }
 
-  private buildSalesData(clientName: string, clientEmail: string) {
+  private buildSalesData(clientEmail: string, clientName: string, devis: any, projet: any) {
     return {
-      to: environment.salesEmail,
-      subject: 'Prospect envoyé quote',
-      body: `Le prospect ${clientName} s'est envoyé le projet à sa adresse e-mail (${clientEmail}).`
+      clientEmail: environment.salesEmail,
+      clientName: "Sales team",
+      subject: `Prospect envoyé quote:
+       - nom: ${clientName}
+       - email: ${clientEmail}`,
+      devis,
+      projet
     }
   }
 
-  private buildClientData(clientEmail: string) {
+  private buildClientData(clientEmail: string, clientName: string, devis: any, projet: any) {
     return {
-      to: clientEmail,
+      clientEmail: clientEmail,
+      clientName: clientName,
       subject: 'Planification du projet : durée et coûts détaillés.',
-      devis: this.devis || {},
-      projet: this.chiffrageService.getEstimatedData(this.estimationJours) || {}
+      devis,
+      projet
     };
   }
 }

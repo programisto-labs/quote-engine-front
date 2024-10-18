@@ -16,8 +16,8 @@ export class EmailService {
 
   sendNotificationMessages(clientData: any, salesData: any, discordData: any) {
     fromArrayLike([
-      this.sendEmailToClient(clientData).pipe(delay(5000)),
-      this.sendEmailToSales(salesData),
+      this.sendEmail(clientData).pipe(delay(5000)),
+      this.sendEmail(salesData),
       this.sendDiscordMessage(discordData)
     ]).pipe(
       concatAll(),
@@ -30,12 +30,8 @@ export class EmailService {
     });
   }
 
-  public sendEmailToClient(data: any): Observable<any> {
-    return this.http.post<any>(`${this.devisRapideApiUrl}/mail/toClient`, data, {headers: {'Content-Type': 'application/json',}});
-  }
-
-  public sendEmailToSales(data: any): Observable<any> {
-    return this.http.post<any>(`${this.devisRapideApiUrl}/mail/toSales`, data, {headers: {'Content-Type': 'application/json',}});
+  public sendEmail(data: any): Observable<any> {
+    return this.http.post<any>(`${this.devisRapideApiUrl}/sendEmail`, data, {headers: {'Content-Type': 'application/json',}});
   }
 
   public sendDiscordMessage(discordData: any): Observable<Autocomplete> {
