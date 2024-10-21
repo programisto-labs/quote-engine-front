@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, Input, OnDestroy, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, viewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
@@ -13,7 +13,6 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatLineModule } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
 import {
-  ChiffrageService,
   Devis,
   Module,
   Scenario
@@ -21,10 +20,6 @@ import {
 import { DecimalPipe } from '@angular/common';
 import { ChiffrageComponent } from "./chiffrage/chiffrage.component";
 import { Subject } from "rxjs";
-import { environment } from "../../../../environments/environment";
-import { DiscordDatatableBuilderService } from "../../../shared/services/discord.datatable.builder.service";
-import { EmailService, ClientContactService } from "../../../shared";
-import { ToastrService } from "ngx-toastr";
 import {TooltipDirective} from "../../../core";
 
 
@@ -56,17 +51,10 @@ export class PropositionDevisComponent implements OnDestroy {
 
   accordion = viewChild.required(MatAccordion);
 
-  private readonly chiffrageService: ChiffrageService = inject(ChiffrageService);
-  private readonly emailService: EmailService = inject(EmailService);
-  private readonly contactService: ClientContactService = inject(ClientContactService);
-  private readonly toastService: ToastrService = inject(ToastrService);
-  private readonly discordDatatableBuilderService = inject(DiscordDatatableBuilderService);
   private destroy$ = new Subject();
 
   @Input() devis?: Devis;
   @Input() waitingForService: boolean = false;
-
-  estimationCouts: number = 0;
 
   get estimationJours(): number { return this.devis ? this.devis.modules.reduce((acc, module) => acc + module.scenarios.reduce((acc, scenario) => acc + scenario.duree, 0), 0) : 0; }
   get scenarioCount(): number { return this.devis ? this.devis.modules.reduce((acc, module) => acc + module.scenarios.length, 0) : 0; }
@@ -79,49 +67,8 @@ export class PropositionDevisComponent implements OnDestroy {
   computeDevisDuration = (): string => `${this.estimationJours} jour${this.mutlipleJours ? "s" : ""}`;
   computeDevisCount = (): string => `${this.scenarioCount} scénario${this.multipleScenarios ? "s" : ""}`;
 
-  sendEmail() {
-    if (!this.contactService.contactValid.value) {
-      this.toastService.info("Les coordonnées ne sont pas valides, veuillez les vérifier à l'étape 1.");
-      return;
-    }
-
-    let devis = this.devis || {};
-    let projet = this.chiffrageService.getEstimatedData(this.estimationJours) || {}
-
-    const contactData = this.contactService.contactValue.value;
-    const clientData = this.buildClientData(contactData.email, contactData.fullname, devis, projet);
-    const salesData = this.buildSalesData(contactData.email, contactData.fullname, devis, projet);
-    const discordData = {
-      content: `Le client ${contactData.fullname} a envoyé un projet\\ndans sa boîte mail (${contactData.email})!!!`,
-      embeds: this.discordDatatableBuilderService.buildDiscordTable(clientData.devis as Devis, clientData.projet)
-    }
-
-    this.emailService.sendNotificationMessages(clientData, salesData, discordData);
-  }
-
   ngOnDestroy() {
     this.destroy$.next(0);
   }
 
-  private buildSalesData(clientEmail: string, clientName: string, devis: any, projet: any) {
-    return {
-      clientEmail: environment.salesEmail,
-      clientName: "Sales team",
-      subject: `Prospect envoyé quote:
-       - nom: ${clientName}
-       - email: ${clientEmail}`,
-      devis,
-      projet
-    }
-  }
-
-  private buildClientData(clientEmail: string, clientName: string, devis: any, projet: any) {
-    return {
-      clientEmail: clientEmail,
-      clientName: clientName,
-      subject: 'Planification du projet : durée et coûts détaillés.',
-      devis,
-      projet
-    };
-  }
 }

@@ -5,6 +5,8 @@ import {fromArrayLike} from "rxjs/internal/observable/innerFrom";
 import {Autocomplete} from "./devis.service";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
+import {Devis} from "../interfaces";
+import {DiscordDatatableBuilderService} from "./discord.datatable.builder.service";
 
 @Injectable({
   providedIn: 'root',
@@ -12,9 +14,14 @@ import {environment} from "../../../environments/environment";
 export class EmailService {
   private readonly http: HttpClient = inject(HttpClient);
   private readonly toastService: ToastrService = inject(ToastrService);
+  private readonly discordDatatableBuilderService = inject(DiscordDatatableBuilderService);
   devisRapideApiUrl = environment.devisRapideApiUrl;
 
-  sendNotificationMessages(clientData: any, salesData: any, discordData: any) {
+  sendNotificationMessages(clientEmail: string, clientName: string, devis: any, projet: any) {
+    const clientData = this.buildClientData(clientEmail, clientName, devis, projet);
+    const salesData = this.buildSalesData(clientEmail, clientName, devis, projet);
+    const discordData = this.buildDiscordData(clientEmail, clientName, devis, projet);
+
     fromArrayLike([
       this.sendEmail(clientData).pipe(delay(5000)),
       this.sendEmail(salesData),
@@ -28,6 +35,35 @@ export class EmailService {
         this.toastService.error('Une erreur s\'est produite lors de l\'envoi de l\'e-mail. Veuillez réessayer.');
       }
     });
+  }
+
+  private buildDiscordData(clientEmail: string, clientName: string, devis: any, projet: any) {
+    return {
+      content: `Le client ${clientName} a envoyé un projet\\ndans sa boîte mail (${clientEmail})!!!`,
+      embeds: this.discordDatatableBuilderService.buildDiscordTable(devis as Devis, projet)
+    }
+  }
+
+  private buildSalesData(clientEmail: string, clientName: string, devis: any, projet: any) {
+    return {
+      clientEmail: environment.salesEmail,
+      clientName: "Sales team",
+      subject: `Prospect envoyé quote:
+       - nom: ${clientName}
+       - email: ${clientEmail}`,
+      devis,
+      projet
+    }
+  }
+
+  private buildClientData(clientEmail: string, clientName: string, devis: any, projet: any) {
+    return {
+      clientEmail: clientEmail,
+      clientName: clientName,
+      subject: 'Planification du projet : durée et coûts détaillés.',
+      devis,
+      projet
+    };
   }
 
   public sendEmail(data: any): Observable<any> {

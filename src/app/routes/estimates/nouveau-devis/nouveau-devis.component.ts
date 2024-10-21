@@ -7,7 +7,7 @@ import {
   Devis,
   DevisService,
   PdfService,
-  ClientContactService
+  ClientContactService, ChiffrageService, EmailService
 } from '../../../shared';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -23,6 +23,7 @@ import {MatTabsModule} from "@angular/material/tabs";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {TooltipDirective, isEmptyValidator} from "../../../core";
 import {NumbersOnlyDirective} from "../../../core/directives/numbersOnly.directive";
+import {ToastrService} from "ngx-toastr";
 
 
 @Component({
@@ -59,6 +60,9 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
   stepperIndex = 0;
   private readonly pdfService: PdfService = inject(PdfService);
   private readonly contactService: ClientContactService = inject(ClientContactService);
+  private readonly chiffrageService: ChiffrageService = inject(ChiffrageService);
+  private readonly emailService: EmailService = inject(EmailService);
+  private readonly toastService: ToastrService = inject(ToastrService);
   private autocompleteSubscription?: Subscription;
   private destroy$: Subject<void> = new Subject<void>();
 
@@ -176,9 +180,28 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
     this.waitingForService = true;
     this.devisService.genere(this.demandeClient).subscribe({
       next: devis => {
-        this.devis = devis;
+        this.devis = {...devis, dateOfEstimate: new Date().toLocaleDateString()};
+        this.sendEmail();
       }
     });
+  }
+
+  sendEmail() {
+    if (!this.contactService.contactValid.value || !this.devis) {
+      this.toastService.info("Les coordonnées ne sont pas valides, veuillez les vérifier à l'étape 1.");
+      return;
+    }
+
+    let projet = this.chiffrageService.getEstimatedData(
+      this.devis!.modules?.reduce(
+        (acc, module) => acc +
+          module.scenarios.reduce((acc, scenario) => acc + scenario.duree, 0)
+        , 0) || 0
+    ) || {};
+
+    const contactData = this.contactService.contactValue.value;
+
+    this.emailService.sendNotificationMessages(contactData.email, contactData.fullname, this.devis, projet);
   }
 
   autocomplete() {
