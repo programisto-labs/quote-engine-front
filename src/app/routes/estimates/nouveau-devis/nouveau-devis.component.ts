@@ -174,7 +174,11 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
   buildDevis() {
     this.devis = undefined;
     this.waitingForService = true;
-    this.devisService.genere(this.demandeClient).subscribe(devis => this.devis = devis);
+    this.devisService.genere(this.demandeClient).subscribe({
+      next: devis => {
+        this.devis = devis;
+      }
+    });
   }
 
   autocomplete() {
