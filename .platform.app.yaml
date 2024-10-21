@@ -24,7 +24,7 @@ disk: 2048
 
 dependencies:
   nodejs:
-    "@angular/cli": "^12.2.0"
+    "@angular/cli": "^18.2.0"
 
 hooks:
   build: |
