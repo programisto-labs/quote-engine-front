@@ -1,7 +1,7 @@
-"https://www.{default}/":
+"https://devis.programisto.fr/":
     type: upstream
     upstream: "devis-rapide:http"
-    
-"https://{default}/":
-    type: redirect
-    to: "https://www.{default}/"
+
+"http://devis.programisto.fr/":
+  type: redirect
+  to: "https://devis.programisto.fr/"
