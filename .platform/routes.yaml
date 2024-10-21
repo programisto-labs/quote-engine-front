@@ -1,7 +1,7 @@
-"https://devis.programisto.fr/":
+"https://devis.programisto.fr":
     type: upstream
     upstream: "devis-rapide:http"
 
-"http://devis.programisto.fr/":
+"http://devis.programisto.fr":
   type: redirect
-  to: "https://devis.programisto.fr/"
+  to: "https://devis.programisto.fr"
