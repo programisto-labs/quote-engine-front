@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, viewChild } from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, Input, OnDestroy, viewChild} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
@@ -13,7 +13,8 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatLineModule } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
 import {
-  Devis,
+  ChiffrageService, ClientContactService,
+  Devis, EmailService,
   Module,
   Scenario
 } from '../../../shared';
@@ -21,6 +22,8 @@ import { DecimalPipe } from '@angular/common';
 import { ChiffrageComponent } from "./chiffrage/chiffrage.component";
 import { Subject } from "rxjs";
 import {TooltipDirective} from "../../../core";
+import {ToastrService} from "ngx-toastr";
+import {TranslateModule} from "@ngx-translate/core";
 
 
 @Component({
@@ -42,16 +45,20 @@ import {TooltipDirective} from "../../../core";
     MatSelectModule,
     DecimalPipe,
     ChiffrageComponent,
-    TooltipDirective
+    TooltipDirective,
+    TranslateModule
   ],
   templateUrl: './proposition-devis.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PropositionDevisComponent implements OnDestroy {
+export class PropositionDevisComponent {
 
   accordion = viewChild.required(MatAccordion);
 
-  private destroy$ = new Subject();
+  private readonly chiffrageService: ChiffrageService = inject(ChiffrageService);
+  private readonly emailService: EmailService = inject(EmailService);
+  private readonly contactService: ClientContactService = inject(ClientContactService);
+  private readonly toastService: ToastrService = inject(ToastrService);
 
   @Input() devis?: Devis;
   @Input() waitingForService: boolean = false;
@@ -67,8 +74,17 @@ export class PropositionDevisComponent implements OnDestroy {
   computeDevisDuration = (): string => `${this.estimationJours} jour${this.mutlipleJours ? "s" : ""}`;
   computeDevisCount = (): string => `${this.scenarioCount} scénario${this.multipleScenarios ? "s" : ""}`;
 
-  ngOnDestroy() {
-    this.destroy$.next(0);
-  }
+  sendEmail() {
+    if (!this.contactService.contactValid.value) {
+      this.toastService.info("Les coordonnées ne sont pas valides, veuillez les vérifier à l'étape 1.");
+      return;
+    }
 
+    let devis = this.devis || {};
+    let projet = this.chiffrageService.getEstimatedData(this.estimationJours) || {}
+
+    const contactData = this.contactService.contactValue.value;
+
+    this.emailService.sendNotificationMessages(contactData.email, contactData.fullname, devis, projet);
+  }
 }

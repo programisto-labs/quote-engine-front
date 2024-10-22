@@ -105,6 +105,7 @@
   "dialogs.confirm_delete": "Confirmer la suppression ?",
   "dialogs.ok": "Ok",
   "dialogs.close": "Fermer",
+  "dialogs.send_by_email": "Envoyer par email",
   "dialogs.cancel": "Annuler",
   "dialogs.submit": "Soumettre",
   "dialogs.upload": "Télécharger",

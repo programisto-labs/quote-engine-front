@@ -7,3 +7,4 @@ export * from './chiffrage';
 export * from './pdf.service';
 export * from './email.service';
 export * from './client-contact.service';
+export * from './discord.service';

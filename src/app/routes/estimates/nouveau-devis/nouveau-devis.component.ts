@@ -7,7 +7,8 @@ import {
   Devis,
   DevisService,
   PdfService,
-  ClientContactService, ChiffrageService, EmailService
+  ClientContactService, ChiffrageService,
+  DiscordService
 } from '../../../shared';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -61,7 +62,7 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
   private readonly pdfService: PdfService = inject(PdfService);
   private readonly contactService: ClientContactService = inject(ClientContactService);
   private readonly chiffrageService: ChiffrageService = inject(ChiffrageService);
-  private readonly emailService: EmailService = inject(EmailService);
+  private readonly discordServie: DiscordService = inject(DiscordService);
   private readonly toastService: ToastrService = inject(ToastrService);
   private autocompleteSubscription?: Subscription;
   private destroy$: Subject<void> = new Subject<void>();
@@ -180,13 +181,18 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
     this.waitingForService = true;
     this.devisService.genere(this.demandeClient).subscribe({
       next: devis => {
+        this.waitingForService = false;
         this.devis = {...devis, dateOfEstimate: new Date().toLocaleDateString()};
-        this.sendEmail();
+        this.sendDiscordMessages();
+      },
+      error: (e) => {
+        this.waitingForService = false;
+        console.log('Nouveau devis: buildDevis: ', e);
       }
     });
   }
 
-  sendEmail() {
+  sendDiscordMessages() {
     if (!this.contactService.contactValid.value || !this.devis) {
       this.toastService.info("Les coordonnées ne sont pas valides, veuillez les vérifier à l'étape 1.");
       return;
@@ -201,17 +207,23 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
 
     const contactData = this.contactService.contactValue.value;
 
-    this.emailService.sendNotificationMessages(contactData.email, contactData.fullname, this.devis, projet);
+    this.discordServie.sendNotificationMessages(contactData.email, contactData.fullname, this.devis, projet);
   }
 
   autocomplete() {
     this.waitingForCompletion = true;
-    this.devisService.autocomplete(this.demandeClient).subscribe(autocomplete => {
-      autocomplete.suggestions.forEach(suggestion => {
-        const item = this.formBuilder.group({useCase: suggestion})
-        this.useCases.push(item);
-      });
-      this.waitingForCompletion = false;
+    this.devisService.autocomplete(this.demandeClient).subscribe({
+      next: (autocomplete) => {
+        autocomplete.suggestions.forEach(suggestion => {
+          const item = this.formBuilder.group({useCase: suggestion})
+          this.useCases.push(item);
+        });
+        this.waitingForCompletion = false;
+      },
+      error: (e) => {
+        this.waitingForCompletion = false;
+        console.log('Nouveau devis: autocomplete: ', e);
+      }
     });
   }
 

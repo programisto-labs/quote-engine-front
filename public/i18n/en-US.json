@@ -105,6 +105,7 @@
   "dialogs.confirm_delete": "Confirm delete?",
   "dialogs.ok": "Ok",
   "dialogs.close": "Close",
+  "dialogs.send_by_email": "Send by email",
   "dialogs.cancel": "Cancel",
   "dialogs.submit": "Submit",
   "dialogs.upload": "Upload",
