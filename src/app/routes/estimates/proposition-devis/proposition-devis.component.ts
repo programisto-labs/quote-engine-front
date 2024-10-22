@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, inject, Input, OnDestroy, viewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, Input, viewChild} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
@@ -20,7 +20,6 @@ import {
 } from '../../../shared';
 import { DecimalPipe } from '@angular/common';
 import { ChiffrageComponent } from "./chiffrage/chiffrage.component";
-import { Subject } from "rxjs";
 import {TooltipDirective} from "../../../core";
 import {ToastrService} from "ngx-toastr";
 import {TranslateModule} from "@ngx-translate/core";
@@ -64,15 +63,15 @@ export class PropositionDevisComponent {
   @Input() waitingForService: boolean = false;
 
   get estimationJours(): number { return this.devis ? this.devis.modules.reduce((acc, module) => acc + module.scenarios.reduce((acc, scenario) => acc + scenario.duree, 0), 0) : 0; }
-  get scenarioCount(): number { return this.devis ? this.devis.modules.reduce((acc, module) => acc + module.scenarios.length, 0) : 0; }
-  get multipleScenarios(): boolean { return this.scenarioCount > 1; }
+  get modulesCount(): number { return this.devis && this.devis.modules ? this.devis.modules.length : 0 }
+  get multipleModules(): boolean { return this.modulesCount > 1; }
   get mutlipleJours(): boolean { return this.estimationJours > 1; }
 
   computeModuleDuration = (module: Module): string => `${Module.moduleDuree(module)} jour${Module.moduleDuree(module) > 1 ? "s" : ""}`;
   computeScenarioDuration = (scenario: Scenario): string => `${scenario.duree} jour${scenario.duree > 1 ? "s" : ""}`;
   computeModuleCount = (module: Module): string => `${module.scenarios.length} scénario${module.scenarios.length > 1 ? "s" : ""}`;
   computeDevisDuration = (): string => `${this.estimationJours} jour${this.mutlipleJours ? "s" : ""}`;
-  computeDevisCount = (): string => `${this.scenarioCount} scénario${this.multipleScenarios ? "s" : ""}`;
+  computeDevisCount = (): string => `${this.modulesCount} module${this.multipleModules ? "s" : ""}`;
 
   sendEmail() {
     if (!this.contactService.contactValid.value) {

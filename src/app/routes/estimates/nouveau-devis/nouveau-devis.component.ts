@@ -207,7 +207,7 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
 
     const contactData = this.contactService.contactValue.value;
 
-    this.discordServie.sendNotificationMessages(contactData.email, contactData.fullname, this.devis, projet);
+    this.discordServie.sendNotificationMessages(contactData, this.devis, projet);
   }
 
   autocomplete() {

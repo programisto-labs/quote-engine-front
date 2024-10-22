@@ -15,9 +15,9 @@ export class DiscordService {
   private readonly discordDatatableBuilderService = inject(DiscordDatatableBuilderService);
   devisRapideApiUrl = environment.devisRapideApiUrl;
 
-  sendNotificationMessages(clientEmail: string, clientName: string, devis: any, projet: any) {
-    let discord_message = this.buildDiscordData(clientEmail, clientName, devis, projet, environment.discord_webhook);
-    let workflow_message = this.buildDiscordData(clientEmail, clientName, devis, projet, environment.workflow_webhook);
+  sendNotificationMessages(contactData: any, devis: any, projet: any) {
+    let discord_message = this.buildDiscordData(contactData, devis, projet, environment.discord_webhook);
+    let workflow_message = this.buildDiscordRawData(contactData, devis, projet, environment.workflow_webhook);
 
 
     fromArrayLike([
@@ -33,12 +33,19 @@ export class DiscordService {
     });
   }
 
-  private buildDiscordData(clientEmail: string, clientName: string, devis: any, projet: any, webhook: string) {
+  private buildDiscordData(contact: any, devis: any, projet: any, webhook: string) {
     return {
-      content: `Le client ${clientName} a envoyé un projet\\ndans sa boîte mail (${clientEmail})!!!`,
+      content: `Le client ${contact.clientName} a envoyé un projet\\ndans sa boîte mail (${contact.clientEmail})!!!`,
       embeds: this.discordDatatableBuilderService.buildDiscordTable(devis as Devis, projet),
+      webhook
+    }
+  }
+
+  private buildDiscordRawData(contact: any, devis: any, projet: any, webhook: string) {
+    return {
       devis,
       projet,
+      client: contact,
       webhook
     }
   }
