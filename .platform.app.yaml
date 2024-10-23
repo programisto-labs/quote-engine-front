@@ -36,6 +36,29 @@ hooks:
     NODE_ENV=production npm run build:ssr
 
 web:
+  locations:
+    "/":
+      root: "dist/browser"
+      index: "index.html"
+      allow: true
+      try_files:
+        - "/index.html"
+    "/api":
+      passthru: true
+    "/js/":
+      allow: true
+      root: "dist/browser"
+      mime: "application/javascript"
+    "/css/":
+      allow: true
+      root: "dist/browser"
+      mime: "text/css"
+    "/assets/":
+      allow: true
+      root: "dist/browser"
+    "/favicon.ico":
+      allow: true
+      root: "dist/browser/favicon.ico"
   commands:
     start: |
       echo "--- Starting the application ---"

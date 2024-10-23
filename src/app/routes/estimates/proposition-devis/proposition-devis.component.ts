@@ -86,7 +86,7 @@ export class PropositionDevisComponent implements AfterViewInit, OnDestroy{
         }
       },
       error: (e: any) => {
-        this.emailButtonLabel = this.translate.instant('dialogs.send_by_sent');
+        this.emailButtonLabel = this.translate.instant('dialogs.send_by_email');
         this.emailSent = false;
       }
     });
