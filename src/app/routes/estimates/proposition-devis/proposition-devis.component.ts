@@ -84,6 +84,10 @@ export class PropositionDevisComponent implements AfterViewInit, OnDestroy{
           this.emailButtonLabel = this.translate.instant('dialogs.email_sent');
           this.emailSent = true;
         }
+        if (status === 'idle') {
+          this.emailButtonLabel = this.translate.instant('dialogs.send_by_email');
+          this.emailSent = false;
+        }
       },
       error: (e: any) => {
         this.emailButtonLabel = this.translate.instant('dialogs.send_by_email');
