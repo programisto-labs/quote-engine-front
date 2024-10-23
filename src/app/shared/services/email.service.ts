@@ -35,9 +35,7 @@ export class EmailService {
     return {
       clientEmail: environment.salesEmail,
       clientName: "Sales team",
-      subject: `Prospect envoyé quote:
-       - nom: ${clientName}
-       - email: ${clientEmail}`,
+      subject: `Prospect envoyé quote (nom: ${clientName}, email: ${clientEmail})`,
       devis,
       projet
     }
@@ -47,7 +45,7 @@ export class EmailService {
     return {
       clientEmail: clientEmail,
       clientName: clientName,
-      subject: 'Planification du projet : durée et coûts détaillés.',
+      subject: `Projet "${devis.nom}" estimé`,
       devis,
       projet
     };
