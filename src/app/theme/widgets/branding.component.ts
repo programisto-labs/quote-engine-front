@@ -4,7 +4,7 @@ import {Component, Input} from '@angular/core';
   selector: 'app-branding',
   template: `
     <div class="p-y-16 align-content-center h-full">
-      <a class="branding" href="/">
+      <a class="branding" href="https://programisto.fr" target="_blank">
         <img [src]="src" alt="Programisto" [width]="width"/>
       </a>
     </div>
