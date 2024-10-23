@@ -3,6 +3,21 @@
   z-index: 1000 !important;
 }
 
+.title-icon-suffix {
+  display: flex;
+  align-items: center;
+
+  h1, h2, h3, h4, h5 {
+    display: flex;
+  }
+
+  .mat-icon {
+    font-size: 14px;
+    height: 14px;
+    width: 14px;
+  }
+}
+
 .secondary-button {
   outline: 2px solid #F0CD65 !important;
 }
@@ -58,6 +73,10 @@
   background-color: #F2D275;
   border-radius: 25px;
   padding: 24px !important;
+}
+
+.mat-horizontal-stepper-header-container {
+    padding-bottom: 16px !important;
 }
 
 .mat-horizontal-stepper-header {
@@ -116,4 +135,10 @@ mat-card-header + mat-card-content {
 
 .mat-mdc-chip {
   margin: 12px !important;
+}
+
+.mdc-list-item.mdc-list-item--with-trailing-meta {
+   .mdc-list-item__end {
+    font-size: inherit;
+  }
 }

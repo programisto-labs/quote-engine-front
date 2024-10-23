@@ -38,7 +38,12 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(
       NgProgressHttp,
       NgProgressRouter,
-      ToastrModule.forRoot(),
+      ToastrModule.forRoot({
+        positionClass: 'toast-bottom-right',
+        timeOut: 5000,
+        closeButton: true,
+        progressBar: true
+      }),
       TranslateModule.forRoot({
         defaultLanguage: 'fr-Fr',
         loader: {

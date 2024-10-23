@@ -1,28 +1,26 @@
 import { DecimalPipe } from '@angular/common';
 import {Component, inject, Input, viewChild} from '@angular/core';
-import { MatBadgeModule } from '@angular/material/badge';
 import { MatButton } from '@angular/material/button';
-import { MatCard, MatCardActions, MatCardContent, MatCardFooter, MatCardHeader, MatCardModule, MatCardSubtitle, MatCardTitle } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatLineModule } from '@angular/material/core';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
-import { MatSelectModule } from '@angular/material/select';
 import { Chiffrage, ChiffrageService } from '../../../../shared';
-import {TooltipDirective} from "../../../../core/directives/tooltip.directive";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-chiffrage',
   standalone: true,
   imports: [
-
-    MatButton, MatListModule, MatIconModule, MatSelectModule, MatInputModule, MatFormFieldModule,
-    MatCard, MatCardTitle, MatCardSubtitle, MatCardActions, MatCardContent, MatCardHeader, MatCardFooter,
-    MatChipsModule, MatLineModule, MatCardModule, MatExpansionModule, MatGridListModule, MatBadgeModule, DecimalPipe, TooltipDirective
+    MatButton,
+    MatListModule,
+    MatIconModule,
+    MatChipsModule,
+    MatLineModule,
+    MatExpansionModule,
+    DecimalPipe,
+    TranslateModule
   ],
   templateUrl: './chiffrage.component.html',
 })
