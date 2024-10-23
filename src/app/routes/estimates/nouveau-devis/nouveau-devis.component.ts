@@ -141,7 +141,7 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
   }
 
   newUseCase(value: string = '') {
-    return this.formBuilder.group({useCase: [value, [Validators.required, Validators.pattern('^[.,;:!-_\'"a-zA-ZÀ-ÖØ-öø-ÿ]+[ .,;:!-_\'"a-zA-ZÀ-ÖØ-öø-ÿ]+$')]]})
+    return this.formBuilder.group({useCase: [value, [Validators.required, isEmptyValidator,Validators.pattern('^[.,;:!-_\'"a-zA-ZÀ-ÖØ-öø-ÿ]+[ .,;:!-_\'"a-zA-ZÀ-ÖØ-öø-ÿ]+$')]]})
   }
 
   addNewUseCase() {
@@ -214,10 +214,23 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
     this.waitingForCompletion = true;
     this.devisService.autocomplete(this.demandeClient).subscribe({
       next: (autocomplete) => {
+        const validUseCasesControls = this.useCases.controls
+          .filter(control => control.value && control.value['useCase'].trim().length > 0);
+
+        const validUseCasesArray = new FormArray(
+          validUseCasesControls.map(useCase => this.newUseCase(useCase.value['useCase']))
+        );
+        this.formGroupScenarios.setControl('useCases', validUseCasesArray);
+
         autocomplete.suggestions.forEach(suggestion => {
           const item = this.formBuilder.group({useCase: suggestion})
           this.useCases.push(item);
         });
+
+        if (this.useCases.length === 0) {
+          this.useCases.push(this.newUseCase());
+        }
+
         this.waitingForCompletion = false;
       },
       error: (e) => {
