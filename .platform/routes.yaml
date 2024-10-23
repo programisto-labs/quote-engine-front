@@ -5,3 +5,11 @@
 "http://devis.programisto.fr":
   type: redirect
   to: "https://devis.programisto.fr"
+
+"https://www.devis.programisto.fr":
+  type: redirect
+  to: "https://devis.programisto.fr"
+
+"http://www.devis.programisto.fr":
+  type: redirect
+  to: "https://devis.programisto.fr"
