@@ -8,10 +8,9 @@ export const routes: Routes = [
     path: '',
     component: AdminLayoutComponent,
     children: [
-      { path: '', redirectTo: 'home', pathMatch: 'full' },
-      { path: 'home', component: NouveauDevisComponent },
+      { path: '', component: NouveauDevisComponent, pathMatch: 'full' },
       { path: 'team', component: ContactComponent },
     ],
   },
-  { path: '**', redirectTo: 'home' },
+  { path: '**', redirectTo: '' },
 ];

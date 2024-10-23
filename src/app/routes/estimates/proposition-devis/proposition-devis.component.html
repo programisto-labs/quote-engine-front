@@ -1,18 +1,26 @@
 @if(devis) {
 <div class="row m-y-8">
   <div class="col-12 col-sm-6 p-y-8 align-content-center">
-    <h3 class="f-w-500 m-0">{{ devis.nom }}</h3>
+    <h3 class="title">{{ devis.nom }}</h3>
+  </div>
+  <div class="col-12 col-sm-6 d-flex align-items-center justify-content-end p-y-8">
+    <button id="send_email" class="send_email" mat-flat-button class="secondary-button"
+    (click)="sendEmail()"
+    [disabled]="emailSent || !contactValid"
+    >
+      <mat-icon>email</mat-icon>{{ emailButtonLabel }}
+    </button>
   </div>
 </div>
 <div class="row m-y-8">
   <div class="col-12 col-sm-6 p-y-8 align-content-center">
     <h3 class="f-w-500 m-0">Fonctionnalitées
-      <small> <i> ({{ computeDevisCount ()}} {{computeDevisDuration ()}}) </i> </small>
+      <small> <i> ({{ computeDevisCount ()}}, {{computeDevisDuration ()}}) </i> </small>
     </h3>
   </div>
   <div class="col-12 col-sm-6 d-flex align-items-center justify-content-end p-y-8">
-      <button mat-flat-button (click)="accordion().openAll()" class="secondary-button m-r-8">Expand All</button>
-      <button mat-flat-button (click)="accordion().closeAll()" class="secondary-button">Collapse All</button>
+      <button mat-flat-button (click)="accordion().openAll()" class="secondary-button m-r-8">{{ 'dialogs.expand_all' | translate }}</button>
+      <button mat-flat-button (click)="accordion().closeAll()" class="secondary-button">{{ 'dialogs.collapse_all' | translate }}</button>
   </div>
 </div>
 <div class="row m-y-8">
@@ -45,10 +53,7 @@
             <mat-list>
                 <mat-list-item>
                     <mat-icon matListItemIcon>note</mat-icon>
-                    <div matListItemTitle
-                      istoTooltip
-                      [tooltipIcon]="'info'"
-                      [tooltipContent]="scenario.nom">{{scenario.nom}}</div>
+                    <div matListItemTitle>{{scenario.nom}}</div>
                     <div matListItemMeta> {{ computeScenarioDuration(scenario) }}</div>
                 </mat-list-item>
             </mat-list>
@@ -63,10 +68,8 @@
 }
 @else if(waitingForService) {
   <div class="row m-y-8">
-    <div class="col-12 p-y-8">
-      <h3 class="f-w-500 m-0">Génération du devis en cours ...
-        <mat-icon>hourglass_full</mat-icon>
-      </h3>
+    <div class="col-12 p-y-8 title-icon-suffix">
+      <h3 class="f-w-500 m-0">Génération du devis en cours ...</h3><mat-icon>hourglass_full</mat-icon>
     </div>
     <div class="col-12 p-y-8">
       <p> Veuillez patienter pendant que le service génère votre devis. </p>
@@ -76,10 +79,8 @@
 }
 @else {
   <div class="row m-y-8">
-    <div class="col-12 p-y-8">
-      <h3 class="f-w-400 m-0">Informations manquantes ...
-        <mat-icon>construction</mat-icon>
-      </h3>
+    <div class="col-12 p-y-8 title-icon-suffix">
+      <h3>Informations manquantes ...</h3><mat-icon>construction</mat-icon>
     </div>
   </div>
   <div class="row m-y-8">

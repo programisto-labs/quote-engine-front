@@ -5,3 +5,8 @@ export interface Devis {
   modules: Module[];
   dateOfEstimate?: string;
 }
+
+export const defaultDevis = {
+  nom: '',
+  modules: []
+}
