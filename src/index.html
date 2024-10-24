@@ -69,7 +69,7 @@
   <style>
     #gdpr_cookie_modal {
       border: 1px solid #d3ced2;
-      max-width: 800px; /* Increase the max-width to make it wider */
+      max-width: 600px; /* Increase the max-width to make it wider */
       width: 90%; /* Ensure it scales well on smaller screens */
       background-color: #202020;
       color: white;
@@ -108,6 +108,10 @@
         left: 0;
         margin: 0 auto;
       }
+      .cookie-button {
+        max-width: unset!important;
+        margin-right: 0px!important;
+      }
     }
   
     .cookie-button {
@@ -116,15 +120,23 @@
       border-radius: 18px;
       border: 1px solid white;
       width: 100%;
-      height: 36px;
-      max-width: 140px;
+      height:28px;
+      max-width: 160px;
       margin-bottom: 8px;
       cursor: pointer;
+      margin-right: 15px;
+      font-size: .83em;
     }
   
     .cookie-button-2 {
       background-color: #202020;
       color: white;
+    }
+
+    .cookie-button-3 {
+      border: unset;
+      color: white;
+      background-color: #202020;
     }
   
     .cookie-button-2:hover {
@@ -152,54 +164,36 @@
 </head>
 
 <body>
+
 <!-- Consent Banner -->
 <div id="consent-banner">
-  <div class="d-flex w-full p-16">
-    <div class="col-12 col-sm-8">
-      <p>Nous utilisons des cookies pour vous offrir la meilleure expérience sur notre site. Pour en savoir plus sur les cookies utilisés, gérez vos préférences. Pour plus d'informations, consultez notre politique de confidentialité.</p>
-    </div>
-    <div class="col-12 col-sm-4 align-content-center">
-      <div class="row">
-        <div class="col-12 w-full">
-          <button onclick="openCookieSettings()" class="cookie-button cookie-button-2"
-                  data-href="#moove_gdpr_cookie_modal" aria-label="Choisir">Paramètres des cookies
-          </button>
-        </div>
-        <div class="col-12 w-full">
-          <button onclick="rejectCookies()" class="cookie-button cookie-button-2" aria-label="Tout refuser">Refuser</button>
-        </div>
-        <div class="col-12 w-full">
-          <button onclick="acceptCookies()" class="cookie-button" aria-label="Tout accepter">Accepter</button>
-        </div>
-      </div>
-    </div>
+  <div class="w-full">
+    <p style="font-size: .83em">Nous utilisons des cookies pour vous offrir la meilleure expérience sur notre site. Pour en savoir plus sur les cookies utilisés, gérez vos préférences. Pour plus d'informations, consultez notre politique de confidentialité.</p>
+  </div>
+  <div class="w-full d-flex flex-wrap">
+    <button onclick="openCookieSettings()" class="cookie-button cookie-button-2 consent-btn w-full-sm" data-href="#moove_gdpr_cookie_modal" aria-label="Choisir">Paramètres des cookies</button>
+    <button onclick="rejectCookies()" class="cookie-button cookie-button-2 consent-btn w-full-sm" aria-label="Tout refuser">Refuser</button>
+    <button onclick="acceptCookies()" class="cookie-button consent-btn w-full-sm" aria-label="Tout accepter">Accepter</button>
   </div>
 </div>
 
 <!-- Cookie Settings Modal -->
 <div id="gdpr_cookie_modal">
-  <div class="d-flex row">
-    <div class="col-12 col-sm-8">
-      <div class="w-full">
-        <p style="font-size: 1.17em; font-weight: bold;">Paramètres des cookies</p>
-      </div>
-      <div class="w-full">
-        <p style="margin-bottom: 0.5rem; font-size: 0.83em; font-weight: bold;">Gérez vos préférences de cookies ici.</p>
-        <p style="margin-bottom: 0.5rem;">Nous utilisons Google Tag Manager pour déclencher des événements Google Analytics et Microsoft Clarity pour suivre le parcours des utilisateurs sur notre site afin d'améliorer l'expérience utilisateur. Aucune information personnelle n'est collectée sans votre consentement.</p>
-        <!-- Commented out ad_storage -->
-        <!-- <label><input type="checkbox" id="ad_storage"/>Publicité</label><br> -->
-        <label><input type="checkbox" id="analytics_storage"/>Analyse</label>
-      </div>
-    </div>
-    <div class="col-12 col-sm-4 align-content-center">
-      <div class="row">
-        <div class="col-12">
-          <button class="cookie-button" onclick="saveCookiePreferences()">Enregistrer les préférences</button>
-        </div>
-      </div>
-    </div>
+  <div class="w-full">
+    <p style="font-size: 1.17em; font-weight: bold;">Paramètres des cookies</p>
+  </div>
+  <div class="w-full">
+    <p style="margin-bottom: 0.5rem; font-size: 0.83em; font-weight: bold;">Gérez vos préférences de cookies ici</p>
+    <p style="margin-bottom: 0.5rem; font-size: 0.83em">Nous utilisons Google Tag Manager pour déclencher des événements Google Analytics et Microsoft Clarity pour suivre le parcours des utilisateurs sur notre site afin d'améliorer l'expérience utilisateur. Aucune information personnelle n'est collectée sans votre consentement.</p>
+    <!-- Commented out ad_storage -->
+    <!-- <label><input type="checkbox" id="ad_storage"/>Publicité</label><br> -->
+    <label style="display: flex;"><input style="margin: 0px 10px 0px 10px;" type="checkbox" id="analytics_storage"/><span style="font-size: 0.83em; font-weight: bold;">Analyse de la session</span></label>
+  </div>
+  <div class="w-full text-right" style="margin-top: 0.5em;">
+    <button class="cookie-button" onclick="saveCookiePreferences()">Enregistrer</button>
   </div>
 </div>
+
 
 <!-- App Root -->
 <app-root></app-root>
@@ -259,6 +253,10 @@
   function openCookieSettings() {
     document.getElementById('consent-banner').style.display = 'none';
     document.getElementById('gdpr_cookie_modal').style.display = 'block';
+  }
+
+  function closeCookieSettings() {
+    document.getElementById('gdpr_cookie_modal').style.display = 'none';
   }
 
   function saveCookiePreferences() {
