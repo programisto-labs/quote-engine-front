@@ -10,20 +10,224 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <meta property="og:title" content="Générateur de devis - Programisto" />
   <meta property="og:description" content="Estimez le budget de votre app en quelques clics et recevez votre estimation par email !" />
+  <meta name="description" content="Estimez le budget de votre application en quelques clics et recevez votre estimation par email avec le générateur de devis de Programisto." />
   <meta property="og:image" content="https://programisto.fr/wp-content/uploads/2024/10/Baner-01-e1729688886955.jpg" />
   <meta property="og:url" content="https://devis.programisto.fr" />
-  <!-- Google Tag Manager -->
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-MDGGRFMK');</script>
-  <!-- End Google Tag Manager -->
+
+  <style>
+    #gdpr_cookie_modal {
+      border: 1px solid #d3ced2;
+      max-width: calc(100% - 30px);
+      background-color: #202020;
+      color: white;
+      border-radius: 10px;
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      z-index: 1001;
+    }
+
+    #consent-banner {
+      display: none;
+      position: fixed;
+      width: 600px;
+      border: 1px solid #d3ced2;
+      max-width: calc(100% - 30px);
+      bottom: 15px;
+      right: 15px;
+      background-color: #202020;
+      border-radius: 10px;
+      text-align: left;
+      color: #d3ced2;
+      z-index: 1000;
+    }
+
+    .cookie-button {
+      background-color: #F0CD65;
+      color: black;
+      border-radius: 18px;
+      border: 1px solid white;
+      width: 100%;
+      height: 36px;
+      max-width: 140px;
+      margin-bottom: 8px;
+      cursor: pointer;
+    }
+
+    .cookie-button-2 {
+      background-color: #202020;
+      color: white;
+    }
+
+    .cookie-button-2:hover {
+      background-color: white;
+      color: black;
+    }
+  </style>
+  <!-- Google Tag Manager Consent Initialization -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    // Initialize with default values
+    gtag('consent', 'default', {
+      'ad_storage': 'denied',
+      'analytics_storage': 'denied'
+    });
+  </script>
+
+  <!-- DO NOT Load Google Tag Manager until consent is accepted -->
 </head>
-  <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MDGGRFMK" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-    <app-root></app-root>
-  </body>
+
+<body>
+<!-- Consent Banner -->
+<div id="consent-banner">
+  <div class="d-flex w-full p-16">
+    <div class="col-12 col-sm-8">
+      <p>Nous utilisons des cookies pour optimiser notre site web et notre service. Vous pouvez accepter ou refuser ces
+        cookies.</p>
+    </div>
+    <div class="col-12 col-sm-4 align-content-center">
+      <div class="row">
+        <div class="col-12 w-full">
+          <button onclick="acceptCookies()" class="cookie-button" aria-label="Tout accepter">Accepter</button>
+        </div>
+        <div class="col-12 w-full">
+          <button onclick="rejectCookies()" class="cookie-button cookie-button-2" aria-label="Tout refuser">Refuser
+          </button>
+        </div>
+        <div class="col-12 w-full">
+          <button onclick="openCookieSettings()" class="cookie-button cookie-button-2"
+                  data-href="#moove_gdpr_cookie_modal" aria-label="Choisir">Paramètres des cookies
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cookie Settings Modal -->
+<div id="gdpr_cookie_modal">
+  <div class="d-flex row">
+    <div class="col-12 col-sm-8">
+      <div class="w-full">
+        <h3>Paramètres des cookies</h3>
+      </div>
+      <div class="w-full">
+        <h5 style="margin-bottom: 0.5rem;">Gérez vos préférences de cookies ici.</h5>
+        <label><input type="checkbox" id="ad_storage"/>Publicité</label><br>
+        <label><input type="checkbox" id="analytics_storage"/>Analyse</label>
+      </div>
+    </div>
+    <div class="col-12 col-sm-4 align-content-center">
+      <div class="row">
+        <div class="col-12">
+          <button class="cookie-button" onclick="saveCookiePreferences()">Enregistrer les préférences</button>
+        </div>
+        <div class="col-12">
+          <button class="cookie-button cookie-button-2" onclick="closeCookieSettings()">Fermer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- App Root -->
+<app-root></app-root>
+
+<!-- Consent and Cookie Handling Script -->
+<script>
+  function getCookie(name) {
+    const value = '; ' + document.cookie;
+    const parts = value.split('; ' + name + '=');
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+
+  function setCookie(name, value, days) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    const expires = "expires=" + date.toUTCString();
+    document.cookie = name + "=" + value + ";" + expires + ";path=/";
+  }
+
+  function loadGTM() {
+    (function (w, d, s, l, i) {
+      w[l] = w[l] || [];
+      w[l].push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
+      var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+      j.async = true;
+      j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+      f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-MDGGRFMK');
+  }
+
+  function acceptCookies() {
+    setCookie('cookieConsent', 'accepted', 365);
+    setCookie('ad_storage', 'granted', 365);
+    setCookie('analytics_storage', 'granted', 365);
+    gtag('consent', 'update', {
+      'ad_storage': 'granted',
+      'analytics_storage': 'granted'
+    });
+    document.getElementById('consent-banner').style.display = 'none';
+    loadGTM(); // Load GTM only when cookies are accepted
+  }
+
+  function rejectCookies() {
+    setCookie('cookieConsent', 'rejected', 1);
+    setCookie('ad_storage', 'denied', 1);
+    setCookie('analytics_storage', 'denied', 1);
+    gtag('consent', 'update', {
+      'ad_storage': 'denied',
+      'analytics_storage': 'denied'
+    });
+    document.getElementById('consent-banner').style.display = 'none';
+  }
+
+  function openCookieSettings() {
+    document.getElementById('gdpr_cookie_modal').style.display = 'block';
+  }
+
+  function closeCookieSettings() {
+    document.getElementById('gdpr_cookie_modal').style.display = 'none';
+  }
+
+  function saveCookiePreferences() {
+    const adStorage = document.getElementById('ad_storage').checked ? 'granted' : 'denied';
+    const analyticsStorage = document.getElementById('analytics_storage').checked ? 'granted' : 'denied';
+    setCookie('ad_storage', adStorage, 365);
+    setCookie('analytics_storage', analyticsStorage, 365);
+    gtag('consent', 'update', {
+      'ad_storage': adStorage,
+      'analytics_storage': analyticsStorage
+    });
+    closeCookieSettings();
+  }
+
+  window.onload = function () {
+    const consent = getCookie('cookieConsent');
+    if (!consent) {
+      document.getElementById('consent-banner').style.display = 'block';
+    } else if (consent === 'accepted') {
+      loadGTM(); // Load GTM if cookies were already accepted
+      gtag('consent', 'update', {
+        'ad_storage': 'granted',
+        'analytics_storage': 'granted'
+      });
+    }
+  };
+</script>
+
+<!-- GTM noscript (loaded conditionally after consent) -->
+<noscript id="gtm-noscript"></noscript>
+
+</body>
+
 </html>
