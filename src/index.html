@@ -118,19 +118,19 @@
       background-color: #F0CD65;
       color: black;
       border-radius: 18px;
-      border: 1px solid white;
       width: 100%;
       height:28px;
       max-width: 160px;
       margin-bottom: 8px;
       cursor: pointer;
       margin-right: 15px;
-      font-size: .83em;
+      font-size: .75em;
     }
   
     .cookie-button-2 {
       background-color: #202020;
       color: white;
+      border: 1px solid white;
     }
 
     .cookie-button-3 {
@@ -168,10 +168,10 @@
 <!-- Consent Banner -->
 <div id="consent-banner">
   <div class="w-full">
-    <p style="font-size: .83em">Nous utilisons des cookies pour vous offrir la meilleure expérience sur notre site. Pour en savoir plus sur les cookies utilisés, gérez vos préférences. Pour plus d'informations, consultez notre politique de confidentialité.</p>
+    <p style="font-size: .83em">Nous utilisons des cookies pour vous offrir la meilleure expérience sur notre site. Pour en savoir plus sur les cookies utilisés, gérez vos préférences. Pour plus d'informations, consultez notre <a href="https://programisto.fr/mentions-legales" title="Mentions Légales & confidentialité" style="color:unset;" target="_blank">politique de confidentialité</a>.</p>
   </div>
   <div class="w-full d-flex flex-wrap">
-    <button onclick="openCookieSettings()" class="cookie-button cookie-button-2 consent-btn w-full-sm" data-href="#moove_gdpr_cookie_modal" aria-label="Choisir">Paramètres des cookies</button>
+    <button onclick="openCookieSettings()" class="cookie-button cookie-button-3 consent-btn w-full-sm" data-href="#moove_gdpr_cookie_modal" aria-label="Choisir">Paramètres des cookies</button>
     <button onclick="rejectCookies()" class="cookie-button cookie-button-2 consent-btn w-full-sm" aria-label="Tout refuser">Refuser</button>
     <button onclick="acceptCookies()" class="cookie-button consent-btn w-full-sm" aria-label="Tout accepter">Accepter</button>
   </div>
@@ -184,9 +184,9 @@
   </div>
   <div class="w-full">
     <p style="margin-bottom: 0.5rem; font-size: 0.83em; font-weight: bold;">Gérez vos préférences de cookies ici</p>
-    <p style="margin-bottom: 0.5rem; font-size: 0.83em">Nous utilisons Google Tag Manager pour déclencher des événements Google Analytics et Microsoft Clarity pour suivre le parcours des utilisateurs sur notre site afin d'améliorer l'expérience utilisateur. Aucune information personnelle n'est collectée sans votre consentement.</p>
+    <p style="margin-bottom: 0.5rem; font-size: 0.83em">Nous utilisons Google Tag Manager pour déclencher des événements Google Analytics et Microsoft Clarity pour suivre le parcours des utilisateurs sur notre site afin d'améliorer l'expérience utilisateur. Aucune information personnelle n'est collectée sans votre consentement. Pour plus d'informations, consultez notre <a href="https://programisto.fr/mentions-legales" title="Mentions Légales & confidentialité" style="color:unset;" target="_blank">politique de confidentialité</a>.</p>
     <label style="display: flex;">
-      <span style="margin: 0px 10px 0px 10px; font-size: 0.83em; font-weight: bold;" id="analytics_status">Analyse de la session: </span>
+      <span style="margin: 0px 10px 15px 10px; font-size: 0.83em; font-weight: bold;" id="analytics_status">Analyse de la session: </span>
     </label>    
   </div>
   <div class="w-full d-flex flex-wrap">
