@@ -11,7 +11,7 @@
   <div class="col-12 p-y-8">
     <mat-accordion multi [displayMode]="'flat'">
       <mat-expansion-panel #expansionPanel>
-        <mat-expansion-panel-header>
+        <mat-expansion-panel-header data-category="Conception">
           <div class="row w-full align-content-center m-y-8">
             <div class="col-12 col-md-6 align-content-center">
               <mat-panel-title>
@@ -35,28 +35,28 @@
           </div>
         </mat-expansion-panel-header>
         <mat-list>
-          <mat-list-item>
+          <mat-list-item data-product="Étude du besoin">
             <mat-icon matListItemIcon>search</mat-icon>
             <div matListItemTitle
             >Étude du besoin</div>
             <div matListItemMeta> {{chiffrageCouts.conception.etude | number}} €</div>
             <div matListItemLine> {{chiffrageJours.conception.etude | number}} jours</div>
           </mat-list-item>
-          <mat-list-item>
+          <mat-list-item data-product="Conception fonctionnelle">
             <mat-icon matListItemIcon>extension</mat-icon>
             <div matListItemTitle
             >Conception fonctionnelle</div>
             <div matListItemMeta> {{chiffrageCouts.conception.conceptionFonctionnelle| number}} €</div>
             <div matListItemLine> {{chiffrageJours.conception.conceptionFonctionnelle| number}} jours</div>
           </mat-list-item>
-          <mat-list-item>
+          <mat-list-item data-product="Conception technique">
             <mat-icon matListItemIcon>engineering</mat-icon>
             <div matListItemTitle
             >Conception technique</div>
             <div matListItemMeta> {{chiffrageCouts.conception.conceptionTechnique| number}} €</div>
             <div matListItemLine> {{chiffrageJours.conception.conceptionTechnique| number}} jours</div>
           </mat-list-item>
-          <mat-list-item>
+          <mat-list-item data-product="Conception cahier de test">
             <mat-icon matListItemIcon>assignment</mat-icon>
             <div matListItemTitle
             >Conception cahier de test</div>
@@ -65,7 +65,7 @@
           </mat-list-item>
         </mat-list>
       </mat-expansion-panel>
-      <mat-expansion-panel>
+      <mat-expansion-panel data-category="Construction">
         <mat-expansion-panel-header>
           <div class="row w-full m-y-8">
             <div class="col-12 col-md-6 align-content-center">
@@ -90,42 +90,42 @@
           </div>
         </mat-expansion-panel-header>
         <mat-list>
-          <mat-list-item>
+          <mat-list-item data-product="Initialisation du projet">
             <mat-icon matListItemIcon>play_arrow</mat-icon>
             <div matListItemTitle
             >Initialisation du projet</div>
             <div matListItemMeta> {{chiffrageCouts.construction.initialisation | number}} €</div>
             <div matListItemLine> {{chiffrageJours.construction.initialisation | number}} jours</div>
           </mat-list-item>
-          <mat-list-item>
+          <mat-list-item data-product="Développements et tests unitaires">
             <mat-icon matListItemIcon>code</mat-icon>
             <div matListItemTitle
             >Développements et tests unitaires</div>
             <div matListItemMeta> {{chiffrageCouts.construction.developementAvecTests | number}} €</div>
             <div matListItemLine> {{chiffrageJours.construction.developementAvecTests | number}} jours</div>
           </mat-list-item>
-          <mat-list-item>
+          <mat-list-item data-product="Relecture et validation du code">
             <mat-icon matListItemIcon>check_circle</mat-icon>
             <div matListItemTitle
             >Relecture et validation du code</div>
             <div matListItemMeta> {{chiffrageCouts.construction.relecture | number}} €</div>
             <div matListItemLine> {{chiffrageJours.construction.relecture | number}} jours</div>
           </mat-list-item>
-          <mat-list-item>
+          <mat-list-item data-product="Support technique">
             <mat-icon matListItemIcon>support</mat-icon>
             <div matListItemTitle
             >Support technique</div>
             <div matListItemMeta> {{chiffrageCouts.construction.supportTechnique | number}} €</div>
             <div matListItemLine> {{chiffrageJours.construction.supportTechnique | number}} jours</div>
           </mat-list-item>
-          <mat-list-item>
+          <mat-list-item data-product="Support fonctionnel">
             <mat-icon matListItemIcon>help</mat-icon>
             <div matListItemTitle
             >Support fonctionnel</div>
             <div matListItemMeta> {{chiffrageCouts.construction.supportFonctionnel | number}} €</div>
             <div matListItemLine> {{chiffrageJours.construction.supportFonctionnel | number}} jours</div>
           </mat-list-item>
-          <mat-list-item>
+          <mat-list-item data-product="Suivi de projet">
             <mat-icon matListItemIcon>timeline</mat-icon>
             <div matListItemTitle
             >Suivi de projet</div>
@@ -134,7 +134,7 @@
           </mat-list-item>
         </mat-list>
       </mat-expansion-panel>
-      <mat-expansion-panel>
+      <mat-expansion-panel data-category="Recette">
         <mat-expansion-panel-header>
           <div class="row w-full m-y-8">
             <div class="col-12 col-md-6 align-content-center">
@@ -159,35 +159,35 @@
           </div>
         </mat-expansion-panel-header>
         <mat-list>
-          <mat-list-item>
+          <mat-list-item data-product="Livraison de la recette">
             <mat-icon matListItemIcon>local_shipping</mat-icon>
             <div matListItemTitle
             >Livraison de la recette</div>
             <div matListItemMeta> {{chiffrageCouts.recette.livraisonRecette| number}} €</div>
             <div matListItemLine> {{chiffrageJours.recette.livraisonRecette | number}} jours</div>
           </mat-list-item>
-          <mat-list-item>
+          <mat-list-item data-product="Tests de recette">
             <mat-icon matListItemIcon>bug_report</mat-icon>
             <div matListItemTitle
             >Tests de recette</div>
             <div matListItemMeta> {{chiffrageCouts.recette.tests | number}} €</div>
             <div matListItemLine> {{chiffrageJours.recette.tests | number}} jours</div>
           </mat-list-item>
-          <mat-list-item>
+          <mat-list-item data-product="Corrections bugs">
             <mat-icon matListItemIcon>build_circle</mat-icon>
             <div matListItemTitle
             >Corrections bugs</div>
             <div matListItemMeta> {{chiffrageCouts.recette.corrections| number}} €</div>
             <div matListItemLine> {{chiffrageJours.recette.corrections | number}} jours</div>
           </mat-list-item>
-          <mat-list-item>
+          <mat-list-item  data-product="Relecture et validation de la recette">
             <mat-icon matListItemIcon>verified</mat-icon>
             <div matListItemTitle
             >Relecture et validation de la recette</div>
             <div matListItemMeta> {{chiffrageCouts.recette.relecture | number}} €</div>
             <div matListItemLine> {{chiffrageJours.recette.relecture | number}} jours</div>
           </mat-list-item>
-          <mat-list-item>
+          <mat-list-item data-product="Support technique de la recette">
             <mat-icon matListItemIcon>contact_phone</mat-icon>
             <div matListItemTitle
             >Support technique de la recette</div>
@@ -196,7 +196,7 @@
           </mat-list-item>
         </mat-list>
       </mat-expansion-panel>
-      <mat-expansion-panel>
+      <mat-expansion-panel data-category="Livraison">
         <mat-expansion-panel-header>
           <div class="row w-full m-y-8">
             <div class="col-12 col-md-6 align-content-center">
@@ -221,28 +221,28 @@
           </div>
         </mat-expansion-panel-header>
         <mat-list>
-          <mat-list-item>
+          <mat-list-item data-product="Rédaction DMFX">
             <mat-icon matListItemIcon>description</mat-icon>
             <div matListItemTitle
             >Rédaction DMFX</div>
             <div matListItemMeta> {{chiffrageCouts.livraison.redactionDMFX | number}} €</div>
             <div matListItemLine> {{chiffrageJours.livraison.redactionDMFX | number}} jours</div>
           </mat-list-item>
-          <mat-list-item>
+          <mat-list-item data-product="Livraison production">
             <mat-icon matListItemIcon>publish</mat-icon>
             <div matListItemTitle
             >Livraison production</div>
             <div matListItemMeta> {{chiffrageCouts.livraison.livraison| number}} €</div>
             <div matListItemLine> {{chiffrageJours.livraison.livraison | number}} jours</div>
           </mat-list-item>
-          <mat-list-item>
+          <mat-list-item data-product="Accompagement livraison">
             <mat-icon matListItemIcon>support_agent</mat-icon>
             <div matListItemTitle
             >Accompagement livraison</div>
             <div matListItemMeta> {{chiffrageCouts.livraison.accompagnement | number}} €</div>
             <div matListItemLine> {{chiffrageJours.livraison.accompagnement | number}} jours</div>
           </mat-list-item>
-          <mat-list-item>
+          <mat-list-item data-product="Garantie">
             <mat-icon matListItemIcon>security</mat-icon>
             <div matListItemTitle
             >Garantie</div>
