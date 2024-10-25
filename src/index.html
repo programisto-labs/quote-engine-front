@@ -301,10 +301,16 @@
         loadGTM(); // Load GTM only in production
       }
       gtag('consent', 'update', {
-        // 'ad_storage': adStorage,
+        // 'ad_storage': granted,
         'analytics_storage': 'granted'
       });
       analyticsStatus.textContent == "Autorisé";
+    } else {
+      gtag('consent', 'update', {
+        // 'ad_storage': denied,
+        'analytics_storage': 'denied'
+      });
+      analyticsStatus.textContent == "Désactivé";
     }
   };
 </script>
