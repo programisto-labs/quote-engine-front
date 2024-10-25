@@ -187,7 +187,7 @@
     <p style="margin-bottom: 0.5rem; font-size: 0.83em; font-weight: bold;">Gérez vos préférences de cookies ici</p>
     <p style="margin-bottom: 0.5rem; font-size: 0.83em">Nous utilisons Google Tag Manager pour déclencher des événements Google Analytics et Microsoft Clarity pour suivre le parcours des utilisateurs sur notre site afin d'améliorer l'expérience utilisateur. Aucune information personnelle n'est collectée sans votre consentement. Pour plus d'informations, consultez notre <a href="https://programisto.fr/mentions-legales" title="Mentions Légales & confidentialité" style="color:unset;" target="_blank">politique de confidentialité</a>.</p>
     <label style="display: flex;">
-      <span style="margin: 0px 10px 15px 10px; font-size: 0.83em; font-weight: bold;" id="analytics_status">Analyse de la session : </span>
+      <span style="margin: 0px 10px 15px 10px; font-size: 0.83em; font-weight: bold;" id="analytics_status">Analyse de la session</span>
     </label>    
   </div>
   <div class="w-full d-flex flex-wrap">
@@ -237,7 +237,7 @@
       // 'ad_storage': 'granted',
       'analytics_storage': 'granted'
     });
-    analyticsStatus.textContent += "Autorisé";
+    analyticsStatus.textContent += " : Autorisé";
     document.getElementById('consent-banner').style.display = 'none';
     document.getElementById('gdpr_cookie_modal').style.display = 'none';
     loadGTM(); // Load GTM only when cookies are accepted
@@ -253,7 +253,7 @@
       // 'ad_storage': 'denied',
       'analytics_storage': 'denied'
     });
-    analyticsStatus.textContent += "Désactivé";
+    analyticsStatus.textContent += " : Désactivé";
     document.getElementById('consent-banner').style.display = 'none';
     document.getElementById('gdpr_cookie_modal').style.display = 'none';
   }
@@ -286,14 +286,14 @@
     const analyticsStatus = document.getElementById('analytics_status');
     if (!consent) {
       document.getElementById('consent-banner').style.display = 'block';
-      analyticsStatus.textContent += "Désactivé";
+      analyticsStatus.textContent += " : Désactivé";
     } else if (consent === 'accepted') {
       loadGTM(); // Load GTM if cookies were already accepted
       gtag('consent', 'update', {
         // 'ad_storage': adStorage,
         'analytics_storage': 'granted'
       });
-      analyticsStatus.textContent += "Autorisé";
+      analyticsStatus.textContent += " : Autorisé";
     }
   };
 </script>
