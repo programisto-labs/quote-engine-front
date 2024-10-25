@@ -33,7 +33,7 @@ export class DevisService {
     }).pipe(
       tap(response => {
         if (response.status === 200) {
-          this.triggerSimpleGTMEvent(); // Trigger a simple GTM event
+          this.triggerSimpleGTMEventWithDelay();
         }
       }),
       map(response => response.body as Devis) // Return only the Devis object
@@ -41,13 +41,17 @@ export class DevisService {
   }
   
   // Define the simple GTM trigger function
-  private triggerSimpleGTMEvent(): void {
-    if (typeof window !== 'undefined' && window.dataLayer) {
-      window.dataLayer.push({
-        event: 'quoteGenerateSuccess' // Minimal custom GTM event
-      });
+  private triggerSimpleGTMEventWithDelay(): void {
+    if (typeof window !== 'undefined') {
+      window.dataLayer = window.dataLayer || []; // Ensure dataLayer exists
+      setTimeout(() => {
+        window.dataLayer?.push({
+          event: 'quoteGenerateSuccess' // Minimal custom GTM event
+        });
+      }, 1000); // Delay of 1000ms (1 second)
     }
   }
+  
   
   public autocomplete(demandeClient: DemandeClient): Observable<Autocomplete> {
     return this.http.post<Autocomplete>(`${this.devisRapideApiUrl}/scenario/autocomplete`, demandeClient, {headers: {'Content-Type': 'application/json',}});
