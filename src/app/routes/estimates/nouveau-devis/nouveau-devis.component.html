@@ -208,7 +208,7 @@
       </form>
       <div class="d-flex w-full row justify-content-start m-x-0 p-x-24 p-y-8">
         <div class="col-12 col-md-3 m-b-16" style="flex-basis: content;">
-          <button mat-flat-button class="secondary-button m-r-8"
+          <button id="autocomplete_scenario_button" mat-flat-button class="secondary-button m-r-8"
                   (click)="autocomplete()"
                   [disabled]="waitingForCompletion || (formGroupDescription.invalid && formGroupScenarios.invalid)"
           >

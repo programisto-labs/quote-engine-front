@@ -14,10 +14,63 @@
   <meta property="og:image" content="https://programisto.fr/wp-content/uploads/2024/10/Baner-01-e1729688886955.jpg" />
   <meta property="og:url" content="https://devis.programisto.fr" />
 
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "Organization",
+      "name": "Programisto",
+      "url": "https://programisto.fr",
+      "logo": "https://programisto.fr/wp-content/uploads/2024/04/01.png",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+33525530211",
+        "contactType": "customer service",
+        "areaServed": "FR",
+        "availableLanguage": ["French", "English"]
+      },
+      "sameAs": [
+        "https://www.facebook.com/programisto",
+        "https://twitter.com/programisto",
+        "https://www.linkedin.com/company/programisto",
+        "https://programisto.fr"
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "5 Quai Lawton",
+        "addressLocality": "Bordeaux",
+        "postalCode": "33300",
+        "addressCountry": "FR"
+      },
+      "openingHours": [
+        "Mo-Fr 09:00-18:00",
+      ],
+      "founder": {
+        "@type": "Person",
+        "name": "Florian Duport",
+        "sameAs": "https://www.linkedin.com/in/florian-duport-programisto/"
+      },
+      "serviceArea": {
+        "@type": "Place",
+        "name": "France",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "FR"
+        }
+      },
+      "service": {
+        "@type": "Service",
+        "name": "Générateur de devis",
+        "description": "Estimez le budget de votre app en quelques clics et recevez votre estimation par email !",
+        "url": "https://devis.programisto.fr"
+      }
+    }
+  </script>
+    
   <style>
     #gdpr_cookie_modal {
       border: 1px solid #d3ced2;
-      max-width: calc(100% - 30px);
+      max-width: 600px; /* Increase the max-width to make it wider */
+      width: 90%; /* Ensure it scales well on smaller screens */
       background-color: #202020;
       color: white;
       border-radius: 10px;
@@ -28,14 +81,15 @@
       transform: translate(-50%, -50%);
       padding: 20px;
       z-index: 1001;
+      box-sizing: border-box;
     }
-
+  
     #consent-banner {
       display: none;
       position: fixed;
-      width: 600px;
+      width: 100%; /* Make the banner responsive */
+      max-width: 580px;
       border: 1px solid #d3ced2;
-      max-width: calc(100% - 30px);
       bottom: 15px;
       right: 15px;
       background-color: #202020;
@@ -43,30 +97,55 @@
       text-align: left;
       color: #d3ced2;
       z-index: 1000;
+      padding: 16px;
+      box-sizing: border-box;
     }
-
+  
+    @media (max-width: 768px) {
+      #consent-banner {
+        max-width: calc(100% - 30px);
+        right: 0;
+        left: 0;
+        margin: 0 auto;
+      }
+      .cookie-button {
+        max-width: unset!important;
+        margin-right: 0px!important;
+      }
+    }
+  
     .cookie-button {
       background-color: #F0CD65;
       color: black;
       border-radius: 18px;
-      border: 1px solid white;
       width: 100%;
-      height: 36px;
-      max-width: 140px;
+      height:28px;
+      max-width: 150px;
       margin-bottom: 8px;
       cursor: pointer;
+      margin-right: 15px;
+      font-size: .75em;
+      border: 1px solid #F0CD65;
     }
-
+  
     .cookie-button-2 {
       background-color: #202020;
       color: white;
+      border: 1px solid white;
     }
 
+    .cookie-button-3 {
+      border: unset;
+      color: white;
+      background-color: #202020;
+    }
+  
     .cookie-button-2:hover {
       background-color: white;
       color: black;
     }
   </style>
+  
   <!-- Google Tag Manager Consent Initialization -->
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -77,7 +156,7 @@
 
     // Initialize with default values
     gtag('consent', 'default', {
-      'ad_storage': 'denied',
+      // 'ad_storage': 'denied',
       'analytics_storage': 'denied'
     });
   </script>
@@ -86,57 +165,37 @@
 </head>
 
 <body>
+
 <!-- Consent Banner -->
 <div id="consent-banner">
-  <div class="d-flex w-full p-16">
-    <div class="col-12 col-sm-8">
-      <p>Nous utilisons des cookies pour optimiser notre site web et notre service. Vous pouvez accepter ou refuser ces
-        cookies.</p>
-    </div>
-    <div class="col-12 col-sm-4 align-content-center">
-      <div class="row">
-        <div class="col-12 w-full">
-          <button onclick="acceptCookies()" class="cookie-button" aria-label="Tout accepter">Accepter</button>
-        </div>
-        <div class="col-12 w-full">
-          <button onclick="rejectCookies()" class="cookie-button cookie-button-2" aria-label="Tout refuser">Refuser
-          </button>
-        </div>
-        <div class="col-12 w-full">
-          <button onclick="openCookieSettings()" class="cookie-button cookie-button-2"
-                  data-href="#moove_gdpr_cookie_modal" aria-label="Choisir">Paramètres des cookies
-          </button>
-        </div>
-      </div>
-    </div>
+  <div class="w-full">
+    <p style="font-size: .83em">Nous utilisons des cookies pour vous offrir la meilleure expérience sur notre site. Pour en savoir plus sur les cookies utilisés, gérez vos préférences. Pour plus d'informations, consultez notre <a href="https://programisto.fr/mentions-legales" title="Mentions Légales & confidentialité" style="color:unset;" target="_blank">politique de confidentialité</a>.</p>
+  </div>
+  <div class="w-full d-flex flex-wrap">
+    <button onclick="openCookieSettings()" class="cookie-button cookie-button-3 consent-btn w-full-sm" data-href="#moove_gdpr_cookie_modal" aria-label="Choisir">Paramètres des cookies</button>
+    <button onclick="rejectCookies()" class="cookie-button cookie-button-2 consent-btn w-full-sm" aria-label="Tout refuser">Refuser</button>
+    <button onclick="acceptCookies()" class="cookie-button consent-btn w-full-sm" aria-label="Tout accepter">Accepter</button>
   </div>
 </div>
 
 <!-- Cookie Settings Modal -->
 <div id="gdpr_cookie_modal">
-  <div class="d-flex row">
-    <div class="col-12 col-sm-8">
-      <div class="w-full">
-        <h3>Paramètres des cookies</h3>
-      </div>
-      <div class="w-full">
-        <h5 style="margin-bottom: 0.5rem;">Gérez vos préférences de cookies ici.</h5>
-        <label><input type="checkbox" id="ad_storage"/>Publicité</label><br>
-        <label><input type="checkbox" id="analytics_storage"/>Analyse</label>
-      </div>
-    </div>
-    <div class="col-12 col-sm-4 align-content-center">
-      <div class="row">
-        <div class="col-12">
-          <button class="cookie-button" onclick="saveCookiePreferences()">Enregistrer les préférences</button>
-        </div>
-        <div class="col-12">
-          <button class="cookie-button cookie-button-2" onclick="closeCookieSettings()">Fermer</button>
-        </div>
-      </div>
-    </div>
+  <div class="w-full">
+    <p style="font-size: 1.17em; font-weight: bold;">Paramètres des cookies</p>
+  </div>
+  <div class="w-full">
+    <p style="margin-bottom: 0.5rem; font-size: 0.83em; font-weight: bold;">Gérez vos préférences de cookies ici</p>
+    <p style="margin-bottom: 0.5rem; font-size: 0.83em">Nous utilisons Google Tag Manager pour déclencher des événements Google Analytics et Microsoft Clarity pour suivre le parcours des utilisateurs sur notre site afin d'améliorer l'expérience utilisateur. Aucune information personnelle n'est collectée sans votre consentement. Pour plus d'informations, consultez notre <a href="https://programisto.fr/mentions-legales" title="Mentions Légales & confidentialité" style="color:unset;" target="_blank">politique de confidentialité</a>.</p>
+    <label style="display: flex; margin: 0px 10px 15px 10px; font-size: 0.83em; font-weight: bold;">
+      Analyse de la session : <span style="margin-left: 5px" id="analytics_status"></span>
+    </label>    
+  </div>
+  <div class="w-full d-flex flex-wrap">
+    <button onclick="rejectCookies()" class="cookie-button cookie-button-2 consent-btn w-full-sm" aria-label="Tout refuser">Refuser</button>
+    <button onclick="acceptCookies()" class="cookie-button consent-btn w-full-sm" aria-label="Tout accepter">Accepter</button>
   </div>
 </div>
+
 
 <!-- App Root -->
 <app-root></app-root>
@@ -156,6 +215,11 @@
     document.cookie = name + "=" + value + ";" + expires + ";path=/";
   }
 
+  // Function to check if the environment is production
+  function isProduction() {
+    return window.location.hostname === 'devis.programisto.fr';
+  }
+
   function loadGTM() {
     (function (w, d, s, l, i) {
       w[l] = w[l] || [];
@@ -169,29 +233,41 @@
   }
 
   function acceptCookies() {
+    const analyticsStatus = document.getElementById('analytics_status');
     setCookie('cookieConsent', 'accepted', 365);
-    setCookie('ad_storage', 'granted', 365);
+    // Commented out ad_storage cookie setting
+    // setCookie('ad_storage', 'granted', 365);
     setCookie('analytics_storage', 'granted', 365);
     gtag('consent', 'update', {
-      'ad_storage': 'granted',
+      // 'ad_storage': 'granted',
       'analytics_storage': 'granted'
     });
+    analyticsStatus.textContent = "Autorisé";
     document.getElementById('consent-banner').style.display = 'none';
-    loadGTM(); // Load GTM only when cookies are accepted
+    document.getElementById('gdpr_cookie_modal').style.display = 'none';
+    // Load GTM only when cookies are accepted and in production
+    if (isProduction()) {
+      loadGTM(); // Load GTM only in production
+    }
   }
 
   function rejectCookies() {
+    const analyticsStatus = document.getElementById('analytics_status');
     setCookie('cookieConsent', 'rejected', 1);
-    setCookie('ad_storage', 'denied', 1);
+    // Commented out ad_storage cookie setting
+    // setCookie('ad_storage', 'denied', 1);
     setCookie('analytics_storage', 'denied', 1);
     gtag('consent', 'update', {
-      'ad_storage': 'denied',
+      // 'ad_storage': 'denied',
       'analytics_storage': 'denied'
     });
+    analyticsStatus.textContent = "Désactivé";
     document.getElementById('consent-banner').style.display = 'none';
+    document.getElementById('gdpr_cookie_modal').style.display = 'none';
   }
 
   function openCookieSettings() {
+    document.getElementById('consent-banner').style.display = 'none';
     document.getElementById('gdpr_cookie_modal').style.display = 'block';
   }
 
@@ -200,12 +276,14 @@
   }
 
   function saveCookiePreferences() {
-    const adStorage = document.getElementById('ad_storage').checked ? 'granted' : 'denied';
+    // Commented out ad_storage preference handling
+    const adStorage = document.getElementById('ad_storage') ? (document.getElementById('ad_storage').checked ? 'granted' : 'denied') : 'denied';
     const analyticsStorage = document.getElementById('analytics_storage').checked ? 'granted' : 'denied';
-    setCookie('ad_storage', adStorage, 365);
+    // Commented out ad_storage cookie setting
+    // setCookie('ad_storage', adStorage, 365);
     setCookie('analytics_storage', analyticsStorage, 365);
     gtag('consent', 'update', {
-      'ad_storage': adStorage,
+      // 'ad_storage': adStorage,
       'analytics_storage': analyticsStorage
     });
     closeCookieSettings();
@@ -213,14 +291,26 @@
 
   window.onload = function () {
     const consent = getCookie('cookieConsent');
+    const analyticsStatus = document.getElementById('analytics_status');
     if (!consent) {
       document.getElementById('consent-banner').style.display = 'block';
+      analyticsStatus.textContent = "Désactivé";
     } else if (consent === 'accepted') {
-      loadGTM(); // Load GTM if cookies were already accepted
+      // Load GTM only when cookies are accepted and in production
+      if (isProduction()) {
+        loadGTM(); // Load GTM only in production
+      }
       gtag('consent', 'update', {
-        'ad_storage': 'granted',
+        // 'ad_storage': granted,
         'analytics_storage': 'granted'
       });
+      analyticsStatus.textContent = "Autorisé";
+    } else {
+      gtag('consent', 'update', {
+        // 'ad_storage': denied,
+        'analytics_storage': 'denied'
+      });
+      analyticsStatus.textContent = "Désactivé";
     }
   };
 </script>
