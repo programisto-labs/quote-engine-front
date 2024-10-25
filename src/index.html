@@ -215,6 +215,11 @@
     document.cookie = name + "=" + value + ";" + expires + ";path=/";
   }
 
+  // Function to check if the environment is production
+  function isProduction() {
+    return window.location.hostname === 'devis.programisto.fr';
+  }
+
   function loadGTM() {
     (function (w, d, s, l, i) {
       w[l] = w[l] || [];
@@ -240,7 +245,10 @@
     analyticsStatus.textContent = "Autorisé";
     document.getElementById('consent-banner').style.display = 'none';
     document.getElementById('gdpr_cookie_modal').style.display = 'none';
-    loadGTM(); // Load GTM only when cookies are accepted
+    // Load GTM only when cookies are accepted and in production
+    if (isProduction()) {
+      loadGTM(); // Load GTM only in production
+    }
   }
 
   function rejectCookies() {
@@ -288,7 +296,10 @@
       document.getElementById('consent-banner').style.display = 'block';
       analyticsStatus.textContent = "Désactivé";
     } else if (consent === 'accepted') {
-      loadGTM(); // Load GTM if cookies were already accepted
+      // Load GTM only when cookies are accepted and in production
+      if (isProduction()) {
+        loadGTM(); // Load GTM only in production
+      }
       gtag('consent', 'update', {
         // 'ad_storage': adStorage,
         'analytics_storage': 'granted'
