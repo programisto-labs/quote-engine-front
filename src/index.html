@@ -304,13 +304,13 @@
         // 'ad_storage': granted,
         'analytics_storage': 'granted'
       });
-      analyticsStatus.textContent == "Autorisé";
+      analyticsStatus.textContent = "Autorisé";
     } else {
       gtag('consent', 'update', {
         // 'ad_storage': denied,
         'analytics_storage': 'denied'
       });
-      analyticsStatus.textContent == "Désactivé";
+      analyticsStatus.textContent = "Désactivé";
     }
   };
 </script>
