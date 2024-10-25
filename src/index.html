@@ -185,12 +185,13 @@
   <div class="w-full">
     <p style="margin-bottom: 0.5rem; font-size: 0.83em; font-weight: bold;">Gérez vos préférences de cookies ici</p>
     <p style="margin-bottom: 0.5rem; font-size: 0.83em">Nous utilisons Google Tag Manager pour déclencher des événements Google Analytics et Microsoft Clarity pour suivre le parcours des utilisateurs sur notre site afin d'améliorer l'expérience utilisateur. Aucune information personnelle n'est collectée sans votre consentement.</p>
-    <!-- Commented out ad_storage -->
-    <!-- <label><input type="checkbox" id="ad_storage"/>Publicité</label><br> -->
-    <label style="display: flex;"><input style="margin: 0px 10px 0px 10px;" type="checkbox" id="analytics_storage"/><span style="font-size: 0.83em; font-weight: bold;">Analyse de la session</span></label>
+    <label style="display: flex;">
+      <span style="margin: 0px 10px 0px 10px; font-size: 0.83em; font-weight: bold;" id="analytics_status">Analyse de la session: </span>
+    </label>    
   </div>
-  <div class="w-full text-right" style="margin-top: 0.5em;">
-    <button class="cookie-button" onclick="saveCookiePreferences()">Enregistrer</button>
+  <div class="w-full d-flex flex-wrap">
+    <button onclick="rejectCookies()" class="cookie-button cookie-button-2 consent-btn w-full-sm" aria-label="Tout refuser">Refuser</button>
+    <button onclick="acceptCookies()" class="cookie-button consent-btn w-full-sm" aria-label="Tout accepter">Accepter</button>
   </div>
 </div>
 
@@ -226,6 +227,7 @@
   }
 
   function acceptCookies() {
+    const analyticsStatus = document.getElementById('analytics_status');
     setCookie('cookieConsent', 'accepted', 365);
     // Commented out ad_storage cookie setting
     // setCookie('ad_storage', 'granted', 365);
@@ -234,11 +236,14 @@
       // 'ad_storage': 'granted',
       'analytics_storage': 'granted'
     });
+    analyticsStatus.textContent += "Autorisé";
     document.getElementById('consent-banner').style.display = 'none';
+    document.getElementById('gdpr_cookie_modal').style.display = 'none';
     loadGTM(); // Load GTM only when cookies are accepted
   }
 
   function rejectCookies() {
+    const analyticsStatus = document.getElementById('analytics_status');
     setCookie('cookieConsent', 'rejected', 1);
     // Commented out ad_storage cookie setting
     // setCookie('ad_storage', 'denied', 1);
@@ -247,7 +252,9 @@
       // 'ad_storage': 'denied',
       'analytics_storage': 'denied'
     });
+    analyticsStatus.textContent += "Désactivé";
     document.getElementById('consent-banner').style.display = 'none';
+    document.getElementById('gdpr_cookie_modal').style.display = 'none';
   }
 
   function openCookieSettings() {
@@ -275,14 +282,17 @@
 
   window.onload = function () {
     const consent = getCookie('cookieConsent');
+    const analyticsStatus = document.getElementById('analytics_status');
     if (!consent) {
       document.getElementById('consent-banner').style.display = 'block';
+      analyticsStatus.textContent += "Désactivé";
     } else if (consent === 'accepted') {
       loadGTM(); // Load GTM if cookies were already accepted
       gtag('consent', 'update', {
         // 'ad_storage': adStorage,
         'analytics_storage': 'granted'
       });
+      analyticsStatus.textContent += "Autorisé";
     }
   };
 </script>
