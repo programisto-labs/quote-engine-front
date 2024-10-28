@@ -26,8 +26,8 @@ export class DevisService {
   }
 
 
-  public genere(demandeClient: DemandeClient): Observable<Devis> {
-    return this.http.post<Devis>(`${this.devisRapideApiUrl}/genere`, demandeClient, {
+  public genere(demandeClient: DemandeClient, chunkSize = 10,): Observable<Devis> {
+    return this.http.post<Devis>(`${this.devisRapideApiUrl}/genere/${chunkSize}`, demandeClient, {
       headers: { 'Content-Type': 'application/json' },
       observe: 'response'
     }).pipe(
@@ -39,7 +39,11 @@ export class DevisService {
       map(response => response.body as Devis) // Return only the Devis object
     );
   }
-  
+
+  public genereScheduled(scheduleData: any, chunkSize = 10, delay: number = 60): Observable<any> {
+    return this.http.post<any>(`${this.devisRapideApiUrl}/genere/${chunkSize}/${delay}`, scheduleData);
+  }
+
   // Define the simple GTM trigger function
   private triggerSimpleGTMEventWithDelay(): void {
     if (typeof window !== 'undefined') {
@@ -51,8 +55,8 @@ export class DevisService {
       }, 1000); // Delay of 1000ms (1 second)
     }
   }
-  
-  
+
+
   public autocomplete(demandeClient: DemandeClient): Observable<Autocomplete> {
     return this.http.post<Autocomplete>(`${this.devisRapideApiUrl}/scenario/autocomplete`, demandeClient, {headers: {'Content-Type': 'application/json',}});
   }

@@ -17,7 +17,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatInputModule} from '@angular/material/input';
 import {AsyncPipe, NgClass} from '@angular/common';
-import {debounceTime, distinctUntilChanged, Subject, Subscription, take, takeUntil} from 'rxjs';
+import {debounceTime, distinctUntilChanged, retry, Subject, Subscription, take, takeUntil} from 'rxjs';
 import {PdfLoaderComponent} from "../../pdf-loader/pdf-loader.component";
 import {TranslateModule} from "@ngx-translate/core";
 import {MatTabsModule} from "@angular/material/tabs";
@@ -179,7 +179,9 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
   buildDevis() {
     this.devis = undefined;
     this.waitingForService = true;
-    this.devisService.genere(this.demandeClient).subscribe({
+    this.devisService.genere(this.demandeClient, 20).pipe(
+      retry(2)
+    ).subscribe({
       next: devis => {
         this.waitingForService = false;
         this.devis = {...devis, dateOfEstimate: new Date().toLocaleDateString()};
@@ -187,9 +189,27 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
       },
       error: (e) => {
         this.waitingForService = false;
+        this.toastService.error("La demande était trop lourde. Les résultats seront envoyés par mail une fois les calculs effectués.");
+        this.scheduleBuildDavis();
         console.log('Nouveau devis: buildDevis: ', e);
       }
     });
+  }
+
+  scheduleBuildDavis() {
+    this.devisService.genereScheduled({
+      clientData: this.contactData,
+      demandeClient: this.demandeClient
+    }, 5, 60).subscribe({
+      next: () => {
+        console.log('Devis generation scheduled succesfully');
+      },
+      error: (e) => console.log('Error scheduling devis generation.')
+    });
+  }
+
+  get contactData() {
+    return this.contactService.contactValue.value;
   }
 
   sendDiscordMessages() {
@@ -205,9 +225,7 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
         , 0) || 0
     ) || {};
 
-    const contactData = this.contactService.contactValue.value;
-
-    this.discordServie.sendNotificationMessages(contactData, this.devis, projet);
+    this.discordServie.sendNotificationMessages(this.contactData, this.devis, projet);
   }
 
   autocomplete() {

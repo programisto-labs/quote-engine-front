@@ -33,7 +33,6 @@ export class EmailService {
     return {
       clientEmail: clientEmail,
       clientName: clientName,
-      subject: `Projet "${devis.nom}" estimé`,
       devis,
       projet
     };
