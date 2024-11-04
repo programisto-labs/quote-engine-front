@@ -74,7 +74,7 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
       company: [data?.company || '', [Validators.required, Validators.pattern('^[a-zA-ZÀ-ÖØ-öø-ÿ]+([ a-zA-ZÀ-ÖØ-öø-ÿ])*$')]],
       email: [data?.email || '', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
       tele: [data?.tele || '', [Validators.required, Validators.pattern('^(0[1-7]{1}(\\d{2}){4})$')]], //(\+33|0)
-      coreBusiness: ['', [Validators.required, Validators.pattern('^[a-zA-ZÀ-ÖØ-öø-ÿ]+[ .,;:!-_a-zA-ZÀ-ÖØ-öø-ÿ]+$')]],
+      coreBusiness: ['', [Validators.required, Validators.pattern('^[ÆæŒœaa-zA-ZÀ-ÖØ-öø-ÿ]+[ .,;:!-_ÆæŒœaa-zA-ZÀ-ÖØ-öø-ÿ]+$')]],
       concept: ['', [Validators.required, isEmptyValidator(), Validators.maxLength(2000), Validators.minLength(10)]]
     });
     this.formGroupScenarios = this.formBuilder.group({
@@ -93,6 +93,7 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
 
   ngOnDestroy() {
     this.destroy$.next();
+    this.destroy$.complete();
   }
 
   get fullname() {
@@ -141,7 +142,7 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
   }
 
   newUseCase(value: string = '') {
-    return this.formBuilder.group({useCase: [value, [Validators.required, isEmptyValidator,Validators.pattern('^[.,;:!-_\'"a-zA-ZÀ-ÖØ-öø-ÿ]+[ .,;:!-_\'"a-zA-ZÀ-ÖØ-öø-ÿ]+$')]]})
+    return this.formBuilder.group({useCase: [value, [Validators.required, isEmptyValidator,Validators.pattern('^[.,;:!-_\'"ÆæŒœa-zA-ZÀ-ÖØ-öø-ÿ]+[ .,;:!-_\'"a-zA-ZÀ-ÖØ-öø-ÿ]+$')]]})
   }
 
   addNewUseCase() {

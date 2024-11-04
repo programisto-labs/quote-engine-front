@@ -58,7 +58,7 @@ export class PropositionDevisComponent implements AfterViewInit, OnDestroy{
   private readonly emailService: EmailService = inject(EmailService);
   private readonly contactService: ClientContactService = inject(ClientContactService);
   private readonly translate: TranslateService = inject(TranslateService);
-  private destroy$ = new Subject<void>();
+  private destroy$: Subject<void> = new Subject<void>();
 
   emailButtonLabel = this.translate.instant('dialogs.send_by_email');
   emailSent = false;
@@ -98,6 +98,7 @@ export class PropositionDevisComponent implements AfterViewInit, OnDestroy{
 
   ngOnDestroy() {
     this.destroy$.next();
+    this.destroy$.complete();
   }
 
   get devis() { return this._devis }
