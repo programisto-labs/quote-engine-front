@@ -142,7 +142,8 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
   }
 
   newUseCase(value: string = '') {
-    return this.formBuilder.group({useCase: [value, [Validators.required, isEmptyValidator,Validators.pattern('^[.,;:!-_\'"ÆæŒœa-zA-ZÀ-ÖØ-öø-ÿ]+[ .,;:!-_\'"a-zA-ZÀ-ÖØ-öø-ÿ]+$')]]})
+    return this.formBuilder.group({useCase: [value,
+        [Validators.required, isEmptyValidator, Validators.pattern('^[ÆæŒœa-zA-ZÀ-ÖØ-öø-ÿ]+[ .,;:!-_ÆæŒœa-zA-ZÀ-ÖØ-öø-ÿ]+$')]]})
   }
 
   addNewUseCase() {
