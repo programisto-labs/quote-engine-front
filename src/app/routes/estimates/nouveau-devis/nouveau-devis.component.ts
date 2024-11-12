@@ -17,7 +17,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatInputModule} from '@angular/material/input';
 import {AsyncPipe, NgClass} from '@angular/common';
-import {debounceTime, distinctUntilChanged, Subject, Subscription, take, takeUntil} from 'rxjs';
+import {debounceTime, distinctUntilChanged, retry, Subject, Subscription, take, takeUntil} from 'rxjs';
 import {PdfLoaderComponent} from "../../pdf-loader/pdf-loader.component";
 import {TranslateModule} from "@ngx-translate/core";
 import {MatTabsModule} from "@angular/material/tabs";
@@ -74,7 +74,7 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
       company: [data?.company || '', [Validators.required, Validators.pattern('^[a-zA-ZÀ-ÖØ-öø-ÿ]+([ a-zA-ZÀ-ÖØ-öø-ÿ])*$')]],
       email: [data?.email || '', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
       tele: [data?.tele || '', [Validators.required, Validators.pattern('^(0[1-7]{1}(\\d{2}){4})$')]], //(\+33|0)
-      coreBusiness: ['', [Validators.required, Validators.pattern('^[a-zA-ZÀ-ÖØ-öø-ÿ]+[ .,;:!-_a-zA-ZÀ-ÖØ-öø-ÿ]+$')]],
+      coreBusiness: ['', [Validators.required, Validators.pattern('^[ÆæŒœaa-zA-ZÀ-ÖØ-öø-ÿ’]+[ .,;:!-_ÆæŒœaa-zA-ZÀ-ÖØ-öø-ÿ’]+$')]],
       concept: ['', [Validators.required, isEmptyValidator(), Validators.maxLength(2000), Validators.minLength(10)]]
     });
     this.formGroupScenarios = this.formBuilder.group({
@@ -93,6 +93,7 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
 
   ngOnDestroy() {
     this.destroy$.next();
+    this.destroy$.complete();
   }
 
   get fullname() {
@@ -141,7 +142,8 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
   }
 
   newUseCase(value: string = '') {
-    return this.formBuilder.group({useCase: [value, [Validators.required, isEmptyValidator,Validators.pattern('^[.,;:!-_\'"a-zA-ZÀ-ÖØ-öø-ÿ]+[ .,;:!-_\'"a-zA-ZÀ-ÖØ-öø-ÿ]+$')]]})
+    return this.formBuilder.group({useCase: [value,
+        [Validators.required, isEmptyValidator, Validators.pattern('^[ÆæŒœa-zA-ZÀ-ÖØ-öø-ÿ’]+[ .,;:!-_ÆæŒœa-zA-ZÀ-ÖØ-öø-ÿ’]+$')]]})
   }
 
   addNewUseCase() {
@@ -179,7 +181,9 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
   buildDevis() {
     this.devis = undefined;
     this.waitingForService = true;
-    this.devisService.genere(this.demandeClient).subscribe({
+    this.devisService.genere(this.demandeClient, 20).pipe(
+      retry(2)
+    ).subscribe({
       next: devis => {
         this.waitingForService = false;
         this.devis = {...devis, dateOfEstimate: new Date().toLocaleDateString()};
@@ -187,9 +191,27 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
       },
       error: (e) => {
         this.waitingForService = false;
+        this.toastService.error("La demande était trop lourde. Les résultats seront envoyés par mail une fois les calculs effectués.");
+        this.scheduleBuildDavis();
         console.log('Nouveau devis: buildDevis: ', e);
       }
     });
+  }
+
+  scheduleBuildDavis() {
+    this.devisService.genereScheduled({
+      clientData: this.contactData,
+      demandeClient: this.demandeClient
+    }, 5, 60).subscribe({
+      next: () => {
+        console.log('Devis generation scheduled succesfully');
+      },
+      error: (e) => console.log('Error scheduling devis generation.')
+    });
+  }
+
+  get contactData() {
+    return this.contactService.contactValue.value;
   }
 
   sendDiscordMessages() {
@@ -205,9 +227,7 @@ export class NouveauDevisComponent implements AfterViewInit, OnDestroy{
         , 0) || 0
     ) || {};
 
-    const contactData = this.contactService.contactValue.value;
-
-    this.discordServie.sendNotificationMessages(contactData, this.devis, projet);
+    this.discordServie.sendNotificationMessages(this.contactData, this.devis, projet);
   }
 
   autocomplete() {

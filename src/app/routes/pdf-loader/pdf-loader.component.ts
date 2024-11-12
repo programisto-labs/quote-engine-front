@@ -51,6 +51,7 @@ export class PdfLoaderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.destroy$.next();
+    this.destroy$.complete();
   }
 
   loadPdf(event: any) {
